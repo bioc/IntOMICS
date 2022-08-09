@@ -57,7 +57,7 @@ $$\\[0.1in]$$
 ```{r include = TRUE, echo = TRUE, eval=FALSE}
 
 library(remotes)
-install_github("anna-pacinkova/intomics_package")  
+install_github("anna-pacinkova/IntOMICS")  
 
 ```
 
