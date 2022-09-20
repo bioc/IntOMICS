@@ -60,12 +60,3 @@ preprocessing
 \description{
 'B_prior_mat' creates the biological prior matrix.
 }
-\examples{
-data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
-package="IntOMICS")
-B <- B_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
-     annot = annot, lm_METH = TRUE, r_squared_thres = 0.3,
-     p_val_thres = 0.05, TFtargs = TFtarg_mat, TFBS_belief = 0.75, 
-     nonGE_belief = 0.5,  woPKGE_belief = 0.5)
-
-}

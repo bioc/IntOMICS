@@ -36,17 +36,3 @@ with markov blanket resampling
 \code{MBR} This function performs the markov blanket resampling method according
 to Su and Borsuk, 2016.
 }
-\examples{
-data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
-package="IntOMICS")
-OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, 
-    layers_def = layers_def, TFtargs = TFtarg_mat, annot = annot, 
-    r_squared_thres = 0.3, lm_METH = TRUE)
-adjacency_matrix <- OMICS_mod_res$B_prior_mat
-adjacency_matrix[,] <- 0
-MBR(source_net_adjacency = adjacency_matrix, 
-    layers_def = OMICS_mod_res$layers_def, omics = OMICS_mod_res$omics, 
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node,
-    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)
-
-}

@@ -50,37 +50,3 @@ MCMC convergence
 After the burn-in period, we discard the values from the first half
 of this phase.
 }
-\examples{
-data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
-    package="IntOMICS")
-OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, annot = annot, 
-    layers_def = layers_def, TFtargs = TFtarg_mat, r_squared_thres = 0.3, 
-    lm_METH = TRUE)
-first.adapt.phase_net <- first_adapt_phase(omics = OMICS_mod_res$omics, 
-    B_prior_mat = OMICS_mod_res$B_prior_mat, prob_mbr = 0.07, len = 5,  
-    energy_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
-    layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    parent_set_combinations =
-    OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)
-transient.phase_net <- transient_phase(prob_mbr = 0.07, 
-    first.adapt.phase_net = first.adapt.phase_net, 
-    omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat, 
-    layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
-    energy_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
-second.adapt.phase_net <- second_adapt_phase(prob_mbr = 0.07, 
-    transient.phase_net = transient.phase_net, woPKGE_belief = 0.5, 
-    omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat, 
-    layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
-    energy_all_configs_node =
-    OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
-sampling_phase(second.adapt.phase_net = second.adapt.phase_net, 
-    omics = OMICS_mod_res$omics, layers_def = OMICS_mod_res$layers_def, 
-    prob_mbr = 0.07, thin = 500, minseglen = 50000,
-    burn_in = 100000, annot = OMICS_mod_res$annot)
-
-}

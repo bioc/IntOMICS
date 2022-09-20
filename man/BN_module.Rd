@@ -38,7 +38,7 @@ data(list=c("PK", "TFtarg_mat", "annot", "gene_annot", "layers_def",
     "omics"), package="IntOMICS")
 OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, 
     layers_def = layers_def, TFtargs = TFtarg_mat,
-    annot = annot, r_squared_thres = 0.3, 
+    annot = annot, gene_annot = gene_annot, r_squared_thres = 0.3, 
     lm_METH = TRUE)
 BN_mod_res <- BN_module(burn_in = 100000, thin = 500, 
     OMICS_mod_res = OMICS_mod_res, minseglen = 50000, 

@@ -57,32 +57,3 @@ SD of hyperparameter beta
 has a similar covariance structure with the target distribution.
 This is part of second_adapt_phase.
 }
-\examples{
-data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
-    package="IntOMICS")
-OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, annot = annot, 
-    layers_def = layers_def, TFtargs = TFtarg_mat, r_squared_thres = 0.3,
-    lm_METH = TRUE)
-first.adapt.phase_net <- first_adapt_phase(omics = OMICS_mod_res$omics, 
-    B_prior_mat = OMICS_mod_res$B_prior_mat, 
-    energy_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
-    len = 5, layers_def = OMICS_mod_res$layers_def, prob_mbr = 0.07,
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
-    annot = OMICS_mod_res$annot)
-transient.phase_net <- transient_phase(annot = OMICS_mod_res$annot, 
-    first.adapt.phase_net = first.adapt.phase_net, 
-    omics = OMICS_mod_res$omics, prob_mbr = 0.07, 
-    B_prior_mat = OMICS_mod_res$B_prior_mat, 
-    layers_def = OMICS_mod_res$layers_def, 
-    energy_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
-variance_target(transient.phase_net = transient.phase_net, 
-    constant = 1.586667, fin = 200, B_prior_mat = OMICS_mod_res$B_prior_mat,
-    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    layers_def = OMICS_mod_res$layers_def, omics = OMICS_mod_res$omics, 
-    prob_mbr = 0.07, annot = OMICS_mod_res$annot)
-
-}

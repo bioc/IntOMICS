@@ -36,24 +36,3 @@ Numeric vector of length 1: BGe score of given adjacency matrix
 \code{BGe_score} Computes the BGe score of given network using precomputed sets
 of possible parents.
 }
-\examples{
-data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
-    package="IntOMICS")
-OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, lm_METH = TRUE,
-    layers_def = layers_def, TFtargs = TFtarg_mat, annot = annot, 
-    r_squared_thres = 0.3)
-first.adapt.phase_net <- first_adapt_phase(omics = OMICS_mod_res$omics, 
-    B_prior_mat = OMICS_mod_res$B_prior_mat, annot = OMICS_mod_res$annot,
-    energy_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
-    len = 5, layers_def = OMICS_mod_res$layers_def, prob_mbr = 0.07,
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)
-adjacency_matrix <- OMICS_mod_res$B_prior_mat
-adjacency_matrix[,] <- 0
-BGe_score(adjacency_matrix = adjacency_matrix, omics = OMICS_mod_res$omics,
-    layers_def = OMICS_mod_res$layers_def, 
-    parent_set_combinations =
-    OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node)
-
-}

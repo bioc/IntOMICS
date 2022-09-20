@@ -20,8 +20,3 @@ Numeric vector
 \code{normalise} This function is from the ambient package.
 It is used to determine the position of directed edge arrows.
 }
-\examples{
-x <- seq(1,10)
-normalise(x, from = range(x), to = c(0, 1))
-
-}

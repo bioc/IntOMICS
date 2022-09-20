@@ -25,16 +25,3 @@ Numeric of length 1: neighborhood size
 \code{neighborhood_size} This function is determines number of network structures
 that can be reached from the current network structure.
 }
-\examples{
-data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
-package="IntOMICS")
-B <- B_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
-     annot = annot, lm_METH = TRUE, r_squared_thres = 0.3,
-     p_val_thres = 0.05, TFtargs = TFtarg_mat, TFBS_belief = 0.75, 
-     nonGE_belief = 0.5, woPKGE_belief = 0.5)
-adjacency_matrix <- B$B_prior_mat
-adjacency_matrix[,] <- 0
-neighborhood_size(net = adjacency_matrix, layers_def = layers_def,
-B_prior_mat = B$B_prior_mat, omics = B$omics)
-
-}

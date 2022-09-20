@@ -21,15 +21,3 @@ of the network.
 The sum of the epsilons of all variables/nodes in the network gives us
 the energy of given network.
 }
-\examples{
-
-data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
-     package="IntOMICS")
-OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, annot = annot, 
-     layers_def = layers_def, lm_METH = TRUE,
-     TFtargs = TFtarg_mat, r_squared_thres = 0.3)
-adjacency_matrix <- OMICS_mod_res$B_prior_mat
-adjacency_matrix[,] <- 0
-epsilon(net = adjacency_matrix, B_prior_mat = OMICS_mod_res$B_prior_mat)
-
-}

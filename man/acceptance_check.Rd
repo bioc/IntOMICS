@@ -52,24 +52,3 @@ before given acceptance rate
 \code{acceptance_check} This phase verify if the acceptance is in range
 of 0.28 and 0.6.
 }
-\examples{
-data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
-     package="IntOMICS")
-OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, annot = annot, 
-    layers_def = layers_def, TFtargs = TFtarg_mat,
-    r_squared_thres = 0.3, lm_METH = TRUE)
-first.adapt.phase_net <- first_adapt_phase(omics = OMICS_mod_res$omics, 
-    B_prior_mat = OMICS_mod_res$B_prior_mat, annot = OMICS_mod_res$annot,
-    energy_all_configs_node = 
-    OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
-    len = 5, layers_def = OMICS_mod_res$layers_def, prob_mbr = 0.07,
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)
-acceptance_check(first.adapt.phase_net = first.adapt.phase_net,
-    round_check = 100, last_iter_check = 100, prob_mbr = 0.07,
-    layers_def = OMICS_mod_res$layers_def, 
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations,
-    omics = OMICS_mod_res$omics, annot = OMICS_mod_res$annot)
-
-}

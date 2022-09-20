@@ -15,7 +15,8 @@ OMICS_module(
   p_val_thres = 0.05,
   TFBS_belief = 0.75,
   nonGE_belief = 0.5,
-  woPKGE_belief = 0.5
+  woPKGE_belief = 0.5,
+  gene_annot
 )
 }
 \arguments{
@@ -52,6 +53,9 @@ interactions of features except GE-GE (default=0.5).}
 
 \item{woPKGE_belief}{numeric vector to define the belief concerning GE-GE
 interactions without prior knowledge (default=0.5).}
+
+\item{gene_annot}{data.frame containing the entrez ID and corresponding
+gene symbol for conversion.}
 }
 \value{
 List of 6 elements needed to init MCMC simulation
@@ -63,10 +67,10 @@ all possible parent sets per node definition +
 BGe score computation for all possible parent sets
 }
 \examples{
-data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
+data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
 package="IntOMICS")
 OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, 
     layers_def = layers_def, TFtargs = TFtarg_mat, annot = annot, 
-    r_squared_thres = 0.3, lm_METH = TRUE)
+    gene_annot = gene_annot, r_squared_thres = 0.3, lm_METH = TRUE)
 
 }

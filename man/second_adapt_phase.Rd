@@ -55,36 +55,3 @@ second adaption phase result
 \code{second_adapt_phase} This phase identifies the proposal distribution
 that has a similar covariance structure with the target distribution.
 }
-\examples{
-data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
-     package="IntOMICS")
-OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, annot = annot, 
-     layers_def = layers_def, lm_METH = TRUE,
-     TFtargs = TFtarg_mat, r_squared_thres = 0.3)
-first.adapt.phase_net <- first_adapt_phase(omics = OMICS_mod_res$omics, 
-    B_prior_mat = OMICS_mod_res$B_prior_mat, 
-    energy_all_configs_node = 
-    OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
-    len = 5, prob_mbr = 0.07, annot = OMICS_mod_res$annot,
-    layers_def = OMICS_mod_res$layers_def, 
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)
-transient.phase_net <- transient_phase(prob_mbr = 0.07,
-    first.adapt.phase_net = first.adapt.phase_net, 
-    omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat, 
-    layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
-    energy_all_configs_node = 
-    OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
-second_adapt_phase(transient.phase_net = transient.phase_net,
-    omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat, 
-    layers_def = OMICS_mod_res$layers_def, woPKGE_belief = 0.5,
-    energy_all_configs_node = 
-    OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node, 
-    prob_mbr = 0.07, annot = OMICS_mod_res$annot,
-    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    parent_set_combinations = 
-    OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
-
-}

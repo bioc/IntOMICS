@@ -6,13 +6,13 @@
 \usage{
 edge_types(
   mcmc_res,
-  PK,
+  PK = NULL,
   gene_annot,
   edge_list,
   node_list,
   OMICS_mod_res,
   edge_weights,
-  TFtargs
+  TFtargs = NULL
 )
 }
 \arguments{

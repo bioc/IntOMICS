@@ -16,6 +16,8 @@
 #' (columns) and their targets (rows).
 #' @param annot named list containing the associated methylation probes 
 #' of given gene.
+#' @param gene_annot data.frame containing the entrez ID and corresponding 
+#' gene symbol for conversion.
 #' @param lm_METH logical asking whether to use linear regression to filter
 #' methylation data (default=TRUE).
 #' @param r_squared_thres numeric vector to define the R^2 used as a threshold
@@ -30,18 +32,21 @@
 #' interactions without prior knowledge (default=0.5).
 #'
 #' @examples
-#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
+#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
 #' package="IntOMICS")
 #' OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, 
 #'     layers_def = layers_def, TFtargs = TFtarg_mat, annot = annot, 
-#'     r_squared_thres = 0.3, lm_METH = TRUE)
+#'     gene_annot = gene_annot, r_squared_thres = 0.3, lm_METH = TRUE)
 #'
 #' @return List of 6 elements needed to init MCMC simulation          
 #' @export
 OMICS_module <- function(omics, PK=NULL, layers_def, TFtargs=NULL, annot=NULL, 
 lm_METH = TRUE, r_squared_thres = 0.3, p_val_thres = 0.05, TFBS_belief = 0.75, 
-nonGE_belief = 0.5, woPKGE_belief = 0.5)
+nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
 {
+    colnames(omics$ge) <- gene_annot$entrezID[match(colnames(omics$ge),gene_annot$gene_symbol)]
+    colnames(omics$cnv) <- tolower(gene_annot$entrezID[match(colnames(omics$cnv),gene_annot$gene_symbol)])
+    
     if(TFBS_belief==woPKGE_belief)
     {
         message("GE-GE interactions without PK have the same belief as TFs-targets interactions. TFs-targets interactions will be considered as GE-GE interactions without prior knowledge.")
@@ -92,31 +97,23 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5)
 #' interactions without prior knowledge (default=0.5).
 #' @importFrom bestNormalize orderNorm
 #'
-#' @examples
-#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
-#' package="IntOMICS")
-#' B <- B_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
-#'      annot = annot, lm_METH = TRUE, r_squared_thres = 0.3,
-#'      p_val_thres = 0.05, TFtargs = TFtarg_mat, TFBS_belief = 0.75, 
-#'      nonGE_belief = 0.5,  woPKGE_belief = 0.5)
-#'
 #' @return List of 4 elements: prior biological matrix and data
 #' preprocessing           
 #' @export
 B_prior_mat <- function(omics, PK, layers_def, TFtargs, annot, lm_METH, 
 r_squared_thres, p_val_thres, TFBS_belief, nonGE_belief, woPKGE_belief)
 {
-    if(any(regexpr("ENTREZID:",colnames(omics[[layers_def$omics[1]]]))<0))
+    if(any(regexpr("EID:",colnames(omics[[layers_def$omics[1]]]))<0))
     {
-        stop("Gene names in GE matrix are not in the correct form. Please, use ENTREZID:XXXX.")
-    } # end if(regexpr("ENTREZID:",colnames(omics[[layers_def$omics[1]]]))<0)
+        stop("Gene names in GE matrix are not in the correct form. Please, use EID:XXXX.")
+    } # end if(regexpr("EID:",colnames(omics[[layers_def$omics[1]]]))<0)
   
     if(!is.null(TFtargs))
     {
-        if(any(regexpr("ENTREZID:",colnames(TFtargs))<0))
+        if(any(regexpr("EID:",colnames(TFtargs))<0))
         {
-            message("Gene names in TFtargs are not in the correct form. Please, use ENTREZID:XXXX.")
-        } # end if(any(regexpr("ENTREZID:",colnames(TFtargs))<0))
+            message("Gene names in TFtargs are not in the correct form. Please, use EID:XXXX.")
+        } # end if(any(regexpr("EID:",colnames(TFtargs))<0))
     } # end if(!is.null(TFtargs))
   
     if(is.null(PK))
@@ -190,7 +187,7 @@ r_squared_thres, p_val_thres, TFBS_belief, nonGE_belief, woPKGE_belief)
         for(j in seq(from=2,to=length(layers_def$omics)))
         {
             features_lower <- colnames(omics[[layers_def$omics[j]]])
-            if(any(regexpr("entrezid:",
+            if(any(regexpr("eid:",
                 colnames(omics[[layers_def$omics[j]]]))>0)==TRUE)
             {
                 B_layer_lower <- matrix(0, ncol=ncol(B),
@@ -260,7 +257,7 @@ r_squared_thres, p_val_thres, TFBS_belief, nonGE_belief, woPKGE_belief)
                     new_annot <- list()
                     omics[[layers_def$omics[j]]] <- matrix(nrow = 0, ncol = 0)
                 } # end if else (sum(!mapply(is.null,new_annot))==0)
-            } # end if else (any(regexpr("entrezid:",...
+            } # end if else (any(regexpr("eid:",...
         } # end for j
     } # end if(length(layers_def$omics)>1)
     return(list(B_prior_mat = B, annot = new_annot, omics = omics,
@@ -334,18 +331,6 @@ DAGcorescore <- function(j,parentnodes,n,param) {
 #' @param B_prior_mat a biological prior matrix.
 #' @param int_node character vector with given node name.
 #'
-#' @examples
-#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
-#' package="IntOMICS")
-#' B <- B_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
-#'    annot = annot, lm_METH = TRUE, r_squared_thres = 0.3, p_val_thres = 0.05,
-#'    TFtargs = TFtarg_mat, TFBS_belief = 0.75, nonGE_belief = 0.5, 
-#'    woPKGE_belief = 0.5)
-#' all_parents_config <- matrix(c("ENTREZID:2535", "ENTREZID:2535", 
-#' "ENTREZID:1857", "ENTREZID:2932"), byrow = TRUE, nrow=2)
-#' energy_function_node_specific(all_parents_config = all_parents_config,
-#' B_prior_mat = B$B_prior_mat, int_node = "ENTREZID:7482")
-#'
 #' @return Numeric vector of length 1            
 #' @export
 energy_function_node_specific <- function(all_parents_config, B_prior_mat,
@@ -380,12 +365,6 @@ int_node)
 #' of significance in linear regression if lm_METH=TRUE (default=0.05).
 #' @importFrom stats lm shapiro.test
 #'
-#' @examples
-#' data(list=c("annot", "omics"), package="IntOMICS")
-#' lm_meth(ge_mat = omics$ge, meth_mat = omics$meth, 
-#'     gene = "ENTREZID:7482", meth_probes = annot[["ENTREZID:7482"]], 
-#'     r_squared_thres = 0.3, p_val_thres = 0.05)
-#' 
 #' @return Character vector with methylation probes           
 #' @export
 lm_meth <- function(ge_mat, meth_mat, gene, meth_probes, r_squared_thres,
@@ -428,16 +407,6 @@ p_val_thres)
 #' @importFrom utils combn
 #' @importFrom stats na.omit
 #'
-#' @examples
-#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics"),
-#' package="IntOMICS")
-#' B <- B_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
-#'      annot = annot, lm_METH = TRUE, r_squared_thres = 0.3,
-#'      p_val_thres = 0.05, TFtargs = TFtarg_mat, TFBS_belief = 0.75, 
-#'      nonGE_belief = 0.5, woPKGE_belief = 0.5)
-#' pf_UB_est(omics = B$omics, B_prior_mat = B$B_prior_mat, 
-#' layers_def = layers_def, annot = B$annot)
-#' 
 #' @return List of 4 elements needed to simulate MCMC sampling            
 #' @export
 pf_UB_est <- function(omics, B_prior_mat, layers_def, annot)
@@ -453,14 +422,17 @@ pf_UB_est <- function(omics, B_prior_mat, layers_def, annot)
     
         for(rep in seq_len(layers_def$fan_in_ge[1]))
         {
-            comb_some[[rep]] <- utils::combn(potentials_layer,rep)
+            if(length(potentials_layer)>=rep)
+            {
+                comb_some[[rep]] <- utils::combn(potentials_layer,rep)
+            } # end if(length(potentials_layer)>=rep)
         } # end for rep
-        comb_some[[layers_def$fan_in_ge[1]+1]] <- matrix(NA,1,1)
+        comb_some[[length(comb_some)+1]] <- matrix(NA,1,1)
         if(length(layers_def$omics)>1)
         {
             modalities <- layers_def$omics[-1]
             if(any(mapply(FUN=function(mod)
-                any(regexpr("entrezid:",colnames(mod))>0)==TRUE, 
+                any(regexpr("eid:",colnames(mod))>0)==TRUE, 
                 omics[modalities])) & tolower(int_node) %in%
                 unlist(lapply(omics[modalities],colnames)))
             {
@@ -471,18 +443,21 @@ pf_UB_est <- function(omics, B_prior_mat, layers_def, annot)
             } # end if(any(mapply(FUN=function(mod)...
       
             if(any(mapply(omics, FUN=function(list)
-            any(regexpr("entrezid:",colnames(list), 
+            any(regexpr("eid:",colnames(list), 
             ignore.case = TRUE)<0))) & length(annot[[int_node]])>0)
             {
                 modality <- names(which(mapply(omics, FUN=function(list)
-                    any(regexpr("entrezid:",colnames(list), 
+                    any(regexpr("eid:",colnames(list), 
                     ignore.case = TRUE)<0))==TRUE))
                 max_fan_in <- max(layers_def$fan_in_ge[layers_def$omics==
                     modality],length(annot[[int_node]]), na.rm = TRUE)
                 comb_some_meth <- list()
                 for(rep in seq_len(max_fan_in))
                 {
-                    comb_some_meth[[rep]] <- combn(annot[[int_node]],rep)
+                    if(length(annot[[int_node]])>=rep)
+                    {
+                        comb_some_meth[[rep]] <- combn(annot[[int_node]],rep)
+                    } # end if(length(annot[[int_node]]<=rep)
                 } # end for rep
                 comb_some_meth_add <- list()
                 for(meth_pr in seq_len(length(comb_some_meth)))
@@ -588,9 +563,6 @@ pf_UB_est <- function(omics, B_prior_mat, layers_def, annot)
 #' between 0 and 1.
 #' @param x numeric vector.
 #'
-#' @examples
-#' range_01(stats::rnorm(10))
-#' 
 #' @return Numeric vector with normalised values           
 #' @export
 range_01 <- function(x){(x-min(x))/(max(x)-min(x))}

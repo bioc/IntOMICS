@@ -35,7 +35,7 @@
 #' "omics"), package="IntOMICS")
 #' OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, annot = annot, 
 #'        layers_def = layers_def, TFtargs = TFtarg_mat,
-#'        r_squared_thres = 0.3, lm_METH = TRUE)
+#'        r_squared_thres = 0.3, lm_METH = TRUE, gene_annot = gene_annot)
 #' BN_mod_res <- BN_module(burn_in = 100000, thin = 500, len = 5, 
 #'        OMICS_mod_res = OMICS_mod_res, minseglen = 50000, prob_mbr = 0.07)
 #' res_weighted <- trace_plots(mcmc_res = BN_mod_res, figures_dir = "figures/", 
@@ -45,9 +45,9 @@
 #'
 #' @return List of 7 elements needed to plot the final regulatory network
 #' @export
-trace_plots <- function(mcmc_res, burn_in, thin, figures_dir, gene_annot, PK,
+trace_plots <- function(mcmc_res, burn_in, thin, figures_dir, gene_annot, PK=NULL,
 OMICS_mod_res, edge_weights = "MCMC_freq", edge_freq_thres = NULL, gene_ID,
-TFtargs)
+TFtargs = NULL)
 {
     if(!(edge_weights %in% c("MCMC_freq","empB")))
     {
@@ -117,8 +117,12 @@ TFtargs)
         y = strength_threshold+0.015, col="#E69F00")
     grDevices::dev.off()
   
-    PK <- PK[PK$src_entrez %in% unlist(lapply(OMICS_mod_res$omics,colnames)),]
-    PK <- PK[PK$dest_entrez %in% unlist(lapply(OMICS_mod_res$omics,colnames)),]
+    if(!is.null(PK))
+    {
+        PK <- PK[PK$src_entrez %in% unlist(lapply(OMICS_mod_res$omics,colnames)),]
+        PK <- PK[PK$dest_entrez %in% unlist(lapply(OMICS_mod_res$omics,colnames)),]
+    }
+
   
     if(gene_ID=="entrezID")
     {
@@ -138,9 +142,9 @@ TFtargs)
         from <- as.character(gene_annot$gene_symbol[match(cpdag_weights$from.x,
             gene_annot$entrezID)])
         from[is.na(from)] <- cpdag_weights$from.x[is.na(from)]
-        from[regexpr("entrezid",from)>0] <-
+        from[regexpr("eid",from)>0] <-
         tolower(as.character(gene_annot$gene_symbol[match(toupper(
-            from[regexpr("entrezid", from)>0]), gene_annot$entrezID)]))
+            from[regexpr("eid", from)>0]), gene_annot$entrezID)]))
         to <- as.character(gene_annot$gene_symbol[match(cpdag_weights$to.x,
             gene_annot$entrezID)])
         edge_list <- matrix(data = c(from, to, cpdag_weights$strength,
@@ -196,10 +200,6 @@ TFtargs)
 #' @param to numeric vector range of normalised x.
 #' @importFrom stats median
 #'
-#' @examples
-#' x <- seq(1,10)
-#' normalise(x, from = range(x), to = c(0, 1))
-#'
 #' @return Numeric vector
 #' @export
 normalise <- function (x, from = range(x), to = c(0, 1)) {
@@ -233,44 +233,61 @@ normalise <- function (x, from = range(x), to = c(0, 1)) {
 #'
 #' @return List of 6 elements needed to plot the final regulatory network edges
 #' @export
-edge_types <- function(mcmc_res, PK, gene_annot, edge_list, node_list,
-OMICS_mod_res, edge_weights, TFtargs)
+edge_types <- function(mcmc_res, PK = NULL, gene_annot, edge_list, node_list,
+OMICS_mod_res, edge_weights, TFtargs = NULL)
 {
     omics <- OMICS_mod_res$omics
     layers_def <- OMICS_mod_res$layers_def
     omics_meth_original <- OMICS_mod_res$omics_meth_original
   
-    if(any(regexpr("ENTREZID:",node_list)>0))
+    if(any(regexpr("EID:",node_list)>0))
     {
-        PK <- paste(PK$src_entrez, PK$dest_entrez, sep="_")
-    
+        if(!is.null(PK))
+        {
+            PK <- paste(PK$src_entrez, PK$dest_entrez, sep="_")
+        } # end if(!is.null(PK))
+        
         if(edge_weights=="empB")
         {
             edge_list[,"edge_type"] <- "empirical"
-            TF_pk <- as.matrix(TFtargs[intersect(edge_list[,"to"],
-            rownames(TFtargs)), intersect(edge_list[,"from"],
-            colnames(TFtargs))])
-            colnames(TF_pk) <- intersect(edge_list[,"from"], colnames(TFtargs))
-            if(ncol(TF_pk)>=1)
+            
+            if(!is.null(TFtargs))
             {
-                TF_pk <- paste(colnames(TF_pk)[which(TF_pk==1, 
-                arr.ind = TRUE)[,2]], rownames(TF_pk)[which(TF_pk==1, 
-                arr.ind = TRUE)[,1]], sep="_")
-                edge_list[match(intersect(edge_list[,"edge"],TF_pk),
-                edge_list[,"edge"]),"edge_type"] <- "TF"
-            } # end if(ncol(TF_pk)>=1)
-            edge_list[match(intersect(edge_list[,"edge"],PK),
-            edge_list[,"edge"]), "edge_type"] <- "PK"
+                TF_pk <- as.matrix(TFtargs[intersect(edge_list[,"to"],
+                rownames(TFtargs)), intersect(edge_list[,"from"],
+                colnames(TFtargs))])
+                colnames(TF_pk) <- intersect(edge_list[,"from"], 
+                colnames(TFtargs))
+                if(ncol(TF_pk)>=1)
+                {
+                    TF_pk <- paste(colnames(TF_pk)[which(TF_pk==1, 
+                    arr.ind = TRUE)[,2]], rownames(TF_pk)[which(TF_pk==1, 
+                    arr.ind = TRUE)[,1]], sep="_")
+                    edge_list[match(intersect(edge_list[,"edge"],TF_pk),
+                    edge_list[,"edge"]),"edge_type"] <- "TF"
+                } # end if(ncol(TF_pk)>=1)
+            } # end if(!is.null(TFtargs))
+            
+            if(!is.null(PK))
+            {
+                edge_list[match(intersect(edge_list[,"edge"],PK),
+                edge_list[,"edge"]), "edge_type"] <- "PK"
+            } # end if(!is.null(PK))
+            
             edge_list[,"weight"] <-
             round(as.numeric(unlist(lapply(seq_along(edge_list[,2]), 1, 
                 FUN=function(row)
                 mcmc_res$B_prior_mat_weighted[edge_list[row,"from"], 
                 edge_list[row,"to"]]))), 2)
         } else {
-        edge_list[match(setdiff(edge_list[,"edge"],PK),
-            edge_list[,"edge"]),"edge_type"] <- "new"
-        edge_list[match(intersect(edge_list[,"edge"],PK),edge_list[,"edge"]),
-            "edge_type"] <- "PK"
+            if(!is.null(PK))
+            {
+                edge_list[match(setdiff(edge_list[,"edge"],PK),
+                edge_list[,"edge"]),"edge_type"] <- "new"
+                edge_list[match(intersect(edge_list[,"edge"],PK),
+                edge_list[,"edge"]), "edge_type"] <- "PK"
+            } # end if(!is.null(PK))
+        
         } # end if else (edge_weights=="empB")
     
         ge_cols <- RColorBrewer::brewer.pal(9, "Blues")
@@ -326,34 +343,34 @@ OMICS_mod_res, edge_weights, TFtargs)
         borders_meth <- NULL
     
         if(any(mapply(FUN=function(mod)
-            any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))
+            any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))
         {
           cnv_cols <- RColorBrewer::brewer.pal(11, "PiYG")
-          cnv_common <- intersect(node_list[,"label"][regexpr("entrez",
+          cnv_common <- intersect(node_list[,"label"][regexpr("eid",
               node_list[,"label"])>0],
           colnames(omics[[names(which(mapply(FUN=function(mod)
-              any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]]))
+              any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]]))
           omics_cnv_gs <- as.matrix(omics[[names(which(mapply(FUN=function(mod)
-              any(regexpr("entrezid:",colnames(mod))>0), 
+              any(regexpr("eid:",colnames(mod))>0), 
               omics)==TRUE))]][,cnv_common])
           borders_cnv_b1 <- unlist(lapply(strsplit(levels(cut(omics
               [[names(which(mapply(FUN=function(mod) 
-              any(regexpr("entrezid:",colnames(mod))>0), 
+              any(regexpr("eid:",colnames(mod))>0), 
               omics)==TRUE))]][omics[[names(which(mapply(FUN=function(mod) 
-              any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]]<=0], 
+              any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]]<=0], 
               seq(from=min(omics[[names(which(mapply(FUN=function(mod) 
-              any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]],
+              any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]],
               na.rm = TRUE), to=0, length.out=6), 
               include.lowest = TRUE)),","),FUN=function(l) l[1]))
           borders_cnv_b1[1] <- sub("[","(",borders_cnv_b1[1], fixed = TRUE)
           borders_cnv_b1 <- as.numeric(sub("(","",borders_cnv_b1, fixed = TRUE))
           borders_cnv_b2 <- unlist(lapply(strsplit(levels(cut(omics
               [[names(which(mapply(FUN=function(mod) 
-              any(regexpr("entrezid:",colnames(mod))>0), 
+              any(regexpr("eid:",colnames(mod))>0), 
               omics)==TRUE))]][omics[[names(which(mapply(FUN=function(mod) 
-              any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]]>0], 
+              any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]]>0], 
               seq(from=0, to=max(omics[[names(which(mapply(FUN=function(mod) 
-              any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]],
+              any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]],
               na.rm = TRUE), length.out=7), 
               include.lowest = TRUE)),","),FUN=function(l) l[1]))
           borders_cnv_b2[1] <- sub("[","(",borders_cnv_b2[1], fixed = TRUE)
@@ -363,21 +380,21 @@ OMICS_mod_res, edge_weights, TFtargs)
           borders_cnv_t1 <- as.numeric(sub("]","",
               unlist(lapply(strsplit(levels(cut(omics
               [[names(which(mapply(FUN=function(mod) 
-              any(regexpr("entrezid:",colnames(mod))>0), 
+              any(regexpr("eid:",colnames(mod))>0), 
               omics)==TRUE))]][omics[[names(which(mapply(FUN=function(mod) 
-              any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]]<=0], 
+              any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]]<=0], 
               seq(from=min(omics[[names(which(mapply(FUN=function(mod) 
-              any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]],
+              any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]],
               na.rm = TRUE), to=0, length.out=6), 
               include.lowest = TRUE)),","),FUN=function(l) l[2]))))
           borders_cnv_t2 <- as.numeric(sub("]","",
               unlist(lapply(strsplit(levels(cut(omics
               [[names(which(mapply(FUN=function(mod) 
-              any(regexpr("entrezid:",colnames(mod))>0), 
+              any(regexpr("eid:",colnames(mod))>0), 
               omics)==TRUE))]][omics[[names(which(mapply(FUN=function(mod) 
-              any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]]>0], 
+              any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]]>0], 
               seq(from=0, to=max(omics[[names(which(mapply(FUN=function(mod) 
-              any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]],
+              any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]],
               na.rm = TRUE), length.out=7), 
               include.lowest = TRUE)),","),FUN=function(l) l[2]))))
           borders_cnv_t <- c(borders_cnv_t1,borders_cnv_t2)
@@ -387,15 +404,15 @@ OMICS_mod_res, edge_weights, TFtargs)
               breaks = borders_cnv, include.lowest = TRUE, labels = FALSE) + 
               length(ge_cols)
           names(cnv_group) <- colnames(omics_cnv_gs)
-          node_list[regexpr("entrez",node_list[,"label"])>0,"color"] <-
-              as.numeric(cnv_group[match(node_list[regexpr("entrez",
+          node_list[regexpr("eid",node_list[,"label"])>0,"color"] <-
+              as.numeric(cnv_group[match(node_list[regexpr("eid",
               node_list[,"label"])>0,"label"], names(cnv_group))])
       
           ge_cols <- c(ge_cols, cnv_cols)
         } # end if(any(mapply(FUN=function(mod)...
     
         if(any(mapply(omics,
-        FUN=function(list) any(regexpr("entrezid:",colnames(list), 
+        FUN=function(list) any(regexpr("eid:",colnames(list), 
         ignore.case = TRUE)<0))))
         {
             meth_cols <- RColorBrewer::brewer.pal(9, "YlOrRd")
@@ -444,16 +461,19 @@ OMICS_mod_res, edge_weights, TFtargs)
         } # end if(any(mapply(omics,FUN=function(list)...
     
     } else {
-    
-        PK_src_dest <-
-        as.character(gene_annot$gene_symbol[match(
-        PK$src_entrez,gene_annot$entrezID)])
-        PK_src_dest[regexpr("entrezid",PK_src_dest)>0] <- tolower(
-        as.character(gene_annot$gene_symbol[match(toupper(PK_src_dest[
-        regexpr("entrezid",PK_src_dest)>0]), gene_annot$entrezID)]))
-        PK_src_dest[is.na(PK_src_dest)] <- PK$src_entrez[is.na(PK_src_dest)]
-        PK <- paste(PK_src_dest, as.character(gene_annot$gene_symbol[
-            match(PK$dest_entrez,gene_annot$entrezID)]), sep="_")
+        if(!is.null(PK))
+        {
+            PK_src_dest <- as.character(gene_annot$gene_symbol[match(
+            PK$src_entrez,gene_annot$entrezID)])
+            PK_src_dest[regexpr("eid",PK_src_dest)>0] <- tolower(
+            as.character(gene_annot$gene_symbol[match(toupper(PK_src_dest[
+            regexpr("eid",PK_src_dest)>0]), gene_annot$entrezID)]))
+            PK_src_dest[is.na(PK_src_dest)] <- 
+            PK$src_entrez[is.na(PK_src_dest)]
+            PK <- paste(PK_src_dest, as.character(gene_annot$gene_symbol[
+                match(PK$dest_entrez,gene_annot$entrezID)]), sep="_")
+        } # end if(!is.null(PK))
+        
         if(edge_weights=="empB")
         {
             edge_list[,"edge_type"] <- "empirical"
@@ -461,41 +481,52 @@ OMICS_mod_res, edge_weights, TFtargs)
                 gene_annot$gene_symbol)]
             TFs_eid <- gene_annot$entrezID[match(edge_list[,"from"],
                 gene_annot$gene_symbol, nomatch = 0)]
-            TF_pk <- as.matrix(TFtargs[intersect(targs_eid, rownames(TFtargs)),
-                intersect(TFs_eid, colnames(TFtargs))])
-            colnames(TF_pk) <- intersect(TFs_eid, colnames(TFtargs))
-            if(ncol(TF_pk)>=1)
+            if(!is.null(TFtargs))
             {
-                TF_pk <- paste(gene_annot$gene_symbol[match(colnames(TF_pk)
-                    [which(TF_pk==1, arr.ind = TRUE)[,2]],
-                    gene_annot$entrezID)], gene_annot$gene_symbol[match(
-                    rownames(TF_pk)[which(TF_pk==1, arr.ind = TRUE)[,1]],
-                    gene_annot$entrezID)], sep="_")
-                edge_list[match(intersect(edge_list[,"edge"],TF_pk),
-                edge_list[,"edge"]),"edge_type"] <- "TF"
-            } # end if(ncol(TF_pk)>=1)
-      
-           edge_list[match(intersect(edge_list[,"edge"],PK),
-           edge_list[,"edge"]), "edge_type"] <- "PK"
-           rownames(mcmc_res$B_prior_mat_weighted)[!is.na(match(rownames(
-           mcmc_res$B_prior_mat_weighted), gene_annot$entrezID))] <-
-           gene_annot$gene_symbol[match(rownames(
-           mcmc_res$B_prior_mat_weighted), gene_annot$entrezID, nomatch = 0)]
-           rownames(mcmc_res$B_prior_mat_weighted)[!is.na(match(toupper(
-           rownames(mcmc_res$B_prior_mat_weighted)), gene_annot$entrezID))] <-
-           tolower(gene_annot$gene_symbol[match(toupper(rownames(
-           mcmc_res$B_prior_mat_weighted)), gene_annot$entrezID, nomatch = 0)])
-           colnames(mcmc_res$B_prior_mat_weighted) <-
-           rownames(mcmc_res$B_prior_mat_weighted)
-           edge_list[,"weight"] <-
-           round(as.numeric(unlist(lapply(seq_along(edge_list[,2]),
-               FUN=function(row) mcmc_res$B_prior_mat_weighted[
-               edge_list[row,"from"],edge_list[row,"to"]]))),2)
+                TF_pk <- as.matrix(TFtargs[intersect(targs_eid, rownames(TFtargs)),
+                    intersect(TFs_eid, colnames(TFtargs))])
+                colnames(TF_pk) <- intersect(TFs_eid, colnames(TFtargs))
+                if(ncol(TF_pk)>=1)
+                {
+                    TF_pk <- paste(gene_annot$gene_symbol[match(colnames(TF_pk)
+                        [which(TF_pk==1, arr.ind = TRUE)[,2]],
+                        gene_annot$entrezID)], gene_annot$gene_symbol[match(
+                        rownames(TF_pk)[which(TF_pk==1, arr.ind = TRUE)[,1]],
+                        gene_annot$entrezID)], sep="_")
+                    edge_list[match(intersect(edge_list[,"edge"],TF_pk),
+                    edge_list[,"edge"]),"edge_type"] <- "TF"
+                } # end if(ncol(TF_pk)>=1)
+            } # end if(!is.null(TFtargs))
+            
+          
+            if(!is.null(PK))
+            {
+                edge_list[match(intersect(edge_list[,"edge"],PK),
+                edge_list[,"edge"]), "edge_type"] <- "PK"
+            } # end if(!is.null(PK))
+            
+            rownames(mcmc_res$B_prior_mat_weighted)[!is.na(match(rownames(
+            mcmc_res$B_prior_mat_weighted), gene_annot$entrezID))] <-
+            gene_annot$gene_symbol[match(rownames(
+            mcmc_res$B_prior_mat_weighted), gene_annot$entrezID, nomatch = 0)]
+            rownames(mcmc_res$B_prior_mat_weighted)[!is.na(match(toupper(
+            rownames(mcmc_res$B_prior_mat_weighted)), gene_annot$entrezID))] <-
+            tolower(gene_annot$gene_symbol[match(toupper(rownames(
+            mcmc_res$B_prior_mat_weighted)), gene_annot$entrezID, nomatch = 0)])
+            colnames(mcmc_res$B_prior_mat_weighted) <-
+            rownames(mcmc_res$B_prior_mat_weighted)
+            edge_list[,"weight"] <-
+            round(as.numeric(unlist(lapply(seq_along(edge_list[,2]),
+                FUN=function(row) mcmc_res$B_prior_mat_weighted[
+                edge_list[row,"from"],edge_list[row,"to"]]))),2)
         } else {
-            edge_list[match(setdiff(edge_list[,"edge"],PK),
-            edge_list[,"edge"]),"edge_type"] <- "new"
-            edge_list[match(intersect(edge_list[,"edge"],PK),
-            edge_list[,"edge"]), "edge_type"] <- "PK"
+            if(!is.null(PK))
+            {
+                edge_list[match(setdiff(edge_list[,"edge"],PK),
+                edge_list[,"edge"]),"edge_type"] <- "new"
+                edge_list[match(intersect(edge_list[,"edge"],PK),
+                edge_list[,"edge"]), "edge_type"] <- "PK"
+            } # end if(!is.null(PK))
         } # end if else (edge_weights=="empB")
     
         ge_cols <- RColorBrewer::brewer.pal(9, "Blues")
@@ -549,7 +580,7 @@ OMICS_mod_res, edge_weights, TFtargs)
         borders_meth <- NULL
     
         if(any(mapply(FUN=function(mod)
-        any(regexpr("entrezid:",colnames(mod))>0), 
+        any(regexpr("eid:",colnames(mod))>0), 
         omics)==TRUE))
         {
             cnv_cols <- RColorBrewer::brewer.pal(11, "PiYG")
@@ -557,26 +588,26 @@ OMICS_mod_res, edge_weights, TFtargs)
                 match(toupper(node_list[is.na(node_list[,"color"]),"label"]), 
                 gene_annot$gene_symbol)]),
                 colnames(omics[[names(which(mapply(FUN=function(mod) 
-                any(regexpr("entrezid:", colnames(mod))>0), omics)==TRUE))]]))
+                any(regexpr("eid:", colnames(mod))>0), omics)==TRUE))]]))
             omics_cnv_gs <-
                 as.matrix(omics[[names(which(mapply(FUN=function(mod) 
-                any(regexpr("entrezid:",colnames(mod))>0), 
+                any(regexpr("eid:",colnames(mod))>0), 
                 omics)==TRUE))]][,cnv_common])
             colnames(omics_cnv_gs) <- 
                 node_list[node_list[,"label"]==tolower(node_list[,"label"]),
                 "label"][gene_annot$entrezID[match(toupper(node_list[node_list[,
                 "label"]==tolower(node_list[,"label"]),"label"]), 
                 gene_annot$gene_symbol)] %in% toupper(colnames(omics[[names(
-                which(mapply(FUN=function(mod) any(regexpr("entrezid:",
+                which(mapply(FUN=function(mod) any(regexpr("eid:",
                 colnames(mod))>0), omics)==TRUE))]]))]
             borders_cnv_b1 <- unlist(lapply(strsplit(levels(cut(
                 omics[[names(which(mapply(FUN=function(mod)
-                any(regexpr("entrezid:",colnames(mod))>0), 
+                any(regexpr("eid:",colnames(mod))>0), 
                 omics)==TRUE))]][omics[[names(which(mapply(FUN=function(mod) 
-                any(regexpr("entrezid:",colnames(mod))>0),
+                any(regexpr("eid:",colnames(mod))>0),
                 omics)==TRUE))]]<=0],
                 seq(from=min(omics[[names(which(mapply(FUN=function(mod)
-                any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]],
+                any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]],
                 na.rm = TRUE), to=0, length.out=6), 
                 include.lowest = TRUE)),","), FUN=function(l) l[1]))
             borders_cnv_b1[1] <- sub("[","(",borders_cnv_b1[1], fixed = TRUE)
@@ -584,12 +615,12 @@ OMICS_mod_res, edge_weights, TFtargs)
                 fixed = TRUE))
             borders_cnv_b2 <- unlist(lapply(strsplit(levels(cut(
                 omics[[names(which(mapply(FUN=function(mod) 
-                any(regexpr("entrezid:", colnames(mod))>0), 
+                any(regexpr("eid:", colnames(mod))>0), 
                 omics)==TRUE))]][omics[[names(which(mapply(FUN=function(mod) 
-                any(regexpr("entrezid:", colnames(mod))>0),
+                any(regexpr("eid:", colnames(mod))>0),
                 omics)==TRUE))]]>0], seq(from=0,
                 to=max(omics[[names(which(mapply(FUN=function(mod) 
-                any(regexpr("entrezid:", colnames(mod))>0), omics)==TRUE))]],
+                any(regexpr("eid:", colnames(mod))>0), omics)==TRUE))]],
                 na.rm = TRUE), length.out=7), include.lowest = TRUE)),","),
                 FUN=function(l) l[1]))
             borders_cnv_b2[1] <- sub("[","(",borders_cnv_b2[1], fixed = TRUE)
@@ -598,21 +629,21 @@ OMICS_mod_res, edge_weights, TFtargs)
             borders_cnv_b <- c(borders_cnv_b1,borders_cnv_b2)
             borders_cnv_t1 <- as.numeric(sub("]","", unlist(lapply(
                 strsplit(levels(cut(omics[[names(which(mapply(FUN=function(mod) 
-                any(regexpr("entrezid:",colnames(mod))>0), 
+                any(regexpr("eid:",colnames(mod))>0), 
                 omics)==TRUE))]][omics[[names(which(mapply(FUN=function(mod) 
-                any(regexpr("entrezid:",colnames(mod))>0),
+                any(regexpr("eid:",colnames(mod))>0),
                 omics)==TRUE))]]<=0], seq(from=min(omics[[names(which(mapply(
-                FUN=function(mod) any(regexpr("entrezid:",colnames(mod))>0),
+                FUN=function(mod) any(regexpr("eid:",colnames(mod))>0),
                 omics)==TRUE))]], na.rm = TRUE), to=0, length.out=6),
                 include.lowest = TRUE)),","), FUN=function(l) l[2]))))
             borders_cnv_t2 <- as.numeric(sub("]","",
                 unlist(lapply(strsplit(levels(cut(omics[[
                 names(which(mapply(FUN=function(mod)
-                any(regexpr("entrezid:",colnames(mod))>0), 
+                any(regexpr("eid:",colnames(mod))>0), 
                 omics)==TRUE))]][omics[[names(which(mapply(FUN=function(mod) 
-                any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]]>0], 
+                any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]]>0], 
                 seq(from=0, to=max(omics[[names(which(mapply(FUN=function(mod) 
-                any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]],
+                any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]],
                 na.rm = TRUE), length.out=7), include.lowest = TRUE)),","),
                 FUN=function(l) l[2]))))
             borders_cnv_t <- c(borders_cnv_t1,borders_cnv_t2)
@@ -626,20 +657,20 @@ OMICS_mod_res, edge_weights, TFtargs)
             "label"]==tolower(node_list[,"label"]),"label"]), 
             gene_annot$gene_symbol)] %in% toupper(colnames(
             omics[[names(which(mapply(FUN=function(mod)
-            any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]]))] <-
+            any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]]))] <-
                 as.numeric(cnv_group[match(node_list[node_list[,
                 "label"]==tolower(node_list[,"label"]),
                 "label"][gene_annot$entrezID[match(toupper(
                 node_list[node_list[,"label"]==tolower(node_list[,
                 "label"]),"label"]), gene_annot$gene_symbol)] %in%
                 toupper(colnames(omics[[names(which(mapply(FUN=function(mod) 
-                any(regexpr("entrezid:",colnames(mod))>0), omics)==TRUE))]]))], 
+                any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))]]))], 
                 names(cnv_group))])
             ge_cols <- c(ge_cols, cnv_cols)
         } # end if(any(mapply(FUN=function(mod)...
     
         if(any(mapply(omics,FUN=function(list)
-            any(regexpr("entrezid:",colnames(list), ignore.case = TRUE)<0))))
+            any(regexpr("eid:",colnames(list), ignore.case = TRUE)<0))))
         {
             meth_cols <- RColorBrewer::brewer.pal(9, "YlOrRd")
             meth_common <-
@@ -690,7 +721,7 @@ OMICS_mod_res, edge_weights, TFtargs)
                 colnames(omics_meth_original)))], names(meth_group))])
             ge_cols <- c(ge_cols, meth_cols)
         } # end if(any(mapply(omics,FUN=function(list)...
-    } # end if else(any(regexpr("ENTREZID:",node_list)>0))
+    } # end if else(any(regexpr("EID:",node_list)>0))
     return(list(edge_list = edge_list, node_list = node_list, 
         borders_GE = borders, borders_CNV = borders_cnv, 
         borders_METH = borders_meth, node_palette = ge_cols))
@@ -709,7 +740,7 @@ OMICS_mod_res, edge_weights, TFtargs)
 #' "omics"), package="IntOMICS")
 #' OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, 
 #'      layers_def = layers_def, TFtargs = TFtarg_mat, annot = annot, 
-#'      r_squared_thres = 0.3, lm_METH = TRUE)
+#'      r_squared_thres = 0.3, lm_METH = TRUE, gene_annot = gene_annot)
 #' BN_mod_res <- BN_module(burn_in = 100000, thin = 500, len = 5,
 #'      OMICS_mod_res = OMICS_mod_res, minseglen = 50000, prob_mbr = 0.07)
 #' res_weighted <- trace_plots(mcmc_res = BN_mod_res, figures_dir = "figures", 
@@ -772,7 +803,7 @@ legend_custom <- function(net)
 #' "omics"), package="IntOMICS")
 #' OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, annot = annot, 
 #'     layers_def = layers_def, TFtargs = TFtarg_mat, r_squared_thres = 0.3, 
-#'     lm_METH = TRUE)
+#'     lm_METH = TRUE, gene_annot = gene_annot)
 #' BN_mod_res <- BN_module(burn_in = 100000, thin = 500, len = 5,
 #'     OMICS_mod_res = OMICS_mod_res, minseglen = 50000, prob_mbr = 0.07)
 #' empB_heatmap(mcmc_res = BN_mod_res, OMICS_mod_res = OMICS_mod_res, 
@@ -783,10 +814,10 @@ legend_custom <- function(net)
 empB_heatmap <- function(mcmc_res, OMICS_mod_res, gene_annot, TFtargs)
 {
     mat <- mcmc_res$B_prior_mat_weighted - OMICS_mod_res$B_prior_mat
-    mat <- mat[regexpr("ENTREZID:",rownames(mat))>0,
-        regexpr("ENTREZID:",rownames(mat))>0]
-    mat[which(OMICS_mod_res$B_prior_mat[regexpr("ENTREZID:",
-        rownames(OMICS_mod_res$B_prior_mat))>0,regexpr("ENTREZID:",
+    mat <- mat[regexpr("EID:",rownames(mat))>0,
+        regexpr("EID:",rownames(mat))>0]
+    mat[which(OMICS_mod_res$B_prior_mat[regexpr("EID:",
+        rownames(OMICS_mod_res$B_prior_mat))>0,regexpr("EID:",
         rownames(OMICS_mod_res$B_prior_mat))>0]==1)] <- NA
     TFtargs <- as.matrix(TFtargs[intersect(rownames(TFtargs),colnames(mat)),
         intersect(colnames(TFtargs),rownames(mat))])
