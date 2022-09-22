@@ -13,5 +13,5 @@ Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 RoxygenNote: 7.2.1
 LazyData: false
-Suggests: rmarkdown, knitr, ggraph
+Suggests: rmarkdown, knitr, ggraph, curatedTCGAData
 biocViews: Software, DNAMethylation, GeneExpression, CopyNumberVariation, SystemsBiology, GeneRegulation, Network, Bayesian

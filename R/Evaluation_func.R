@@ -96,19 +96,19 @@ TFtargs = NULL)
     }
     total <- merge(cpdag_weights1, cpdag_weights2, by = c("from","to"))
   
-    grDevices::svg(paste(figures_dir,"beta_values.svg",sep="/"))
+    grDevices::jpeg(paste(figures_dir,"beta_values.jpeg",sep="/"))
     plot(df1$beta ~ df1$k, type = "l", col= "darkblue", xlab = "iteration",
         ylab = "beta", main = "Beta values of adaptive MCMC")
     grDevices::dev.off()
   
-    grDevices::svg(paste(figures_dir,"post_prob_edges.svg",sep="/"))
+    grDevices::jpeg(paste(figures_dir,"post_prob_edges.jpeg",sep="/"))
     plot(total$strength.x ~ total$strength.y, xlab="MCMC run 2",
         ylab = "MCMC run 1", 
         main = "Consistency of edges posterior probabilities")
     graphics::abline(0,1, col="orange")
     grDevices::dev.off()
   
-    grDevices::svg(paste(figures_dir,"convergence_RMS.svg",sep="/"))
+    grDevices::jpeg(paste(figures_dir,"convergence_RMS.jpeg",sep="/"))
     plot(rms_strength, main="Convergence RMS strength (C.RMS.str)", pch = 18,
         col="gray30")
     graphics::abline(h=strength_threshold, col="#E69F00", lwd = 1.5)

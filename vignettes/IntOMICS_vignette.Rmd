@@ -270,26 +270,7 @@ names(BN_mod_res)
 
 Trace plots provide an important tool for assessing mixing of a Markov chain and should be inspected carefully.
 Now we have to create a directory to store trace plots. 
-Once it is created, we can run the `trace_plots` function, which generates:  
-  
-1. beta_values.svg: trace plot of beta values (we want to explore the sample space many times and avoid flat bits - the chain stays in the same state for too long; in this case, beta value fluctuates around single value, so the Markov chain is mixing well).  
-<center>
-![](figures/beta_values.svg){width=60%}
-</center>
-
-2. post_prob_edges.svg: consistency of edges posterior probabilities in two independent MCMC simulations (scatter plot of the edge weights confidence using two independent MCMC runs; the convergence is determined by the spread of the points around the y=x line; in this case, the edge weights seems to be consistent in two independent simulations).  
-<center>
-![](figures/post_prob_edges.svg){width=60%}
-</center>
-
-3. convergence_RMS.svg: the c<sub>rms</sub> strength for the convergence evaluation (summarizes the spread of the points around the line y=x in post_prob_edges.svg, for details see (Agostinho et al., 2015) and (Pacinkova \& Popovici, 2022)).  
-<center>
-![](figures/convergence_RMS.svg){width=60%}
-</center>
-
-The parameter "edge_freq_thres" determines the quantile of all edge weights used to filter only reliable edges (default = NULL, all edges will be considered as present). For illustration, we use quite low edge weights filter to capture interactions between features from different layers. We recommend to use some edge weights filtering, such as 0.75 quantile of all edge weights in the resulting networks using "edge_freq_thres = 0.75".
-The parameter "gene_ID" determines the IDs used in the final network. There are two options: "gene_symbol" (default) or "entrezID".
-If you have changed the default value of the "TFBS_belief" argument in the `OMICS_module` function, you have to use the same argument in `trace_plots` function.
+Once it is created, we can run the `trace_plots` function:  
 
 ```{r echo=TRUE, include=TRUE}
 
@@ -307,6 +288,28 @@ res_weighted <- trace_plots(mcmc_res = BN_mod_res,
 ```
 The parameter edge_freq_thres determines the quantile of all edge weights used to filter only reliable edges.
 The parameter gene_ID determines the IDs used in the final network. There are two options: 'gene_symbol' (default) or 'entrezID'.
+
+The `trace_plots` function generates:
+  
+1. beta_values.jpeg: trace plot of beta values (we want to explore the sample space many times and avoid flat bits - the chain stays in the same state for too long; in this case, beta value fluctuates around single value, so the Markov chain is mixing well).  
+<center>
+![](figures/MSI/beta_values.jpeg){width=50%}
+</center>
+
+2. post_prob_edges.jpeg: consistency of edges posterior probabilities in two independent MCMC simulations (scatter plot of the edge weights confidence using two independent MCMC runs; the convergence is determined by the spread of the points around the y=x line; in this case, the edge weights seems to be consistent in two independent simulations).  
+<center>
+![](figures/MSI/post_prob_edges.jpeg){width=50%}
+</center>
+
+3. convergence_RMS.jpeg: the c<sub>rms</sub> strength for the convergence evaluation (summarizes the spread of the points around the line y=x in post_prob_edges.jpeg, for details see (Agostinho et al., 2015) and (Pacinkova \& Popovici, 2022)).  
+<center>
+![](figures/MSI/convergence_RMS.jpeg){width=50%}
+</center>
+
+The parameter "edge_freq_thres" determines the quantile of all edge weights used to filter only reliable edges (default = NULL, all edges will be considered as present). For illustration, we use quite low edge weights filter to capture interactions between features from different layers. We recommend to use some edge weights filtering, such as 0.75 quantile of all edge weights in the resulting networks using "edge_freq_thres = 0.75".
+The parameter "gene_ID" determines the IDs used in the final network. There are two options: "gene_symbol" (default) or "entrezID".
+If you have changed the default value of the "TFBS_belief" argument in the `OMICS_module` function, you have to use the same argument in `trace_plots` function.
+
 
 
 ### Part 5: IntOMICS resulting network structure
