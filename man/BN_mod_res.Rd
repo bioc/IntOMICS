@@ -5,7 +5,7 @@
 \alias{BN_mod_res}
 \title{IntOMICS MCMC simulation result}
 \format{
-A named list with 3 components - each component corresponds to one omics data:
+A named list with 3 components:
 \describe{
 \item{B_prior_mat_weighted}{IntOMICS estimated empirical biological knowledge}
 \item{sampling.phase_res}{results from the conventional MCMC sampling - two independent simulations}

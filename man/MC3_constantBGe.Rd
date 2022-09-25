@@ -53,3 +53,16 @@ with conventional single edge move
 \code{MC3_constantBGe} This function samples a conventional single edge proposal
 move with ficed BGe score.
 }
+\examples{
+data(list=c("OMICS_mod_res", "first.adapt.phase_net"),
+package="IntOMICS")
+MC3_constantBGe(B_prior_mat = OMICS_mod_res$B_prior_mat,
+source_net=first.adapt.phase_net$nets[[length(first.adapt.phase_net$nets)]],
+layers_def=OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
+beta.source=first.adapt.phase_net$betas[[length(first.adapt.phase_net$betas)]], 
+partition_func_UB_beta_source=first.adapt.phase_net$partition_func_UB_beta_source, 
+omics = OMICS_mod_res$omics, 
+parent_set_combinations=OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
+BGe_score_all_configs_node=OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node)
+
+}

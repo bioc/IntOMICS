@@ -16,3 +16,7 @@ boolean of length 1
 \code{is.acyclic} This function is from bnstruct R package. Check if the directed
 graph is acyclic.
 }
+\examples{
+is.acyclic(matrix(c(1,rep(0,20)), nrow=3))
+
+}

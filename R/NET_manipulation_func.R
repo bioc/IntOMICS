@@ -10,6 +10,25 @@
 #' @param layers_def data.frame containing the modality ID, corresponding layer
 #' in BN and maximal number of parents from given layer to GE nodes.
 #'   
+#' @examples
+#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
+#' package="IntOMICS")
+#' colnames(omics$ge) <- gene_annot$entrezID[match(colnames(omics$ge),
+#' gene_annot$gene_symbol)]
+#' colnames(omics$cnv) <- tolower(gene_annot$entrezID[match(colnames(omics$cnv),
+#' gene_annot$gene_symbol)])
+#' B <- B_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
+#'     annot = annot, lm_METH = TRUE, r_squared_thres = 0.3,
+#'     p_val_thres = 0.05, TFtargs = TFtarg_mat, TFBS_belief = 0.75, 
+#'     nonGE_belief = 0.5, woPKGE_belief = 0.5)
+#' adjacency_matrix <- B$B_prior_mat
+#' adjacency_matrix[,] <- 0
+#' adjacency_matrix[1,2] <- 1
+#' layer_max <- colnames(B$omics[[layers_def$omics[1]]])
+#' fan_in_reverse(positions = c(row=1,col=2), 
+#' net_layer_max = adjacency_matrix[layer_max,layer_max], 
+#' layers_def = layers_def)
+#'
 #' @return Numeric vector of length 1: reverse edge candidates
 #' @export
 fan_in_reverse <- function(positions, net_layer_max, layers_def)
@@ -30,6 +49,20 @@ fan_in_reverse <- function(positions, net_layer_max, layers_def)
 #' @param layers_def data.frame containing the modality ID, corresponding layer
 #' in BN and maximal number of parents from given layer to GE nodes.
 #' @param B_prior_mat a biological prior matrix.
+#'
+#' @examples
+#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
+#' package="IntOMICS")
+#' colnames(omics$ge) <- gene_annot$entrezID[match(colnames(omics$ge),
+#' gene_annot$gene_symbol)]
+#' colnames(omics$cnv) <- tolower(gene_annot$entrezID[match(colnames(omics$cnv),
+#' gene_annot$gene_symbol)])
+#' B <- B_prior_mat(omics = omics, PK = PK, annot = annot, lm_METH = TRUE,
+#'      layers_def = layers_def, r_squared_thres = 0.3, p_val_thres = 0.05,
+#'      TFtargs = TFtarg_mat, TFBS_belief = 0.75, nonGE_belief = 0.5, 
+#'      woPKGE_belief = 0.5)
+#' init.net.mcmc(omics = B$omics, layers_def = layers_def, 
+#'      B_prior_mat = B$B_prior_mat)
 #'
 #' @return List of 2 elements: random adjacency network and empty network
 #' @export
@@ -76,6 +109,9 @@ init.net.mcmc <- function(omics, layers_def, B_prior_mat)
 #' graph is acyclic.
 #' @param g adajcency matrix of given network/graph.
 #'
+#' @examples
+#' is.acyclic(matrix(c(1,rep(0,20)), nrow=3))
+#'
 #' @return boolean of length 1
 #' @export
 is.acyclic <- function(g)
@@ -103,6 +139,22 @@ is.acyclic <- function(g)
 #' @param omics named list containing the gene expression (possibly copy number
 #' variation and methylation data). Each component of the list is a matrix 
 #' with samples in rows and features in columns.
+#'
+#' @examples
+#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
+#' package="IntOMICS")
+#' colnames(omics$ge) <- gene_annot$entrezID[match(colnames(omics$ge),
+#' gene_annot$gene_symbol)]
+#' colnames(omics$cnv) <- tolower(gene_annot$entrezID[match(colnames(omics$cnv),
+#' gene_annot$gene_symbol)])
+#' B <- B_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
+#'      annot = annot, lm_METH = TRUE, r_squared_thres = 0.3,
+#'      p_val_thres = 0.05, TFtargs = TFtarg_mat, TFBS_belief = 0.75, 
+#'      nonGE_belief = 0.5, woPKGE_belief = 0.5)
+#' adjacency_matrix <- B$B_prior_mat
+#' adjacency_matrix[,] <- 0
+#' neighborhood_size(net = adjacency_matrix, layers_def = layers_def,
+#' B_prior_mat = B$B_prior_mat, omics = B$omics)
 #'
 #' @return Numeric of length 1: neighborhood size
 #' @export
@@ -134,6 +186,23 @@ neighborhood_size <- function(net, layers_def, B_prior_mat, omics)
 #' @param omics_ge matrix with gene expression data (samples in rows and
 #' features in columns).
 #' @importFrom bnstruct BNDataset BN learn.params dag
+#'
+#' @examples
+#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
+#' package="IntOMICS")
+#' colnames(omics$ge) <- gene_annot$entrezID[match(colnames(omics$ge),
+#' gene_annot$gene_symbol)]
+#' colnames(omics$cnv) <- tolower(gene_annot$entrezID[match(colnames(omics$cnv),
+#' gene_annot$gene_symbol)])
+#' B <- B_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
+#'      annot = annot, lm_METH = TRUE, r_squared_thres = 0.3,
+#'      p_val_thres = 0.05, TFtargs = TFtarg_mat, TFBS_belief = 0.75, 
+#'      nonGE_belief = 0.5, woPKGE_belief = 0.5)
+#' empty.net <- matrix(0, nrow = sum(mapply(ncol,B$omics)), ncol =
+#' sum(mapply(ncol,B$omics)), dimnames = list(unlist(mapply(colnames,B$omics)),
+#' unlist(mapply(colnames,B$omics))))
+#' sample.chain(empty_net = empty.net, 
+#'      omics_ge = B$omics[[layers_def$omics[1]]])
 #'
 #' @return BN object with conditional probabilities
 #' @export
@@ -177,6 +246,22 @@ sample.chain <- function(empty_net, omics_ge)
 #' @importFrom stats runif
 #' @importFrom matrixStats logSumExp
 #'       
+#' @examples
+#' data("OMICS_mod_res", package="IntOMICS")
+#' init.net <- init.net.mcmc(omics = OMICS_mod_res$omics, 
+#'     layers_def = OMICS_mod_res$layers_def, 
+#'     B_prior_mat = OMICS_mod_res$B_prior_mat)
+#' source_net_def(init.net.mcmc.output = init.net, 
+#'     omics = OMICS_mod_res$omics, 
+#'     parent_set_combinations = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations,
+#'     BGe_score_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+#'     B_prior_mat = OMICS_mod_res$B_prior_mat, 
+#'     layers_def = OMICS_mod_res$layers_def, len = 5,
+#'     energy_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node)
+#'              
 #' @return List of 10 elements needed to define the initial adjacency matrix            
 #' @export
 source_net_def <- function(init.net.mcmc.output, parent_set_combinations,
@@ -231,6 +316,15 @@ energy_all_configs_node, len)
 #' @param parent_set_combinations list of all possible parent set configuration
 #' for all nodes available.
 #' @importFrom bnlearn descendants amat empty.graph
+#'
+#' @examples
+#' data("OMICS_mod_res", package="IntOMICS")
+#' MBR(source_net_adjacency = OMICS_mod_res$B_prior_mat, 
+#'     layers_def = OMICS_mod_res$layers_def, omics = OMICS_mod_res$omics, 
+#'     BGe_score_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node,
+#'     parent_set_combinations = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)
 #'
 #' @return List of 10 elements needed to define adjacency matrix 
 #' with markov blanket resampling
@@ -514,6 +608,18 @@ selected_node, descendants, parent_set, BGe_score_all_configs_node)
 #' @param annot named list containing the associated methylation probes 
 #' of given gene.
 #'
+#' @examples
+#' data(list=c("OMICS_mod_res", "first.adapt.phase_net"),
+#' package="IntOMICS")
+#' MC3(B_prior_mat = OMICS_mod_res$B_prior_mat, 
+#' source_net = first.adapt.phase_net$nets[[length(first.adapt.phase_net$nets)]],
+#' layers_def =  OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
+#' beta.source=first.adapt.phase_net$betas[[length(first.adapt.phase_net$betas)]], 
+#' partition_func_UB_beta_source=first.adapt.phase_net$partition_func_UB_beta_source, 
+#' omics = OMICS_mod_res$omics, 
+#' parent_set_combinations=OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
+#' BGe_score_all_configs_node=OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node)
+#'
 #' @return List of 10 elements needed to define adjacency matrix 
 #" with conventional single edge move
 #' @export
@@ -720,6 +826,18 @@ BGe_score_all_configs_node, annot)
 #' @param annot named list containing the associated methylation probes 
 #' of given gene.
 #'
+#' @examples
+#' data(list=c("OMICS_mod_res", "first.adapt.phase_net"),
+#' package="IntOMICS")
+#' MC3_constantBGe(B_prior_mat = OMICS_mod_res$B_prior_mat,
+#' source_net=first.adapt.phase_net$nets[[length(first.adapt.phase_net$nets)]],
+#' layers_def=OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
+#' beta.source=first.adapt.phase_net$betas[[length(first.adapt.phase_net$betas)]], 
+#' partition_func_UB_beta_source=first.adapt.phase_net$partition_func_UB_beta_source, 
+#' omics = OMICS_mod_res$omics, 
+#' parent_set_combinations=OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
+#' BGe_score_all_configs_node=OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node)
+#'
 #' @return List of 10 elements needed to define adjacency matrix 
 #' with conventional single edge move
 #' @export
@@ -768,7 +886,20 @@ BGe_score_all_configs_node, annot)
 #' Each component of the list is a matrix with samples in rows and features 
 #' in columns.
 #' @param B_prior_mat a biological prior matrix.
-#'                      
+#' 
+#' @examples
+#' data(list=c("OMICS_mod_res", "first.adapt.phase_net"),
+#' package="IntOMICS")
+#' source_net <- first.adapt.phase_net$nets[[length(
+#'     first.adapt.phase_net$nets)]]
+#' ge_nodes <- rownames(source_net$adjacency)[regexpr("EID",
+#'     rownames(source_net$adjacency))>0]
+#' vec <- seq_len(length(c(source_net$adjacency)))
+#' vec <- vec[c(OMICS_mod_res$B_prior_mat)>0]
+#' edge_proposal(net = source_net$adjacency, candidates = vec, 
+#'     layers_def = OMICS_mod_res$layers_def, ge_nodes = ge_nodes, 
+#'     omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat)
+#'             
 #' @return List of 6 elements needed to define candidates for conventional
 #' single edge proposal move            
 #' @export

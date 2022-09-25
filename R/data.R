@@ -55,7 +55,7 @@
 #' @source \url{https://www.cancer.gov/tcga}
 "omics"
 
-#' Gene ID conversion table
+#' Layers definition of all omics data
 #'
 #' A data.frame containing the modality ID, corresponding layer in BN and maximal number of parents from given layer to GE nodes.
 #'
@@ -67,11 +67,46 @@
 #' }
 "layers_def"
 
+#' preprocessed IntOMICS input data
+#'
+#' The output from IntOMICS::OMICS_module function. A named list containing preprocessed input data.
+#'
+#' @format A named list with 6 components:
+#' \describe{
+#'   \item{pf_UB_BGe_pre}{output from IntOMICS::pf_UB_est function}
+#'   \item{B_prior_mat}{biological prior matrix}
+#'   \item{annot}{genes and associated methylation probes}
+#'   \item{omics}{a named list containing the gene expression, copy number variation and methylation data}
+#'   \item{layers_def}{layers definition of all omics data}
+#'   \item{omics_meth_original}{original methylation data}
+#' }
+"OMICS_mod_res"
+
+#' IntOMICS first adaption phase result
+#'
+#' The output from IntOMICS::first_adapt_phase function. A named list containing results from the MCMC sampling of the first adaption phase.
+#'
+#' @format A named list with 10 components:
+#' \describe{
+#'   \item{source.net}{initial adjacency matrix}
+#'   \item{beta.source}{initial beta value}
+#'   \item{partition_func_UB_beta_source}{partition function upper bound}
+#'   \item{acceptance_saved}{acceptance ratio}
+#'   \item{B_prior_mat}{biological prior matrix}
+#'   \item{acceptance_beta_saved}{acceptance ratio of beta value}
+#'   \item{betas}{simulated beta values}
+#'   \item{method_choice_saved}{MCMC method used to sample network structure}
+#'   \item{nets}{simulated networks}
+#'   \item{energy_all_configs_node}{energy for all possible parent set configurations}
+#' }
+"first.adapt.phase_net"
+
+
 #' IntOMICS MCMC simulation result
 #'
 #' The output from IntOMICS::BN_module function. A named list containing results from the MCMC sampling (resulting sample is thinned and converted into corresponding CPDAGs)
 #'
-#' @format A named list with 3 components - each component corresponds to one omics data:
+#' @format A named list with 3 components:
 #' \describe{
 #'   \item{B_prior_mat_weighted}{IntOMICS estimated empirical biological knowledge}
 #'   \item{sampling.phase_res}{results from the conventional MCMC sampling - two independent simulations}

@@ -29,3 +29,12 @@ Numeric vector of length 1: BGe score of given node
 \code{BGe_node} Computes the BGe score of given node using precomputed sets
 of all possible parents.
 }
+\examples{
+data("OMICS_mod_res", package="IntOMICS")
+BGe_node(node = "EID:2535", adjacency_matrix = OMICS_mod_res$B_prior_mat,
+    parent_set_combinations =
+    OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
+    BGe_score_all_configs_node =
+    OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node)
+
+}

@@ -51,3 +51,19 @@ List of 1 element: first adaption phase and transient phase result
 \code{transient_phase} This phase verify if the chain is moving towards
 the mode of target distribution.
 }
+\examples{
+data(list=c("PK", "TFtarg_mat", "annot", "layers_def", 
+   "omics", "gene_annot", "OMICS_mod_res", "first.adapt.phase_net"), 
+   package="IntOMICS")
+if(interactive()){transient_phase(first.adapt.phase_net = 
+   first.adapt.phase_net, omics = OMICS_mod_res$omics, 
+   B_prior_mat = OMICS_mod_res$B_prior_mat, prob_mbr = 0.07, 
+    layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
+    energy_all_configs_node = 
+    OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
+    BGe_score_all_configs_node = 
+    OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+    parent_set_combinations = 
+    OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)}
+
+}

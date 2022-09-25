@@ -32,8 +32,8 @@
 #' interactions without prior knowledge (default=0.5).
 #'
 #' @examples
-#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
-#' package="IntOMICS")
+#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", 
+#' "gene_annot"), package="IntOMICS")
 #' OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, 
 #'     layers_def = layers_def, TFtargs = TFtarg_mat, annot = annot, 
 #'     gene_annot = gene_annot, r_squared_thres = 0.3, lm_METH = TRUE)
@@ -46,6 +46,7 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
 {
     colnames(omics$ge) <- gene_annot$entrezID[match(colnames(omics$ge),gene_annot$gene_symbol)]
     colnames(omics$cnv) <- tolower(gene_annot$entrezID[match(colnames(omics$cnv),gene_annot$gene_symbol)])
+    names(annot) <- gene_annot$entrezID[match(names(annot),gene_annot$gene_symbol)]
     
     if(TFBS_belief==woPKGE_belief)
     {
@@ -96,6 +97,18 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
 #' @param woPKGE_belief numeric vector to define the belief concerning GE-GE
 #' interactions without prior knowledge (default=0.5).
 #' @importFrom bestNormalize orderNorm
+#'
+#' @examples
+#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
+#' package="IntOMICS")
+#' colnames(omics$ge) <- gene_annot$entrezID[match(colnames(omics$ge),
+#' gene_annot$gene_symbol)]
+#' colnames(omics$cnv) <- tolower(gene_annot$entrezID[match(colnames(omics$cnv),
+#' gene_annot$gene_symbol)])
+#' B <- B_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
+#'      annot = annot, lm_METH = TRUE, r_squared_thres = 0.3,
+#'      p_val_thres = 0.05, TFtargs = TFtarg_mat, TFBS_belief = 0.75, 
+#'      nonGE_belief = 0.5,  woPKGE_belief = 0.5)
 #'
 #' @return List of 4 elements: prior biological matrix and data
 #' preprocessing           
@@ -331,6 +344,22 @@ DAGcorescore <- function(j,parentnodes,n,param) {
 #' @param B_prior_mat a biological prior matrix.
 #' @param int_node character vector with given node name.
 #'
+#' @examples
+#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
+#' package="IntOMICS")
+#' colnames(omics$ge) <- gene_annot$entrezID[match(colnames(omics$ge),
+#' gene_annot$gene_symbol)]
+#' colnames(omics$cnv) <- tolower(gene_annot$entrezID[match(colnames(omics$cnv),
+#' gene_annot$gene_symbol)])
+#' B <- B_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
+#'    annot = annot, lm_METH = TRUE, r_squared_thres = 0.3, p_val_thres = 0.05,
+#'    TFtargs = TFtarg_mat, TFBS_belief = 0.75, nonGE_belief = 0.5, 
+#'    woPKGE_belief = 0.5)
+#' all_parents_config <- matrix(c("EID:2535", "EID:2535", 
+#' "EID:1857", "EID:2932"), byrow = TRUE, nrow=2)
+#' energy_function_node_specific(all_parents_config = all_parents_config,
+#' B_prior_mat = B$B_prior_mat, int_node = "EID:7482")
+#'
 #' @return Numeric vector of length 1            
 #' @export
 energy_function_node_specific <- function(all_parents_config, B_prior_mat,
@@ -365,6 +394,12 @@ int_node)
 #' of significance in linear regression if lm_METH=TRUE (default=0.05).
 #' @importFrom stats lm shapiro.test
 #'
+#' @examples
+#' data(list=c("annot", "omics"), package="IntOMICS")
+#' lm_meth(ge_mat = omics$ge, meth_mat = omics$meth, 
+#'     gene = "WNT2B", meth_probes = annot[["WNT2B"]], 
+#'     r_squared_thres = 0.3, p_val_thres = 0.05)
+#' 
 #' @return Character vector with methylation probes           
 #' @export
 lm_meth <- function(ge_mat, meth_mat, gene, meth_probes, r_squared_thres,
@@ -407,6 +442,20 @@ p_val_thres)
 #' @importFrom utils combn
 #' @importFrom stats na.omit
 #'
+#' @examples
+#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
+#' package="IntOMICS")
+#' colnames(omics$ge) <- gene_annot$entrezID[match(colnames(omics$ge),
+#' gene_annot$gene_symbol)]
+#' colnames(omics$cnv) <- tolower(gene_annot$entrezID[match(colnames(omics$cnv),
+#' gene_annot$gene_symbol)])
+#' B <- B_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
+#'      annot = annot, lm_METH = TRUE, r_squared_thres = 0.3,
+#'      p_val_thres = 0.05, TFtargs = TFtarg_mat, TFBS_belief = 0.75, 
+#'      nonGE_belief = 0.5, woPKGE_belief = 0.5)
+#' pf_UB_est(omics = B$omics, B_prior_mat = B$B_prior_mat, 
+#' layers_def = layers_def, annot = B$annot)
+#' 
 #' @return List of 4 elements needed to simulate MCMC sampling            
 #' @export
 pf_UB_est <- function(omics, B_prior_mat, layers_def, annot)
@@ -563,6 +612,9 @@ pf_UB_est <- function(omics, B_prior_mat, layers_def, annot)
 #' between 0 and 1.
 #' @param x numeric vector.
 #'
+#' @examples
+#' range_01(stats::rnorm(10))
+#' 
 #' @return Numeric vector with normalised values           
 #' @export
 range_01 <- function(x){(x-min(x))/(max(x)-min(x))}

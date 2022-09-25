@@ -59,13 +59,8 @@ Defines the resulting network structure and determines the color scale
 for each modality.
 }
 \examples{
-data(list=c("PK", "TFtarg_mat", "annot", "gene_annot", "layers_def",
-"omics"), package="IntOMICS")
-OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, annot = annot, 
-       layers_def = layers_def, TFtargs = TFtarg_mat,
-       r_squared_thres = 0.3, lm_METH = TRUE, gene_annot = gene_annot)
-BN_mod_res <- BN_module(burn_in = 100000, thin = 500, len = 5, 
-       OMICS_mod_res = OMICS_mod_res, minseglen = 50000, prob_mbr = 0.07)
+data(list=c("OMICS_mod_res", "BN_mod_res", "gene_annot", "TFtarg_mat", 
+"PK"), package="IntOMICS")
 res_weighted <- trace_plots(mcmc_res = BN_mod_res, figures_dir = "figures/", 
        burn_in = 100000, thin = 500, gene_annot = gene_annot, 
        PK = PK, OMICS_mod_res = OMICS_mod_res, gene_ID = "gene_symbol", 

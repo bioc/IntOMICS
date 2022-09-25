@@ -50,3 +50,31 @@ MCMC convergence
 After the burn-in period, we discard the values from the first half
 of this phase.
 }
+\examples{
+data(list=c("first.adapt.phase_net", "OMICS_mod_res"),
+    package="IntOMICS")
+if(interactive()){transient.phase_net <- transient_phase(prob_mbr = 0.07, 
+    first.adapt.phase_net = first.adapt.phase_net, 
+    omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat, 
+    layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
+    energy_all_configs_node = 
+    OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
+    BGe_score_all_configs_node = 
+    OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+    parent_set_combinations = 
+    OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
+    second.adapt.phase_net <- second_adapt_phase(prob_mbr = 0.07, 
+    transient.phase_net = transient.phase_net, woPKGE_belief = 0.5, 
+    omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat, 
+    layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
+    energy_all_configs_node =
+    OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
+    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
+    sampling_phase(omics = OMICS_mod_res$omics, 
+    second.adapt.phase_net = second.adapt.phase_net, 
+    layers_def = OMICS_mod_res$layers_def, prob_mbr = 0.07, 
+    thin = 500, minseglen = 50000, burn_in = 100000, 
+    annot = OMICS_mod_res$annot)}
+
+}

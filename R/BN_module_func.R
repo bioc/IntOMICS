@@ -16,15 +16,10 @@
 #' @param prob_mbr numeric vector probability of the MBR step.
 #'
 #' @examples
-#' data(list=c("PK", "TFtarg_mat", "annot", "gene_annot", "layers_def", 
-#'     "omics"), package="IntOMICS")
-#' OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, 
-#'     layers_def = layers_def, TFtargs = TFtarg_mat,
-#'     annot = annot, gene_annot = gene_annot, r_squared_thres = 0.3, 
-#'     lm_METH = TRUE)
-#' BN_mod_res <- BN_module(burn_in = 100000, thin = 500, 
-#'     OMICS_mod_res = OMICS_mod_res, minseglen = 50000, 
-#'     len = 5, prob_mbr = 0.07)
+#' data("OMICS_mod_res", package="IntOMICS")
+#' if(interactive()){BN_mod_res <- BN_module(burn_in = 100000, 
+#'     thin = 500, OMICS_mod_res = OMICS_mod_res, 
+#'     minseglen = 50000, len = 5, prob_mbr = 0.07)}
 #' 
 #' @return Large List of 3 elements: empirical biological matrix, 
 #' sampling phase result and hyperparameter beta tuning trace
@@ -61,8 +56,7 @@ BN_module <- function(burn_in, thin, OMICS_mod_res, minseglen, len = 5,
         energy_all_configs_node = energy_all_configs_node, 
         layers_def = OMICS_mod_res$layers_def,
         BGe_score_all_configs_node = BGe_score_all_configs_node,
-        parent_set_combinations = parent_set_combinations)
-                              
+        parent_set_combinations = parent_set_combinations) 
     ### sampling phase ###
     sampling.phase_net <- sampling_phase(omics = OMICS_mod_res$omics,
         second.adapt.phase_net = second.adapt.phase_net, thin = thin,
@@ -101,6 +95,17 @@ BN_module <- function(burn_in, thin, OMICS_mod_res, minseglen, len = 5,
 #' configuration for all nodes available.
 #' @param annot named list containing the associated methylation 
 #' probes of given gene.
+#'
+#' @examples
+#' data("OMICS_module", package="IntOMICS")
+#' if(interactive()){first_adapt_phase(omics = OMICS_mod_res$omics, 
+#'    B_prior_mat = OMICS_mod_res$B_prior_mat, len = 5, 
+#'    energy_all_configs_node = 
+#'    OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
+#'    layers_def = OMICS_mod_res$layers_def, prob_mbr = 0.07,
+#'    BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+#'    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
+#'    annot = OMICS_mod_res$annot)}
 #'
 #' @return List of 1 element: first adaption phase result
 #' @export
@@ -160,6 +165,21 @@ parent_set_combinations, annot) {
 #' probes of given gene.
 #' @importFrom stats runif lm rnorm
 #' @importFrom utils tail
+#'
+#' @examples
+#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", 
+#'    "omics", "gene_annot", "OMICS_mod_res", "first.adapt.phase_net"), 
+#'    package="IntOMICS")
+#' if(interactive()){transient_phase(first.adapt.phase_net = 
+#'    first.adapt.phase_net, omics = OMICS_mod_res$omics, 
+#'    B_prior_mat = OMICS_mod_res$B_prior_mat, prob_mbr = 0.07, 
+#'     layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
+#'     energy_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
+#'     BGe_score_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+#'     parent_set_combinations = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)}
 #'
 #' @return List of 1 element: first adaption phase and transient phase result
 #' @export
@@ -398,6 +418,29 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
 #' GE-GE interactions without prior knowledge (default=0.5).
 #' @importFrom utils tail
 #' @importFrom stats lm 
+#' 
+#' @examples
+#' data(list=c("OMICS_mod_res", "first.adapt.phase_net"), package="IntOMICS")
+#' if(interactive()){transient.phase_net <- transient_phase(prob_mbr = 0.07,
+#'     first.adapt.phase_net = first.adapt.phase_net, 
+#'     omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat, 
+#'     layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
+#'     energy_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
+#'     BGe_score_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+#'     parent_set_combinations = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
+#'     second_adapt_phase(omics = OMICS_mod_res$omics,
+#'     transient.phase_net = transient.phase_net, woPKGE_belief = 0.5,
+#'     layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
+#'     energy_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node, 
+#'     prob_mbr = 0.07, B_prior_mat = OMICS_mod_res$B_prior_mat, 
+#'     BGe_score_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+#'     parent_set_combinations = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)}
 #'
 #' @return List of 1 element: first adaption phase + transient phase + 
 #' second adaption phase result
@@ -518,6 +561,16 @@ parent_set_combinations, annot, woPKGE_belief = 0.5)
 #' @importFrom matrixStats logSumExp
 #' @importFrom utils tail
 #' 
+#' @examples
+#' data(list=c("OMICS_mod_res", "first.adapt.phase_net"), package="IntOMICS")
+#' if(interactive()){acceptance_check(round_check = 100, prob_mbr = 0.07,
+#'     first.adapt.phase_net = first.adapt.phase_net, last_iter_check = 100,
+#'     layers_def = OMICS_mod_res$layers_def, 
+#'     BGe_score_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+#'     parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations,
+#'     omics = OMICS_mod_res$omics, annot = OMICS_mod_res$annot)}
+#'
 #' @return List of 1 element: first adaption phase result 
 #' before given acceptance rate
 #' @export
@@ -661,6 +714,15 @@ BGe_score_all_configs_node, omics, annot)
 #' @param BGe_score_all_configs_node list of nodes BGe score for all possible
 #' parent set configurations.
 #' 
+#' @examples
+#' data("OMICS_mod_res", package="IntOMICS")
+#' BGe_score(adjacency_matrix = OMICS_mod_res$B_prior_mat,
+#'     layers_def = OMICS_mod_res$layers_def, omics = OMICS_mod_res$omics, 
+#'     parent_set_combinations =
+#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
+#'     BGe_score_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node)
+#'
 #' @return Numeric vector of length 1: BGe score of given adjacency matrix
 #' @export
 BGe_score <- function(adjacency_matrix, omics, layers_def,
@@ -687,6 +749,14 @@ parent_set_combinations, BGe_score_all_configs_node)
 #' @param BGe_score_all_configs_node list of nodes BGe score for all possible
 #' parent set configurations.
 #' 
+#' @examples
+#' data("OMICS_mod_res", package="IntOMICS")
+#' BGe_node(node = "EID:2535", adjacency_matrix = OMICS_mod_res$B_prior_mat,
+#'     parent_set_combinations =
+#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
+#'     BGe_score_all_configs_node =
+#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node)
+#'
 #' @return Numeric vector of length 1: BGe score of given node
 #' @export
 BGe_node <- function(node, adjacency_matrix, parent_set_combinations,
@@ -716,6 +786,12 @@ BGe_score_all_configs_node)
 #' the energy of given network.
 #' @param net adjacency matrix of given network.
 #' @param B_prior_mat a biological prior matrix.
+#'
+#' @examples
+#' data("OMICS_mod_res", package="IntOMICS")
+#' adjacency_matrix <- OMICS_mod_res$B_prior_mat
+#' adjacency_matrix[,] <- 0
+#' epsilon(net = adjacency_matrix, B_prior_mat = OMICS_mod_res$B_prior_mat)
 #'
 #' @return Numeric vector of length 1: epsilon of given adjacency matrix
 #' (needed to compute energy of given adjacency matrix)
@@ -890,6 +966,33 @@ layers_def, len, thin, energy_all_configs_node, annot)
 #' @importFrom utils tail
 #' @importFrom bnlearn custom.strength
 #' @importFrom stats quantile
+#'
+#' @examples
+#' data(list=c("first.adapt.phase_net", "OMICS_mod_res"),
+#'     package="IntOMICS")
+#' if(interactive()){transient.phase_net <- transient_phase(prob_mbr = 0.07, 
+#'     first.adapt.phase_net = first.adapt.phase_net, 
+#'     omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat, 
+#'     layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
+#'     energy_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
+#'     BGe_score_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+#'     parent_set_combinations = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
+#'     second.adapt.phase_net <- second_adapt_phase(prob_mbr = 0.07, 
+#'     transient.phase_net = transient.phase_net, woPKGE_belief = 0.5, 
+#'     omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat, 
+#'     layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
+#'     energy_all_configs_node =
+#'     OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
+#'     BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+#'     parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
+#'     sampling_phase(omics = OMICS_mod_res$omics, 
+#'     second.adapt.phase_net = second.adapt.phase_net, 
+#'     layers_def = OMICS_mod_res$layers_def, prob_mbr = 0.07, 
+#'     thin = 500, minseglen = 50000, burn_in = 100000, 
+#'     annot = OMICS_mod_res$annot)}
 #'
 #' @return List of 2 elements: sampling phase result; RMS used to evaluate 
 #' MCMC convergence
@@ -1077,6 +1180,41 @@ thin, minseglen, burn_in, annot)
 #' given gene.
 #' @importFrom stats rnorm
 #' @importFrom matrixStats logSumExp
+#'
+#' @examples
+#' data(list=c("OMICS_mod_res", "first.adapt.phase_net", "annot"), 
+#' package="IntOMICS")
+#' if(interactive()){transient.phase_net <- transient_phase(prob_mbr = 0.07,
+#' first.adapt.phase_net = first.adapt.phase_net, 
+#' omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat, 
+#' layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
+#' energy_all_configs_node = 
+#' OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
+#' BGe_score_all_configs_node = 
+#' OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+#' parent_set_combinations = 
+#' OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
+#' second_adapt_phase_net <- second_adapt_phase(prob_mbr = 0.07, 
+#' transient.phase_net = transient.phase_net, woPKGE_belief = 0.5,
+#' layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
+#' energy_all_configs_node = 
+#' OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node, 
+#' B_prior_mat = OMICS_mod_res$B_prior_mat, 
+#' BGe_score_all_configs_node = 
+#' OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+#' parent_set_combinations = 
+#' OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations,
+#' omics = OMICS_mod_res$omics)
+#' squared_jumping(omics = OMICS_mod_res$omics,
+#' second.adapt.phase_net = second.adapt.phase_net$variance.target_net, 
+#' constant = 2.38/(1.5), fin = (nrow(OMICS_mod_res$B_prior_mat)^2)*5, 
+#' beta_sd = second.adapt.phase_net$beta_sd, prob_mbr = 0.07,
+#' B_prior_mat = OMICS_mod_res$B_prior_mat, 
+#' layers_def = OMICS_mod_res$layers_def,
+#' parent_set_combinations=OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations,
+#' BGe_score_all_configs_node=OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node,
+#' annot = annot)}
+#'
 #' @return List of 1 element: second adaptive phase result with stopped 
 #' MCMC mixing
 #' @export
@@ -1259,6 +1397,30 @@ layers_def, prob_mbr, annot)
 #' of given gene.
 #' @importFrom utils tail
 #' @importFrom stats rnorm sd
+#'
+#' @examples
+#' data(list=c("OMICS_mod_res", "first.adapt.phase_net"),
+#'     package="IntOMICS")
+#' if(interactive()){transient.phase_net <- transient_phase(
+#'     annot = OMICS_mod_res$annot, 
+#'     first.adapt.phase_net = first.adapt.phase_net, 
+#'     omics = OMICS_mod_res$omics, prob_mbr = 0.07, 
+#'     B_prior_mat = OMICS_mod_res$B_prior_mat, 
+#'     layers_def = OMICS_mod_res$layers_def, 
+#'     energy_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
+#'     BGe_score_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+#'     parent_set_combinations = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
+#'     variance_target(annot = OMICS_mod_res$annot,
+#'     constant = 1.586667, B_prior_mat = OMICS_mod_res$B_prior_mat,
+#'     parent_set_combinations = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
+#'     BGe_score_all_configs_node = 
+#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
+#'     layers_def = OMICS_mod_res$layers_def, omics = OMICS_mod_res$omics, 
+#'     prob_mbr = 0.07, transient.phase_net = transient.phase_net, fin = 200)}
 #'
 #' @return Large List of 3 elements: second adaptive phase result 
 #' with possible MCMC mixing; acceptance rate of hyperparameter beta; 

@@ -3,7 +3,7 @@
 \docType{data}
 \name{layers_def}
 \alias{layers_def}
-\title{Gene ID conversion table}
+\title{Layers definition of all omics data}
 \format{
 A data.frame with 3 rows and 3 variables:
 \describe{

@@ -31,13 +31,8 @@
 #' @importFrom grDevices svg dev.off
 #'
 #' @examples
-#' data(list=c("PK", "TFtarg_mat", "annot", "gene_annot", "layers_def",
-#' "omics"), package="IntOMICS")
-#' OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, annot = annot, 
-#'        layers_def = layers_def, TFtargs = TFtarg_mat,
-#'        r_squared_thres = 0.3, lm_METH = TRUE, gene_annot = gene_annot)
-#' BN_mod_res <- BN_module(burn_in = 100000, thin = 500, len = 5, 
-#'        OMICS_mod_res = OMICS_mod_res, minseglen = 50000, prob_mbr = 0.07)
+#' data(list=c("OMICS_mod_res", "BN_mod_res", "gene_annot", "TFtarg_mat", 
+#' "PK"), package="IntOMICS")
 #' res_weighted <- trace_plots(mcmc_res = BN_mod_res, figures_dir = "figures/", 
 #'        burn_in = 100000, thin = 500, gene_annot = gene_annot, 
 #'        PK = PK, OMICS_mod_res = OMICS_mod_res, gene_ID = "gene_symbol", 
@@ -199,6 +194,10 @@ TFtargs = NULL)
 #' @param from numeric vector range of x.
 #' @param to numeric vector range of normalised x.
 #' @importFrom stats median
+#'
+#' @examples
+#' x <- seq(1,10)
+#' normalise(x, from = range(x), to = c(0, 1))
 #'
 #' @return Numeric vector
 #' @export
@@ -736,13 +735,8 @@ OMICS_mod_res, edge_weights, TFtargs = NULL)
 #' @importFrom utils head tail
 #'
 #' @examples
-#' data(list=c("PK", "TFtarg_mat", "annot", "gene_annot", "layers_def",
-#' "omics"), package="IntOMICS")
-#' OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, 
-#'      layers_def = layers_def, TFtargs = TFtarg_mat, annot = annot, 
-#'      r_squared_thres = 0.3, lm_METH = TRUE, gene_annot = gene_annot)
-#' BN_mod_res <- BN_module(burn_in = 100000, thin = 500, len = 5,
-#'      OMICS_mod_res = OMICS_mod_res, minseglen = 50000, prob_mbr = 0.07)
+#' data(list=c("PK", "TFtarg_mat", "gene_annot",
+#' "OMICS_mod_res", "BN_mod_res"), package="IntOMICS")
 #' res_weighted <- trace_plots(mcmc_res = BN_mod_res, figures_dir = "figures", 
 #'      burn_in = 100000, thin = 500, gene_annot = gene_annot, PK = PK, 
 #'      OMICS_mod_res = OMICS_mod_res, gene_ID = "gene_symbol", 
@@ -799,13 +793,8 @@ legend_custom <- function(net)
 #' @importFrom gplots heatmap.2 bluered
 #'
 #' @examples
-#' data(list=c("PK", "TFtarg_mat", "annot", "gene_annot", "layers_def",
-#' "omics"), package="IntOMICS")
-#' OMICS_mod_res <- OMICS_module(omics = omics, PK = PK, annot = annot, 
-#'     layers_def = layers_def, TFtargs = TFtarg_mat, r_squared_thres = 0.3, 
-#'     lm_METH = TRUE, gene_annot = gene_annot)
-#' BN_mod_res <- BN_module(burn_in = 100000, thin = 500, len = 5,
-#'     OMICS_mod_res = OMICS_mod_res, minseglen = 50000, prob_mbr = 0.07)
+#' data(list=c("TFtarg_mat", "gene_annot", "OMICS_mod_res",
+#' "BN_mod_res"), package="IntOMICS")
 #' empB_heatmap(mcmc_res = BN_mod_res, OMICS_mod_res = OMICS_mod_res, 
 #'     gene_annot = gene_annot, TFtargs = TFtarg_mat)
 #'             

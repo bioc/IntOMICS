@@ -16,3 +16,7 @@ Numeric vector with normalised values
 \code{range_01} This function re-scales a numeric vector so that it ranges
 between 0 and 1.
 }
+\examples{
+range_01(stats::rnorm(10))
+
+}
