@@ -74,7 +74,7 @@ if(interactive()){transient.phase_net <- transient_phase(prob_mbr = 0.07,
     sampling_phase(omics = OMICS_mod_res$omics, 
     second.adapt.phase_net = second.adapt.phase_net, 
     layers_def = OMICS_mod_res$layers_def, prob_mbr = 0.07, 
-    thin = 500, minseglen = 50000, burn_in = 100000, 
+    thin = 500, minseglen = 500, burn_in = 10000, 
     annot = OMICS_mod_res$annot)}
 
 }

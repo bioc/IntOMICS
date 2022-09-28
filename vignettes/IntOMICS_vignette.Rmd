@@ -75,6 +75,7 @@ data(list=c("BN_mod_res", "PK", "TFtarg_mat", "annot", "gene_annot", "layers_def
 
 suppressPackageStartupMessages({
 library(curatedTCGAData)
+library(TCGAutils)
 library(bnlearn)
 library(bnstruct)
 library(matrixStats)
@@ -107,25 +108,25 @@ We use `curatedTCGA` package to obtain publicly available toy dataset from The C
 ```{r echo=TRUE, include=TRUE}
 
 coad_SE <- curatedTCGAData("COAD", c("RNASeq2GeneNorm_illuminahiseq","Methylation_methyl450","GISTIC_AllByGene"), version = "2.0.1", dry.run = FALSE)
-
-coad_GE_CNV <- coad_SE[,,c("COAD_RNASeq2GeneNorm_illuminahiseq-20160128","COAD_GISTIC_AllByGene-20160128")]
-rownames(coad_GE_CNV[["COAD_GISTIC_AllByGene-20160128"]]) <- rowData(coad_GE_CNV[["COAD_GISTIC_AllByGene-20160128"]])[["Gene.Symbol"]]
-
-# choose only MSI-H samples
-coad_GE_CNV_clinical <- longFormat(coad_GE_CNV,colDataCols = c("MSI_status","patient.samples.sample.sample_type"))
-coad_GE_CNV_clinical_MSI <- coad_GE_CNV_clinical[which(coad_GE_CNV_clinical$MSI_status=="MSI-H"),]
-
-coad_GE_CNV <- coad_GE_CNV[gene_annot$gene_symbol, unique(coad_GE_CNV_clinical_MSI$primary),]
-coad_METH <- coad_SE[unlist(annot),unique(coad_GE_CNV_clinical_MSI$primary),"COAD_Methylation_methyl450-20160128"]
-coad_GE_CNV_METH <- c(coad_GE_CNV, coad_METH)
-coad_GE_CNV_METH <- coad_GE_CNV_METH[,complete.cases(coad_GE_CNV_METH),]
+coad_SE <- TCGAprimaryTumors(coad_SE)
+ 
+coad_ma <- MatchedAssayExperiment(coad_SE)
+## keep NA for Methylation data
+coad_ma <- subsetByColData(coad_ma, coad_ma$MSI_status == "MSI-H" | is.na(coad_ma$MSI_status))
+# choose first 50 samples for illustration
+coad_ma <- subsetByColData(coad_ma, c(rep(TRUE,50),rep(FALSE,ncol(coad_ma[[1]])-50)))
+rownames(coad_ma[["COAD_GISTIC_AllByGene-20160128"]]) <- rowData(coad_ma[["COAD_GISTIC_AllByGene-20160128"]])[["Gene.Symbol"]]
+ 
+rowselect <- list(gene_annot$gene_symbol, gene_annot$gene_symbol, unlist(annot))
+names(rowselect) <- names(coad_ma)
+coad_toy <- coad_ma[rowselect, , ]
 
 # choose only primary tumor samples
-ge <- t(assay(coad_GE_CNV_METH[[1]])[,colnames(assay(coad_GE_CNV_METH[[1]]))[regexpr("-01A-",colnames(assay(coad_GE_CNV_METH[[1]])))>0]])
-cnv_char <- t(assay(coad_GE_CNV_METH[[2]])[,colnames(assay(coad_GE_CNV_METH[[2]]))[regexpr("-01A-",colnames(assay(coad_GE_CNV_METH[[2]])))>0]])
+ge <- t(assay(coad_toy[[2]]))
+cnv_char <- t(assay(coad_toy[[1]]))
 cnv <- apply(cnv_char,2,as.numeric)
 rownames(cnv) <- rownames(cnv_char)
-meth <- t(as.matrix((assay(coad_GE_CNV_METH[[3]])[,colnames(assay(coad_GE_CNV_METH[[3]]))[regexpr("-01A-",colnames(assay(coad_GE_CNV_METH[[3]])))>0]])))
+meth <- t(as.matrix(assay(coad_toy[[3]])))
 
 omics <- list(ge=ge, cnv=cnv, meth=meth)
 omics <- lapply(omics,FUN=function(mat) {rownames(mat) <- substr(rownames(mat),1,12); mat})
@@ -211,7 +212,7 @@ OMICS_mod_res <- OMICS_module(omics = omics,
                               annot = annot, 
                               gene_annot = gene_annot,
                               lm_METH = TRUE,
-                              r_squared_thres = 0.1,
+                              r_squared_thres = 0.3,
                               p_val_thres = 0.1)
 
 ```
@@ -241,14 +242,17 @@ Now, we can use the automatically tuned MCMC algorithm (Yang and Rosenthal, 2017
 This step can be time-consuming (you can skip it and use the pre-computed result -> R object `BN_mod_res`).
 ```{r echo=TRUE, include=TRUE, eval=FALSE}
 
-BN_mod_res <- BN_module(burn_in = 100000, 
+BN_mod_res <- BN_module(burn_in = 10000, 
                         thin = 500, 
                         OMICS_mod_res = OMICS_mod_res,
-                        minseglen = 50000)
+                        minseglen = 500)
 
 ```
 
 There are two optional arguments: "len" specifies the initial width of the sampling interval for hyperparameter $\beta$. However, this parameter will be tuned during the adaptive phases of the MCMC algorithm. "prob_mbr" specifies the probability of the MBR step (default = TRUE). We strongly recommend to use the default setting (for further details on how this argument affects MCMC scheme results, see (Su and Borsuk, 2016)).
+For the illustration, we have used only short burn-in period. We recommend to use much longer burn-in period, such as 100000 and check trace plots of the MCMC simulation.
+The same goes for minseglen parameter (for further details see (Pacinkova \& Popovici, 2022)).
+
 
 Let's check the outputs of `BN_module` function:
 ```{r echo=TRUE, include=TRUE}
@@ -276,13 +280,13 @@ Once it is created, we can run the `trace_plots` function:
 
 res_weighted <- trace_plots(mcmc_res = BN_mod_res, 
                             figures_dir = "figures/MSI/", 
-                            burn_in = 100000, 
+                            burn_in = 10000, 
                             thin = 500, 
                             gene_annot = gene_annot, 
                             PK = PK, 
                             OMICS_mod_res = OMICS_mod_res,
                             gene_ID = "gene_symbol", 
-                            edge_freq_thres = 0.4,
+                            edge_freq_thres = 0.5,
                             TFtargs = TFtarg_mat)
 
 ```
@@ -345,7 +349,7 @@ We can also change the edge labels to inspect the empirical prior knowledge infe
 
 res_weighted <- trace_plots(mcmc_res = BN_mod_res, 
                             figures_dir = "figures/MSI/", 
-                            burn_in = 100000, 
+                            burn_in = 10000, 
                             thin = 500, 
                             gene_annot = gene_annot, 
                             PK = PK, 
@@ -382,7 +386,7 @@ Interesting could be also density of the edge weights inferred by IntOMICS, that
 
 res_weighted <- trace_plots(mcmc_res = BN_mod_res, 
                             figures_dir = "figures/MSI/", 
-                            burn_in = 100000, 
+                            burn_in = 10000, 
                             thin = 500, 
                             gene_annot = gene_annot, 
                             PK = PK, 
@@ -405,7 +409,7 @@ If you find a bug or have a comment let us know, please, via an e-mail: ana.paci
 Yang, J. \& Rosenthal, J. S. (2017). Automatically tuned general-purpose MCMC via new adaptive diagnostics. Computational Statistics, 32, 315
 – 348.  
 Su, C. \& Borsuk, M. E. (2016). Improving Structure MCMC for Bayesian Networks through Markov Blanket Resampling. Journal of Machine Learning Research, 17, 1 – 20.  
-Pacinkova, A. \& Popovici, V. (2022). Using Empirical Biological Knowledge to Infer Regulatory Networks From Multi-omics Data. doi: 10.21203/rs.3.rs-1291540/v1  
+Pacinkova, A. \& Popovici, V. (2022). Using Empirical Biological Knowledge to Infer Regulatory Networks From Multi-omics Data. BMC Bioinformatics, 23.
 Ogata, H., et al. (1999). KEGG: Kyoto Encyclopedia of Genes and Genomes. Nucleic Acids Res 27, 29–34.  
 Wu, G. \& Haw, R. (2017). Functional Interaction Network Construction and Analysis for Disease Discovery. Methods Mol Biol. 1558, 235–253.  
 ENCODE Project Consortium (2004). The ENCODE (ENCyclopedia Of DNA Elements) Project. Science 22, 636-40.

@@ -62,7 +62,7 @@ for each modality.
 data(list=c("OMICS_mod_res", "BN_mod_res", "gene_annot", "TFtarg_mat", 
 "PK"), package="IntOMICS")
 res_weighted <- trace_plots(mcmc_res = BN_mod_res, figures_dir = "figures/", 
-       burn_in = 100000, thin = 500, gene_annot = gene_annot, 
+       burn_in = 10000, thin = 500, gene_annot = gene_annot, 
        PK = PK, OMICS_mod_res = OMICS_mod_res, gene_ID = "gene_symbol", 
        edge_freq_thres = 0.3, TFtargs = TFtarg_mat) 
 
