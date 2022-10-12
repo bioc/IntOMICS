@@ -222,6 +222,8 @@ r_squared_thres, p_val_thres, TFBS_belief, nonGE_belief, woPKGE_belief)
                 annot <- lapply(annot, FUN=function(s) intersect(s,
                     colnames(omics[[layers_def$omics[j]]])))
                 omics_meth_original <- omics[[layers_def$omics[j]]]
+                omics[[layers_def$omics[j]]][,!apply(omics[[
+                layers_def$omics[j]]],2,FUN=function(col) all(is.na(col)))]
                 omics[[layers_def$omics[j]]] <-
                 apply(omics[[layers_def$omics[j]]], 2, FUN=function(column)
                     bestNormalize::orderNorm(column)$x.t)
