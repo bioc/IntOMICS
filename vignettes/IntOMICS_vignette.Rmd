@@ -120,17 +120,9 @@ rownames(coad_ma[["COAD_GISTIC_AllByGene-20160128"]]) <- rowData(coad_ma[["COAD_
  
 rowselect <- list(gene_annot$gene_symbol, gene_annot$gene_symbol, unlist(annot))
 names(rowselect) <- names(coad_ma)
-coad_toy <- coad_ma[rowselect, , ]
-
-# choose only primary tumor samples
-ge <- t(assay(coad_toy[[2]]))
-cnv_char <- t(assay(coad_toy[[1]]))
-cnv <- apply(cnv_char,2,as.numeric)
-rownames(cnv) <- rownames(cnv_char)
-meth <- t(as.matrix(assay(coad_toy[[3]])))
-
-omics <- list(ge=ge, cnv=cnv, meth=meth)
-omics <- lapply(omics,FUN=function(mat) {rownames(mat) <- substr(rownames(mat),1,12); mat})
+omics <- coad_ma[rowselect, , ]
+# names of the assays must be same as in layers_def$omics
+names(omics) <- c("cnv","ge","meth")
 
 ```
 

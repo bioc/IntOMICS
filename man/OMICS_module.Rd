@@ -20,10 +20,8 @@ OMICS_module(
 )
 }
 \arguments{
-\item{omics}{named list containing the gene expression (possibly copy number
-variation and methylation data).
-Each component of the list is a matrix with samples in rows and
-features in columns.}
+\item{omics}{MatchedAssayExperiment containing the gene expression
+(possibly copy number variation and methylation data).}
 
 \item{PK}{data.frame with known interactions.}
 

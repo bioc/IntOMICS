@@ -46,11 +46,13 @@
 
 #' Omics data
 #'
-#' A named list containing the gene expression, copy number variation and methylation data.
+#' A MatchedAssayExperiment with names same as in layers_def$omics column
+#' containing the gene expression, copy number variation and methylation data.
 #'
-#' @format A named list with 3 components - each component corresponds to one omics data:
+#' @format A MatchedAssayExperiment with 3 components - each component corresponds to
+#' one omics data:
 #' \describe{
-#' each component of the list is a matrix with samples in rows and features in columns
+#'  MatchedAssayExperiment with variable number of columns
 #' }
 #' @source \url{https://www.cancer.gov/tcga}
 "omics"
