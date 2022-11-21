@@ -1,0 +1,9 @@
+citEntry(
+    entry="article",
+    author = c(person("Anna", "Pacinkova"),
+               person("Vlad", "Popovici")),
+    title = "Using empirical biological knowledge to infer regulatory networks from multi-omics data",
+    journal = "BMC Bioinformatics",
+    year = 2022,
+    textVersion = "Anna Pacinkova, Vlad Popovici. 'Using empirical biological knowledge to infer regulatory networks from multi-omics data.' BMC Bioinformatics. 2022."
+)
