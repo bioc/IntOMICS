@@ -23,7 +23,6 @@
 #'     r_squared_thres = 0.3, p_val_thres = 0.05)
 #' 
 #' @return Character vector with methylation probes           
-#' @export
 lm_meth <- function(ge_mat, meth_mat, gene, meth_probes, r_squared_thres,
 p_val_thres)
 {

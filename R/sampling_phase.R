@@ -54,7 +54,6 @@
 #'
 #' @return List of 2 elements: sampling phase result; RMS used to evaluate 
 #' MCMC convergence
-#' @export
 sampling_phase <- function(second.adapt.phase_net, omics, layers_def, prob_mbr,
 thin, minseglen, burn_in, annot) 
 {

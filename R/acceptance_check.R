@@ -37,7 +37,6 @@
 #'
 #' @return List of 1 element: first adaption phase result 
 #' before given acceptance rate
-#' @export
 acceptance_check <- function(first.adapt.phase_net, round_check, 
 last_iter_check, prob_mbr, layers_def, parent_set_combinations,
 BGe_score_all_configs_node, omics, annot)

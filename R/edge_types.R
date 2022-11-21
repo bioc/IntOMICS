@@ -20,7 +20,6 @@
 #' @importFrom RColorBrewer brewer.pal
 #'
 #' @return List of 6 elements needed to plot the final regulatory network edges
-#' @export
 edge_types <- function(mcmc_res, PK = NULL, gene_annot, edge_list, node_list,
 OMICS_mod_res, edge_weights, TFtargs = NULL)
 {

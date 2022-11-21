@@ -30,7 +30,6 @@
 #' importFrom bnlearn empty.graph amat cpdag
 #' importFrom stats runif
 #' @return List of 1 element: sampling phase result before MCMC convergence
-#' @export
 mcmc.simulation_sampling.phase <- function(first, last, sim_init, prob_mbr,
 B_prior_mat, omics, parent_set_combinations, BGe_score_all_configs_node, 
 layers_def, len, thin, energy_all_configs_node, annot)

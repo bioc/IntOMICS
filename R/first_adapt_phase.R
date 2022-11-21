@@ -34,7 +34,6 @@
 #'    annot = OMICS_mod_res$annot)}
 #'
 #' @return List of 1 element: first adaption phase result
-#' @export
 first_adapt_phase <- function(omics, B_prior_mat, energy_all_configs_node, 
 len, layers_def, prob_mbr, BGe_score_all_configs_node, 
 parent_set_combinations, annot) {

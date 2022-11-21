@@ -24,7 +24,6 @@
 #'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node)
 #'
 #' @return Numeric vector of length 1: BGe score of given adjacency matrix
-#' @export
 BGe_score <- function(adjacency_matrix, omics, layers_def,
 parent_set_combinations, BGe_score_all_configs_node)
 {

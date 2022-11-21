@@ -52,7 +52,6 @@
 #' @return Large List of 3 elements: second adaptive phase result 
 #' with possible MCMC mixing; acceptance rate of hyperparameter beta; 
 #' SD of hyperparameter beta
-#' @export
 variance_target <- function(transient.phase_net, constant, fin, B_prior_mat, 
 omics, parent_set_combinations, BGe_score_all_configs_node, layers_def,
 prob_mbr, annot)

@@ -29,7 +29,6 @@
 #' layers_def = layers_def, annot = B$annot)
 #' 
 #' @return List of 4 elements needed to simulate MCMC sampling            
-#' @export
 pf_UB_est <- function(omics, B_prior_mat, layers_def, annot)
 {
     comb_all <- list()

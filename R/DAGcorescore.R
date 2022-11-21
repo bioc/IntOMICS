@@ -9,7 +9,6 @@
 #' necessary information for calculating the BDe/BGe score
 #'
 #' @return Numeric vector of length 1            
-#' @export
 DAGcorescore <- function(j,parentnodes,n,param) {
   
     TN <- param$TN

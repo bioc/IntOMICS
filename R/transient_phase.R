@@ -39,7 +39,6 @@
 #'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)}
 #'
 #' @return List of 1 element: first adaption phase and transient phase result
-#' @export
 transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
     layers_def, energy_all_configs_node, prob_mbr, BGe_score_all_configs_node, 
     parent_set_combinations, annot)

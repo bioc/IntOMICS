@@ -24,7 +24,6 @@
 #' B_prior_mat = B$B_prior_mat, int_node = "EID:7482")
 #'
 #' @return Numeric vector of length 1            
-#' @export
 energy_function_node_specific <- function(all_parents_config, B_prior_mat,
 int_node)
 {

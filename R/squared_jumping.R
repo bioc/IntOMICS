@@ -62,7 +62,6 @@
 #'
 #' @return List of 1 element: second adaptive phase result with stopped 
 #' MCMC mixing
-#' @export
 squared_jumping <- function(second.adapt.phase_net, constant, fin, beta_sd,
 B_prior_mat, omics, parent_set_combinations, BGe_score_all_configs_node,
 layers_def, prob_mbr, annot)

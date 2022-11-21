@@ -49,7 +49,6 @@
 #'
 #' @return List of 1 element: first adaption phase + transient phase + 
 #' second adaption phase result
-#' @export
 second_adapt_phase <- function(transient.phase_net, omics, layers_def,
 B_prior_mat, energy_all_configs_node, prob_mbr, BGe_score_all_configs_node,
 parent_set_combinations, annot, woPKGE_belief = 0.5) 

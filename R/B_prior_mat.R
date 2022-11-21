@@ -1,4 +1,4 @@
-#' B_prior_mat
+#' biological prior matrix
 #' @description 
 #' 'B_prior_mat' creates the biological prior matrix.
 #'
@@ -41,7 +41,6 @@
 #'
 #' @return List of 4 elements: prior biological matrix and data
 #' preprocessing           
-#' @export
 B_prior_mat <- function(omics, PK, layers_def, TFtargs, annot, lm_METH, 
 r_squared_thres, p_val_thres, TFBS_belief, nonGE_belief, woPKGE_belief)
 {
