@@ -44,7 +44,7 @@ pf_UB_est <- function(omics, B_prior_mat, layers_def, annot)
         {
             if(length(potentials_layer)>=rep)
             {
-                comb_some[[rep]] <- utils::combn(potentials_layer,rep)
+                comb_some[[rep]] <- combn(potentials_layer,rep)
             } # end if(length(potentials_layer)>=rep)
         } # end for rep
         comb_some[[length(comb_some)+1]] <- matrix(NA,1,1)
@@ -99,7 +99,7 @@ pf_UB_est <- function(omics, B_prior_mat, layers_def, annot)
             } # if if(any(mapply(omics,FUN=function(list)...
         } # end if(length(layers_def$omics)>1)
     
-        comb_some <- lapply(comb_some,stats::na.omit)
+        comb_some <- lapply(comb_some,na.omit)
         comb_some[[1]] <- cbind(comb_some[[1]], NA)
         comb_some <- comb_some[mapply(comb_some,FUN=function(x) nrow(x))!=0]
         parents_config <- list()

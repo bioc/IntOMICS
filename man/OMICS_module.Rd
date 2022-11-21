@@ -50,7 +50,8 @@ and its target interaction (default=0.75).}
 interactions of features except GE-GE (default=0.5).}
 
 \item{woPKGE_belief}{numeric vector to define the belief concerning GE-GE
-interactions without prior knowledge (default=0.5).}
+interactions without prior knowledge (default=0.5).
+#' @importFrom SummarizedExperiment assay}
 
 \item{gene_annot}{data.frame containing the entrez ID and corresponding
 gene symbol for conversion.}

@@ -49,7 +49,7 @@ selected_node, descendants, parent_set, BGe_score_all_configs_node)
             FUN=function(list) list[1])))
         new_parent_set <- parent_set_combinations[[selected_node]][[
             ind]][,possible_parent_sets_ind[new_parent_set_ind]]
-        sum_score_unmarked <- matrixStats::logSumExp(score_unmarked)
+        sum_score_unmarked <- logSumExp(score_unmarked)
     } # end if(length(possible_parent_sets_ind)==0)
     return(list(new_parent_set = new_parent_set, 
     sum_score_unmarked = sum_score_unmarked, BGe_marked = BGe_marked))

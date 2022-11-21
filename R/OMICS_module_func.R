@@ -28,7 +28,8 @@
 #' interactions of features except GE-GE (default=0.5).
 #' @param woPKGE_belief numeric vector to define the belief concerning GE-GE
 #' interactions without prior knowledge (default=0.5).
-#'
+#'#' @importFrom SummarizedExperiment assay
+
 #' @examples
 #' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", 
 #' "gene_annot"), package="IntOMICS")
@@ -45,7 +46,7 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
     omics_list <- list()
     for(i in seq(1,nrow(layers_def)))
     {
-        omics_list[[i]] <- t(SummarizedExperiment::assay(omics[[layers_def$omics[i]]]))
+        omics_list[[i]] <- t(assay(omics[[layers_def$omics[i]]]))
         if(!is.numeric(omics_list[[i]]))
         {
             omics_list[[i]] <- apply(omics_list[[i]],2,as.numeric)

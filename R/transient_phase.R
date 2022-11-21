@@ -73,7 +73,7 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
             first.adapt.phase_net$acceptance_saved[i] <- 
             candidate.net$likelihood - source.net$likelihood
 
-            u <- log(stats::runif(1))
+            u <- log(runif(1))
             if (u < first.adapt.phase_net$acceptance_saved[i])
             {
                 source.net <- candidate.net
@@ -103,7 +103,7 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
             candidate.net$likelihood_part <- candidate.net$BGe +
                 candidate.net$prior
       
-            u <- log(stats::runif(1))
+            u <- log(runif(1))
             if (u < first.adapt.phase_net$acceptance_saved[i])
             {
                 source.net <- candidate.net
@@ -112,10 +112,10 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
             first.adapt.phase_net$nets[[i]] <- source.net
             partition_func_UB_beta_source <- sum(mapply(
                 first.adapt.phase_net$energy_all_configs_node,
-                FUN=function(x) matrixStats::logSumExp(-beta.source$value*x)))
+                FUN=function(x) logSumExp(-beta.source$value*x)))
         } # end if(method.choice=="MC3")
     
-        beta.candidate <- list(value = stats::rnorm(1, 
+        beta.candidate <- list(value = rnorm(1, 
             mean = beta.source$value, sd = beta_1st_adapt), 
             prior = c(), len = beta_1st_adapt)
         if(beta.candidate$value < 0.5)
@@ -124,12 +124,12 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
         } # end if(beta.candidate$value < 0.5)
         partition_func_UB_beta_candidate <- sum(mapply(
             first.adapt.phase_net$energy_all_configs_node, 
-            FUN=function(x) matrixStats::logSumExp(-beta.candidate$value*x)))
+            FUN=function(x) logSumExp(-beta.candidate$value*x)))
         beta.candidate$prior <- (-beta.candidate$value*source.net$energy) -
             partition_func_UB_beta_candidate
         first.adapt.phase_net$acceptance_beta_saved[i] <- 
             beta.candidate$prior - beta.source$prior
-        u_beta <- log(stats::runif(1))
+        u_beta <- log(runif(1))
         if (u_beta < first.adapt.phase_net$acceptance_beta_saved[i])
         {
             beta.source <- beta.candidate
@@ -140,11 +140,11 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
     } # end for(i in (start+1):(start+1000))
   
     beta_means <-
-    colMeans(matrix(mapply(utils::tail(first.adapt.phase_net$betas,1000),
+    colMeans(matrix(mapply(tail(first.adapt.phase_net$betas,1000),
         FUN=function(list) list$value),nrow=200))
-    reg_dat <- data.frame(beta_means = utils::tail(beta_means,5), 
+    reg_dat <- data.frame(beta_means = tail(beta_means,5), 
         iter = seq_len(5))
-    model <- stats::lm(beta_means ~ iter, data = reg_dat)
+    model <- lm(beta_means ~ iter, data = reg_dat)
     p.val <- summary(model)$coefficients[1,4]
   
     while(p.val < 0.1)
@@ -173,7 +173,7 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
                 first.adapt.phase_net$acceptance_saved[i] <-
                 candidate.net$likelihood - source.net$likelihood
 
-                u <- log(stats::runif(1))
+                u <- log(runif(1))
                 if (u < first.adapt.phase_net$acceptance_saved[i])
                 {
                     source.net <- candidate.net
@@ -204,7 +204,7 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
             candidate.net$likelihood_part <- candidate.net$BGe +
                 candidate.net$prior
         
-            u <- log(stats::runif(1))
+            u <- log(runif(1))
             if (u < first.adapt.phase_net$acceptance_saved[i])
             {
                 source.net <- candidate.net
@@ -213,9 +213,9 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
             first.adapt.phase_net$nets[[i]] <- source.net
             partition_func_UB_beta_source <-
             sum(mapply(first.adapt.phase_net$energy_all_configs_node, 
-                FUN=function(x) matrixStats::logSumExp(-beta.source$value*x)))
+                FUN=function(x) logSumExp(-beta.source$value*x)))
         } # end if(method.choice=="MC3")
-        beta.candidate <- list(value = stats::rnorm(1, sd = beta_1st_adapt,
+        beta.candidate <- list(value = rnorm(1, sd = beta_1st_adapt,
             mean = beta.source$value), prior = c(), len = beta_1st_adapt)
         if(beta.candidate$value < 0.5)
         { 
@@ -224,12 +224,12 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
       
         partition_func_UB_beta_candidate <-
         sum(mapply(first.adapt.phase_net$energy_all_configs_node,
-            FUN=function(x) matrixStats::logSumExp(-beta.candidate$value*x)))
+            FUN=function(x) logSumExp(-beta.candidate$value*x)))
         beta.candidate$prior <- (-beta.candidate$value*source.net$energy) -
             partition_func_UB_beta_candidate
         first.adapt.phase_net$acceptance_beta_saved[i] <- 
         beta.candidate$prior - beta.source$prior
-        u_beta <- log(stats::runif(1))
+        u_beta <- log(runif(1))
         if (u_beta < first.adapt.phase_net$acceptance_beta_saved[i])
         {
             beta.source <- beta.candidate
@@ -240,10 +240,10 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
       } # end for(i in (length(first.adapt.phase_net$nets)+1)...
     
       beta_means <-
-      colMeans(matrix(mapply(utils::tail(first.adapt.phase_net$betas,1000),
+      colMeans(matrix(mapply(tail(first.adapt.phase_net$betas,1000),
            FUN=function(list) list$value),nrow=200))
       reg_dat <- data.frame(beta_means = beta_means, iter = seq_len(5))
-      model <- stats::lm(beta_means ~ iter, data = reg_dat)
+      model <- lm(beta_means ~ iter, data = reg_dat)
       p.val <- summary(model)$coefficients[1,4]
     } # end while(p.val < 0.1)
     return(first.adapt.phase_net)

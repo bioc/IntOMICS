@@ -72,7 +72,7 @@ BGe_score_all_configs_node, omics, annot)
             first.adapt.phase_net$acceptance_saved[i] <-
             candidate.net$likelihood - source.net$likelihood
       
-            u <- log(stats::runif(1))
+            u <- log(runif(1))
             if (u < first.adapt.phase_net$acceptance_saved[i])
             {
                 source.net <- candidate.net
@@ -101,7 +101,7 @@ BGe_score_all_configs_node, omics, annot)
             candidate.net$likelihood_part <- candidate.net$BGe +
                 candidate.net$prior
       
-            u <- log(stats::runif(1))
+            u <- log(runif(1))
             if (u < first.adapt.phase_net$acceptance_saved[i])
             {
                 source.net <- candidate.net
@@ -110,7 +110,7 @@ BGe_score_all_configs_node, omics, annot)
             first.adapt.phase_net$nets[[i]] <- source.net
         } # end if(method.choice=="MC3")
     
-        beta.candidate <- list(value = stats::rnorm(n = 1, 
+        beta.candidate <- list(value = rnorm(n = 1, 
             mean = beta.source$value, 
             sd = beta.source$len), prior = c(), len = beta.source$len)
         if(beta.candidate$value < 0.5)
@@ -120,13 +120,13 @@ BGe_score_all_configs_node, omics, annot)
     
         partition_func_UB_beta_candidate <-
         sum(mapply(first.adapt.phase_net$energy_all_configs_node,
-            FUN=function(x) matrixStats::logSumExp(-beta.candidate$value*x)))
+            FUN=function(x) logSumExp(-beta.candidate$value*x)))
         beta.candidate$prior <- (-beta.candidate$value*source.net$energy) -
             partition_func_UB_beta_candidate
     
         first.adapt.phase_net$acceptance_beta_saved[i] <- 
         beta.candidate$prior - beta.source$prior
-        u_beta <- log(stats::runif(1))
+        u_beta <- log(runif(1))
     
         if (u_beta < first.adapt.phase_net$acceptance_beta_saved[i])
         {
@@ -135,10 +135,10 @@ BGe_score_all_configs_node, omics, annot)
             partition_func_UB_beta_candidate
         } # end if (u_beta < first.adapt.phase_net$acceptance_beta_saved[i])
     
-        if(numbers::mod(length(first.adapt.phase_net$nets), round_check)==0)
+        if(mod(length(first.adapt.phase_net$nets), round_check)==0)
         {
             acceptance.trace_betas <-
-            unlist(lapply(utils::tail(first.adapt.phase_net$betas,
+            unlist(lapply(tail(first.adapt.phase_net$betas,
                 last_iter_check), FUN=function(list) list$prior))
             acceptance.trace_betas <-
             c(1,
@@ -155,7 +155,7 @@ BGe_score_all_configs_node, omics, annot)
             } else {
                 beta.source$len <- exp(log(beta.source$len) - 0.05)
             } # end if else (acceptance.rate_betas > 0.44)
-        } # end if(numbers::mod(i,round_check)==0)
+        } # end if(mod(i,round_check)==0)
         first.adapt.phase_net$betas[[i]] <- beta.source
     } # end while(!(acceptance.rate_betas > 0.28 & ...
     return(first.adapt.phase_net)

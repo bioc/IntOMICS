@@ -56,7 +56,7 @@ TFtargs = NULL)
         FUN=function(x) x$value))), accept = 1)
   
     rms_strength <- abs(diff(mcmc_res$sampling.phase_res$rms))
-    strength_threshold <- stats::quantile(rms_strength, 0.75, na.rm = TRUE)
+    strength_threshold <- quantile(rms_strength, 0.75, na.rm = TRUE)
   
     cpdags1 <-
     unique(mcmc_res$sampling.phase_res$mcmc_sim_part_res$seed1$cpdags[seq(from 
@@ -67,10 +67,10 @@ TFtargs = NULL)
     = (burn_in/thin+1), 
     to = length(mcmc_res$sampling.phase_res$mcmc_sim_part_res$seed2$cpdags))])
   
-    cpdag_weights1 <- bnlearn::custom.strength(cpdags1, 
-        nodes = bnlearn::nodes(cpdags1[[1]]), weights = NULL)
-    cpdag_weights2 <- bnlearn::custom.strength(cpdags2, 
-        nodes = bnlearn::nodes(cpdags2[[1]]), weights = NULL)
+    cpdag_weights1 <- custom.strength(cpdags1, 
+        nodes = nodes(cpdags1[[1]]), weights = NULL)
+    cpdag_weights2 <- custom.strength(cpdags2, 
+        nodes = nodes(cpdags2[[1]]), weights = NULL)
     cpdag_weights1 <- cpdag_weights1[cpdag_weights1$direction>=0.5,]
     cpdag_weights2 <- cpdag_weights2[cpdag_weights2$direction>=0.5,]
   
@@ -84,33 +84,33 @@ TFtargs = NULL)
   
     if(!is.null(edge_freq_thres))
     {
-        strength_quant <- stats::quantile(x = cpdag_weights$strength, 
+        strength_quant <- quantile(x = cpdag_weights$strength, 
             probs = edge_freq_thres)
         cpdag_weights <- cpdag_weights[cpdag_weights$strength >=
             strength_quant,]
     }
     total <- merge(cpdag_weights1, cpdag_weights2, by = c("from","to"))
   
-    grDevices::jpeg(paste(figures_dir,"beta_values.jpeg",sep="/"))
+    jpeg(paste(figures_dir,"beta_values.jpeg",sep="/"))
     plot(df1$beta ~ df1$k, type = "l", col= "darkblue", xlab = "iteration",
         ylab = "beta", main = "Beta values of adaptive MCMC")
-    grDevices::dev.off()
+    dev.off()
   
-    grDevices::jpeg(paste(figures_dir,"post_prob_edges.jpeg",sep="/"))
+    jpeg(paste(figures_dir,"post_prob_edges.jpeg",sep="/"))
     plot(total$strength.x ~ total$strength.y, xlab="MCMC run 2",
         ylab = "MCMC run 1", 
         main = "Consistency of edges posterior probabilities")
-    graphics::abline(0,1, col="orange")
-    grDevices::dev.off()
+    abline(0,1, col="orange")
+    dev.off()
   
-    grDevices::jpeg(paste(figures_dir,"convergence_RMS.jpeg",sep="/"))
+    jpeg(paste(figures_dir,"convergence_RMS.jpeg",sep="/"))
     plot(rms_strength, main="Convergence RMS strength (C.RMS.str)", pch = 18,
         col="gray30")
-    graphics::abline(h=strength_threshold, col="#E69F00", lwd = 1.5)
-    graphics::text(label = paste("3rd quartile of C.RMS.str = ",
+    abline(h=strength_threshold, col="#E69F00", lwd = 1.5)
+    text(label = paste("3rd quartile of C.RMS.str = ",
         round(strength_threshold,3),sep=""), x = 100, 
         y = strength_threshold+0.015, col="#E69F00")
-    grDevices::dev.off()
+    dev.off()
   
     if(!is.null(PK))
     {
@@ -159,25 +159,25 @@ TFtargs = NULL)
     } # end if else if else (gene_ID=="entrezID")
   
     net_weighted <-
-    igraph::graph_from_edgelist(return_list$edge_list[,c("from","to")])
-    igraph::V(net_weighted)$color <-
-    return_list$node_list[match(igraph::as_ids(igraph::V(net_weighted)),
+    graph_from_edgelist(return_list$edge_list[,c("from","to")])
+    V(net_weighted)$color <-
+    return_list$node_list[match(as_ids(V(net_weighted)),
         return_list$node_list[,"label"]),"color"]
     palette <- return_list$node_palette
     names(palette) <- seq_len(length(palette))
-    palette <- palette[unique(igraph::V(net_weighted)$color)]
-    igraph::V(net_weighted)$label <-
-    return_list$node_list[match(igraph::as_ids(igraph::V(net_weighted)),
+    palette <- palette[unique(V(net_weighted)$color)]
+    V(net_weighted)$label <-
+    return_list$node_list[match(as_ids(V(net_weighted)),
         return_list$node_list[,"label"]),"label"]
-    igraph::E(net_weighted)$edge <- return_list$edge_list[match(sub("|", "_",
-        igraph::as_ids(igraph::E(net_weighted)), fixed = TRUE),
+    E(net_weighted)$edge <- return_list$edge_list[match(sub("|", "_",
+        as_ids(E(net_weighted)), fixed = TRUE),
         return_list$edge_list[,"edge"]),"edge_type"]
-    igraph::E(net_weighted)$weight <- return_list$edge_list[match(sub("|", "_",
-        igraph::as_ids(igraph::E(net_weighted)), fixed = TRUE),
+    E(net_weighted)$weight <- return_list$edge_list[match(sub("|", "_",
+        as_ids(E(net_weighted)), fixed = TRUE),
         return_list$edge_list[,"edge"]),"weight"]
 
-    igraph::V(net_weighted)$degree <- igraph::degree(net_weighted, mode = "in")
-    igraph::V(net_weighted)$degree <- normalise(igraph::V(net_weighted)$degree,
+    V(net_weighted)$degree <- degree(net_weighted, mode = "in")
+    V(net_weighted)$degree <- normalise(V(net_weighted)$degree,
         to = c(3, 11))
   
     return(list(edge_list = return_list$edge_list, node_palette = palette,
@@ -208,35 +208,35 @@ TFtargs = NULL)
 legend_custom <- function(net)
 {
     xl <- 1.2;yb <- 1;xr <- 1.3;yt <- 2
-    graphics::par(oma=c(0,0,0,0))
+    par(oma=c(0,0,0,0))
     plot(NA,type="n",ann=FALSE,xlim=c(0.94,2),ylim=c(1.2,1.71),xaxt="n",
         yaxt="n", bty="n")
-    graphics::text(x = 0.95,y = 1.25,labels = "GE")
-    graphics::rect(utils::head(seq(yb,yt,(yt-yb)/9),-1), 
-        xl, utils::tail(seq(yb,yt,(yt-yb)/9),-1), xr,
-        col=RColorBrewer::brewer.pal(9, "Blues"))
-    graphics::text(x = unique(c(utils::head(seq(yb,yt,(yt-yb)/9),-1), 
-        utils::tail(seq(yb,yt,(yt-yb)/9),-1))),y = 1.32,
+    text(x = 0.95,y = 1.25,labels = "GE")
+    rect(head(seq(yb,yt,(yt-yb)/9),-1), 
+        xl, tail(seq(yb,yt,(yt-yb)/9),-1), xr,
+        col=brewer.pal(9, "Blues"))
+    text(x = unique(c(head(seq(yb,yt,(yt-yb)/9),-1), 
+        tail(seq(yb,yt,(yt-yb)/9),-1))),y = 1.32,
         labels = round(net$borders_GE,2))
     if(!is.null(net$borders_CNV))
     {
-        graphics::text(x = 0.94,y = 1.45,labels = "CNV")
-        graphics::rect(utils::head(seq(yb, yt, (yt-yb)/11), -1), xl+0.2,
-            utils::tail(seq(yb ,yt , (yt-yb)/11), -1), xr+0.2,
-            col=RColorBrewer::brewer.pal(11, "PiYG"))
-        graphics::text(x = unique(c(utils::head(seq(yb,yt,(yt-yb)/11),-1), 
-            utils::tail(seq(yb,yt,(yt-yb)/11),-1))),y = 1.52,
+        text(x = 0.94,y = 1.45,labels = "CNV")
+        rect(head(seq(yb, yt, (yt-yb)/11), -1), xl+0.2,
+            tail(seq(yb ,yt , (yt-yb)/11), -1), xr+0.2,
+            col=brewer.pal(11, "PiYG"))
+        text(x = unique(c(head(seq(yb,yt,(yt-yb)/11),-1), 
+            tail(seq(yb,yt,(yt-yb)/11),-1))),y = 1.52,
             labels = round(net$borders_CNV,2))
     } # end if(!is.null(net$borders_CNV))
     if(!is.null(net$borders_METH))
     {
-        graphics::rect(utils::head(seq(yb, yt, (yt-yb)/9), -1), xl+0.4, 
-            utils::tail(seq(yb ,yt , (yt-yb)/9), -1), xr+0.4,
-            col=RColorBrewer::brewer.pal(9, "YlOrRd"))
-        graphics::text(x = unique(c(utils::head(seq(yb,yt,(yt-yb)/9),-1), 
-            utils::tail(seq(yb,yt,(yt-yb)/9),-1))),y = 1.72,
+        rect(head(seq(yb, yt, (yt-yb)/9), -1), xl+0.4, 
+            tail(seq(yb ,yt , (yt-yb)/9), -1), xr+0.4,
+            col=brewer.pal(9, "YlOrRd"))
+        text(x = unique(c(head(seq(yb,yt,(yt-yb)/9),-1), 
+            tail(seq(yb,yt,(yt-yb)/9),-1))),y = 1.72,
             labels = round(net$borders_METH,2))
-        graphics::text(x = 0.94,y = 1.65,labels = "METH")
+        text(x = 0.94,y = 1.65,labels = "METH")
     } # end if(!is.null(net$borders_METH))
 }
 
@@ -283,7 +283,7 @@ empB_heatmap <- function(mcmc_res, OMICS_mod_res, gene_annot, TFtargs)
         gene_annot$entrezID)]
     colnames(mat) <- rownames(mat)
     diag(mat) <- NA
-    gplots::heatmap.2(mat, col=gplots::bluered, na.color="gray", Rowv = NA, 
+    heatmap.2(mat, col=bluered, na.color="gray", Rowv = NA, 
         Colv = NA, trace = 'none', scale = 'none', main = "empB - B",
         dendrogram = "none")
 }

@@ -82,14 +82,14 @@ parent_set_combinations, annot, woPKGE_belief = 0.5)
         BGe_score_all_configs_node = BGe_score_all_configs_node)
 
     betas_check <-
-        mapply(utils::tail(squared.jump_second.adapt.phase_net$betas,
+        mapply(tail(squared.jump_second.adapt.phase_net$betas,
         1001), FUN=function(list) list$value)
     if(length(unique(betas_check))>1)
     {
         betas_check <- colMeans(matrix((betas_check[-1] -
             betas_check[-1001])^2,nrow=200))
         reg_dat <- data.frame(beta_means = betas_check, iter = seq_len(5))
-        model <- stats::lm(beta_means ~ iter, data = reg_dat)
+        model <- lm(beta_means ~ iter, data = reg_dat)
         squared.jump_second.adapt.phase_net$p.val <- 
         summary(model)$coefficients[2,4]
     
@@ -104,7 +104,7 @@ parent_set_combinations, annot, woPKGE_belief = 0.5)
             layers_def = layers_def, prob_mbr = prob_mbr, annot = annot)
       
             betas_check <-
-            mapply(utils::tail(squared.jump_second.adapt.phase_net$betas,1001),
+            mapply(tail(squared.jump_second.adapt.phase_net$betas,1001),
                 FUN=function(list) list$value)
             if(length(unique(betas_check))>1)
             {
@@ -112,7 +112,7 @@ parent_set_combinations, annot, woPKGE_belief = 0.5)
                     betas_check[-1001])^2,nrow=200))
                 reg_dat <- data.frame(beta_means = betas_check, 
                     iter = seq_len(5))
-                model <- stats::lm(beta_means ~ iter, data = reg_dat)
+                model <- lm(beta_means ~ iter, data = reg_dat)
                 squared.jump_second.adapt.phase_net$p.val <- 
                 summary(model)$coefficients[2,4]
             } else {

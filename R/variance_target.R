@@ -56,7 +56,7 @@ variance_target <- function(transient.phase_net, constant, fin, B_prior_mat,
 omics, parent_set_combinations, BGe_score_all_configs_node, layers_def,
 prob_mbr, annot)
 {
-    beta_sd <- stats::sd(mapply(utils::tail(transient.phase_net$betas,1000),
+    beta_sd <- sd(mapply(tail(transient.phase_net$betas,1000),
         FUN=function(list) list$value)[-1000])
     source.net <- transient.phase_net$nets[[length(transient.phase_net$nets)]]
     beta.source <-
@@ -85,7 +85,7 @@ prob_mbr, annot)
             transient.phase_net$acceptance_saved[i] <- 
             candidate.net$likelihood - source.net$likelihood
      
-            u <- log(stats::runif(1))
+            u <- log(runif(1))
             if (u < transient.phase_net$acceptance_saved[i])
             {
                 source.net <- candidate.net
@@ -113,7 +113,7 @@ prob_mbr, annot)
             candidate.net$likelihood_part <- 
             candidate.net$BGe + candidate.net$prior
       
-            u <- log(stats::runif(1))
+            u <- log(runif(1))
             if (u < transient.phase_net$acceptance_saved[i])
             {
                 source.net <- candidate.net
@@ -123,10 +123,10 @@ prob_mbr, annot)
             partition_func_UB_beta_source <-
                 sum(mapply(transient.phase_net$energy_all_configs_node,    
                 FUN=function(x) 
-                matrixStats::logSumExp(-beta.source$value*x)))
+                logSumExp(-beta.source$value*x)))
         } # end if(method.choice=="MC3")
     
-        beta.candidate <- list(value = stats::rnorm(1, 
+        beta.candidate <- list(value = rnorm(1, 
             mean = beta.source$value, sd = beta_sd*constant), prior = c(), 
             len = beta_sd*constant)
         if(beta.candidate$value < 0.5)
@@ -136,13 +136,13 @@ prob_mbr, annot)
     
         partition_func_UB_beta_candidate <-
         sum(mapply(transient.phase_net$energy_all_configs_node,
-            FUN=function(x) matrixStats::logSumExp(-beta.candidate$value*x)))
+            FUN=function(x) logSumExp(-beta.candidate$value*x)))
         beta.candidate$prior <- (-beta.candidate$value*source.net$energy) -
             partition_func_UB_beta_candidate
     
         transient.phase_net$acceptance_beta_saved[i] <- 
         beta.candidate$prior - beta.source$prior
-        u_beta <- log(stats::runif(1))
+        u_beta <- log(runif(1))
         if (u_beta < transient.phase_net$acceptance_beta_saved[i])
         {
             beta.source <- beta.candidate
@@ -153,7 +153,7 @@ prob_mbr, annot)
     } # end for(i in (start+1):(start+200))
   
     acceptance.trace_betas <-
-    unlist(lapply(utils::tail(transient.phase_net$betas, 200),
+    unlist(lapply(tail(transient.phase_net$betas, 200),
         FUN=function(list) list$prior))
     acceptance.trace_betas <-
     c(1,acceptance.trace_betas[seq_len((length(acceptance.trace_betas)-1))] -

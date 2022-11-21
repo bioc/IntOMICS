@@ -64,7 +64,7 @@ layers_def, len, thin, energy_all_configs_node, annot)
                 sim_init_fork$acceptance_saved[i] <- candidate.net$likelihood -
                     source.net$likelihood
   
-                u <- log(stats::runif(1))
+                u <- log(runif(1))
                 if (u < sim_init_fork$acceptance_saved[i])
                 {
                     source.net <- candidate.net
@@ -93,7 +93,7 @@ layers_def, len, thin, energy_all_configs_node, annot)
                 candidate.net$likelihood_part <- 
                 candidate.net$BGe + candidate.net$prior
         
-                u <- log(stats::runif(1))
+                u <- log(runif(1))
                 if (u < sim_init_fork$acceptance_saved[i])
                 {
                     source.net <- candidate.net
@@ -103,13 +103,13 @@ layers_def, len, thin, energy_all_configs_node, annot)
             if(i==last)
             {
                 sim_init_fork$cpdags[[length(sim_init_fork$cpdags)+1]] <-
-                bnlearn::empty.graph(rownames(sim_init_fork$nets[[i
+                empty.graph(rownames(sim_init_fork$nets[[i
                 ]]$adjacency))
-                bnlearn::amat(sim_init_fork$cpdags[[
+                amat(sim_init_fork$cpdags[[
                 length(sim_init_fork$cpdags)]]) <-
                 sim_init_fork$nets[[i]]$adjacency
                 sim_init_fork$cpdags[[length(sim_init_fork$cpdags)]] <-
-                    bnlearn::cpdag(sim_init_fork$cpdags[[
+                    cpdag(sim_init_fork$cpdags[[
                     length(sim_init_fork$cpdags)]])
             } # end if(i==last)
         } # end for (i in first:last)

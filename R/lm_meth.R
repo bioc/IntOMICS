@@ -31,12 +31,12 @@ p_val_thres)
     {
         for(f in seq_len(length(meth_probes)))
         {
-            res <- stats::lm(ge_mat[,gene] ~ meth_mat[,meth_probes[f]])
+            res <- lm(ge_mat[,gene] ~ meth_mat[,meth_probes[f]])
             if(nrow(summary(res)$coefficients)>1)
             {
                 cond1 <- summary(res)$coefficients[2,"Pr(>|t|)"] < p_val_thres
                 cond2 <- summary(res)$r.squared > r_squared_thres
-                cond3 <- stats::shapiro.test(summary(res)$resid)$p.value > 0.1
+                cond3 <- shapiro.test(summary(res)$resid)$p.value > 0.1
                 if(cond1 & cond2 & cond3)
                 {
                     meth_probes_sig <- c(meth_probes_sig, meth_probes[f])

@@ -46,7 +46,7 @@ bgepar = list(am = 1, aw = NULL))
         covmat <- matrix(0,nrow=n, ncol=n,
             dimnames=list(initparam$labels.short,initparam$labels.short))
     } else {
-        covmat <- stats::cov(data, use = "complete.obs") * (N - 1)
+        covmat <- cov(data, use = "complete.obs") * (N - 1)
     } # end if else (N==1)
     means <- colMeans(data, na.rm = TRUE)
     bgepar$aw <- n + bgepar$am + 1

@@ -39,9 +39,9 @@ BGe_score_all_configs_node, parent_set_combinations)
     dag_tmp[,selected_node] <- 0
     dag_tmp[-which(rownames(dag_tmp)==selected_node),
     children_selected_node] <- 0
-    dag_tmp_bn <- bnlearn::empty.graph(rownames(dag_tmp),1)
-    bnlearn::amat(dag_tmp_bn) <- dag_tmp
-    descendants_selected_node <- bnlearn::descendants(x = dag_tmp_bn, 
+    dag_tmp_bn <- empty.graph(rownames(dag_tmp),1)
+    amat(dag_tmp_bn) <- dag_tmp
+    descendants_selected_node <- descendants(x = dag_tmp_bn, 
         node = selected_node)
     selected_node_parents_scores <- parent_sets_sum_scores_X(
         selected_node = selected_node, parent_set = current_parent_set,
@@ -50,7 +50,7 @@ BGe_score_all_configs_node, parent_set_combinations)
         BGe_score_all_configs_node = BGe_score_all_configs_node)
     if(!is.na(selected_node_parents_scores$new_parent_set[1]))
     {
-        bnlearn::amat(dag_tmp_bn)[selected_node_parents_scores$new_parent_set,
+        amat(dag_tmp_bn)[selected_node_parents_scores$new_parent_set,
         selected_node] <- 1
     }
     if(length(children_selected_node)>0)
@@ -68,9 +68,9 @@ BGe_score_all_configs_node, parent_set_combinations)
             BGe_score_all_configs_node = BGe_score_all_configs_node)
         dag_tmp_bn <- node_child_pars_scores$dag_tmp_bn
     } # if(length(children_selected_node)>0)
-    candidate_net_adjacency <- bnlearn::amat(dag_tmp_bn)
-    bnlearn::amat(dag_tmp_bn)[,selected_node] <- 0
-    bnlearn::amat(dag_tmp_bn)[-which(rownames(dag_tmp)==selected_node),
+    candidate_net_adjacency <- amat(dag_tmp_bn)
+    amat(dag_tmp_bn)[,selected_node] <- 0
+    amat(dag_tmp_bn)[-which(rownames(dag_tmp)==selected_node),
     children_selected_node] <- 0
     selected_node_parents_scores_candidate <- parent_sets_sum_scores_X(
         parent_set_combinations = parent_set_combinations, 
@@ -78,7 +78,7 @@ BGe_score_all_configs_node, parent_set_combinations)
         descendants = descendants_selected_node, 
         parent_set = selected_node_parents_scores$new_parent_set, 
         BGe_score_all_configs_node = BGe_score_all_configs_node)
-    bnlearn::amat(dag_tmp_bn)[current_parent_set, selected_node] <- 1
+    amat(dag_tmp_bn)[current_parent_set, selected_node] <- 1
     if(length(children_selected_node)>0)
     {
         node_child_pars_scores_candidate <- parent_sets_sum_scores_childrenX(

@@ -26,7 +26,7 @@ new_parent_set, source_net_adjacency, BGe_score_all_configs_node)
     {
         for(j in child_order)
         {
-            descendants <- bnlearn::descendants(x = dag_tmp_bn, 
+            descendants <- descendants(x = dag_tmp_bn, 
                 node = children_selected_node[j])
             BGe_marked <-
                 lapply(parent_set_combinations[[children_selected_node
@@ -68,9 +68,9 @@ new_parent_set, source_net_adjacency, BGe_score_all_configs_node)
                 new_parent_set <-
                 parent_set_combinations[[children_selected_node[
                 j]]][[ind]][,possible_parent_sets_ind[new_parent_set_ind]]
-                sum_score_unmarked[j] <- matrixStats::logSumExp(score_unmarked)
+                sum_score_unmarked[j] <- logSumExp(score_unmarked)
             } # end if(length(possible_parent_sets_ind)==0)
-            bnlearn::amat(dag_tmp_bn)[new_parent_set,
+            amat(dag_tmp_bn)[new_parent_set,
                 children_selected_node[j]] <- 1
         } # end for j
         return(list(new_parent_set = new_parent_set, 
@@ -79,7 +79,7 @@ new_parent_set, source_net_adjacency, BGe_score_all_configs_node)
     } else {
     for(j in child_order)
     {
-        descendants <- bnlearn::descendants(x = dag_tmp_bn, 
+        descendants <- descendants(x = dag_tmp_bn, 
             node = children_selected_node[j])
         BGe_marked <- lapply(parent_set_combinations[[
             children_selected_node[j]]], FUN=function(list) apply(list, 2, 
@@ -103,11 +103,11 @@ new_parent_set, source_net_adjacency, BGe_score_all_configs_node)
                 children_selected_node[j]]]))
         } else {
             sum_score_unmarked[j] <-
-                matrixStats::logSumExp(unlist(Map(function(pos, scores)
+                logSumExp(unlist(Map(function(pos, scores)
                 scores[!pos], BGe_marked, BGe_score_all_configs_node[[
                 children_selected_node[j]]])))
         } # end if(length(possible_parent_sets_ind)==0)
-        bnlearn::amat(dag_tmp_bn)[names(which(source_net_adjacency[,
+        amat(dag_tmp_bn)[names(which(source_net_adjacency[,
         children_selected_node[j]]==1)), children_selected_node[j]] <- 1
     } # end for j
     return(list(sum_score_unmarked = sum_score_unmarked, 

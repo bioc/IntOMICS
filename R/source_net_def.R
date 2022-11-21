@@ -41,7 +41,7 @@ source_net_def <- function(init.net.mcmc.output, parent_set_combinations,
 omics, BGe_score_all_configs_node, B_prior_mat, layers_def,
 energy_all_configs_node, len)
 {
-    beta_init <- stats::runif(1, min = 0, max = 10)
+    beta_init <- runif(1, min = 0, max = 10)
     beta.source <- list(value = beta_init, prior = c())
     source.net <- init.net.mcmc.output$source.net
     source.net$BGe <- BGe_score(adjacency_matrix = source.net$adjacency, 
@@ -53,7 +53,7 @@ energy_all_configs_node, len)
     source.net$energy <- sum(epsilon(net = source.net$adjacency, 
         B_prior_mat = B_prior_mat))
     partition_func_UB_beta_source <- sum(mapply(energy_all_configs_node,
-        FUN=function(x) matrixStats::logSumExp(-beta.source$value*x)))
+        FUN=function(x) logSumExp(-beta.source$value*x)))
     source.net$prior <- (-beta.source$value*source.net$energy) -
         partition_func_UB_beta_source
     source.net$likelihood_part <- source.net$BGe + source.net$prior

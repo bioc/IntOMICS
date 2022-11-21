@@ -117,7 +117,7 @@ layers_def, prob_mbr, annot)
                     candidate_edge[,"col"], 1] + 1
             } # end if else (candidate.net$edge_move=="reverse")
       
-            u <- log(stats::runif(1))
+            u <- log(runif(1))
             if (u < second.adapt.phase_net$acceptance_saved[i])
             {
                 if(candidate.net$edge_move=="add")
@@ -179,7 +179,7 @@ layers_def, prob_mbr, annot)
                 candidate.net$likelihood_part <- 
                 candidate.net$BGe + candidate.net$prior
       
-                u <- log(stats::runif(1))
+                u <- log(runif(1))
                 if (u < second.adapt.phase_net$acceptance_saved[i])
                 {
                     source.net <- candidate.net
@@ -188,7 +188,7 @@ layers_def, prob_mbr, annot)
                 second.adapt.phase_net$nets[[i]] <- source.net
             } # end if(method.choice=="MC3")
     
-            beta.candidate <- list(value = stats::rnorm(1, 
+            beta.candidate <- list(value = rnorm(1, 
                 mean = beta.source$value, sd = beta_sd*constant), prior = c(),
                 len = beta_sd*constant)
             if(beta.candidate$value < 0.5)
@@ -197,13 +197,13 @@ layers_def, prob_mbr, annot)
             } # end if(beta.candidate$value < 0.5)
             partition_func_UB_beta_candidate <-
             sum(mapply(second.adapt.phase_net$energy_all_configs_node,
-            FUN=function(x) matrixStats::logSumExp(-beta.candidate$value*x)))
+            FUN=function(x) logSumExp(-beta.candidate$value*x)))
             beta.candidate$prior <- (-beta.candidate$value*source.net$energy) -
                 partition_func_UB_beta_candidate
             second.adapt.phase_net$acceptance_beta_saved[i] <-
             beta.candidate$prior - beta.source$prior
             
-            u_beta <- log(stats::runif(1))
+            u_beta <- log(runif(1))
             if (u_beta < second.adapt.phase_net$acceptance_beta_saved[i])
             {
                 beta.source <- beta.candidate

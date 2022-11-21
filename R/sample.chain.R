@@ -28,18 +28,18 @@
 #' @return BN object with conditional probabilities
 sample.chain <- function(empty_net, omics_ge)
 {
-    dataset_BND <- bnstruct::BNDataset(data = empty_net, 
+    dataset_BND <- BNDataset(data = empty_net, 
         discreteness = rep('d',ncol(empty_net)),
         variables = c(colnames(empty_net)), node.sizes = rep(2,ncol(empty_net)),
         starts.from=0)
-    net <- bnstruct::BN(dataset_BND)
-    net.dag <- bnstruct::dag(net)
+    net <- BN(dataset_BND)
+    net.dag <- dag(net)
     n <- ncol(omics_ge)
     chain <- sample(n,n)
     for(i in seq(from=2, to=n))
     {
         net.dag[chain[i-1],chain[i]] <- 1
     }
-    bnstruct::dag(net) <- net.dag
-    return(bnstruct::learn.params(net,dataset_BND))
+    dag(net) <- net.dag
+    return(learn.params(net,dataset_BND))
 }

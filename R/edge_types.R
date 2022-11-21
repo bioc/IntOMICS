@@ -77,7 +77,7 @@ OMICS_mod_res, edge_weights, TFtargs = NULL)
         
         } # end if else (edge_weights=="empB")
     
-        ge_cols <- RColorBrewer::brewer.pal(9, "Blues")
+        ge_cols <- brewer.pal(9, "Blues")
         ge_common <- intersect(unique(node_list),
             colnames(omics[[layers_def$omics[1]]]))
         omics_ge_gs <- as.matrix(omics[[layers_def$omics[1]]][,ge_common])
@@ -85,17 +85,17 @@ OMICS_mod_res, edge_weights, TFtargs = NULL)
     
         borders_ge_b1 <- unlist(lapply(strsplit(levels(cut(omics[[
             layers_def$omics[1]]][omics[[layers_def$omics[1]]]<=
-            stats::median(omics[[layers_def$omics[1]]])],
+            median(omics[[layers_def$omics[1]]])],
             seq(from=min(omics[[layers_def$omics[1]]]), 
-            to=stats::median(omics[[layers_def$omics[1]]]), length.out=5), 
+            to=median(omics[[layers_def$omics[1]]]), length.out=5), 
             include.lowest = TRUE)),","),FUN=function(l) l[1]))
         borders_ge_b1[1] <- sub("[","(",borders_ge_b1[1], fixed = TRUE)
         borders_ge_b1 <- as.numeric(sub("(","",borders_ge_b1, fixed = TRUE))
         borders_ge_b2 <-
         unlist(lapply(strsplit(levels(cut(omics[[layers_def$omics[1
             ]]][omics[[layers_def$omics[1]]]>
-            stats::median(omics[[layers_def$omics[1]]])],
-            seq(from=stats::median(omics[[layers_def$omics[1]]]), 
+            median(omics[[layers_def$omics[1]]])],
+            seq(from=median(omics[[layers_def$omics[1]]]), 
             to=max(omics[[layers_def$omics[1]]]), length.out=6), 
             include.lowest = TRUE)),","),FUN=function(l) l[1]))
         borders_ge_b2[1] <- sub("[","(",borders_ge_b2[1], fixed = TRUE)
@@ -105,15 +105,15 @@ OMICS_mod_res, edge_weights, TFtargs = NULL)
         borders_ge_t1 <- as.numeric(sub("]","",
             unlist(lapply(strsplit(levels(cut(omics[[layers_def$omics[1
             ]]][omics[[layers_def$omics[1]]]<=
-            stats::median(omics[[layers_def$omics[1]]])], 
+            median(omics[[layers_def$omics[1]]])], 
             seq(from=min(omics[[layers_def$omics[1]]]), 
-            to=stats::median(omics[[layers_def$omics[1]]]), length.out=5), 
+            to=median(omics[[layers_def$omics[1]]]), length.out=5), 
             include.lowest = TRUE)),","),FUN=function(l) l[2]))))
         borders_ge_t2 <- as.numeric(sub("]","",
             unlist(lapply(strsplit(levels(cut(omics[[layers_def$omics[1
             ]]][omics[[layers_def$omics[1]]]>
-            stats::median(omics[[layers_def$omics[1]]])], 
-            seq(from=stats::median(omics[[layers_def$omics[1]]]), 
+            median(omics[[layers_def$omics[1]]])], 
+            seq(from=median(omics[[layers_def$omics[1]]]), 
             to=max(omics[[layers_def$omics[1]]]), length.out=6), 
             include.lowest = TRUE)),","),FUN=function(l) l[2]))))
         borders_ge_t <- c(borders_ge_t1,borders_ge_t2)
@@ -132,7 +132,7 @@ OMICS_mod_res, edge_weights, TFtargs = NULL)
         if(any(mapply(FUN=function(mod)
             any(regexpr("eid:",colnames(mod))>0), omics)==TRUE))
         {
-          cnv_cols <- RColorBrewer::brewer.pal(11, "PiYG")
+          cnv_cols <- brewer.pal(11, "PiYG")
           cnv_common <- intersect(node_list[,"label"][regexpr("eid",
               node_list[,"label"])>0],
           colnames(omics[[names(which(mapply(FUN=function(mod)
@@ -202,7 +202,7 @@ OMICS_mod_res, edge_weights, TFtargs = NULL)
         FUN=function(list) any(regexpr("eid:",colnames(list), 
         ignore.case = TRUE)<0))))
         {
-            meth_cols <- RColorBrewer::brewer.pal(9, "YlOrRd")
+            meth_cols <- brewer.pal(9, "YlOrRd")
             meth_common <-
                 intersect(node_list[,"label"],colnames(omics_meth_original))
             omics_meth_gs <- as.matrix(omics_meth_original[,meth_common])
@@ -316,7 +316,7 @@ OMICS_mod_res, edge_weights, TFtargs = NULL)
             } # end if(!is.null(PK))
         } # end if else (edge_weights=="empB")
     
-        ge_cols <- RColorBrewer::brewer.pal(9, "Blues")
+        ge_cols <- brewer.pal(9, "Blues")
         ge_common <- intersect(gene_annot$entrezID[match(unique(node_list),
             gene_annot$gene_symbol)], colnames(omics[[layers_def$omics[1]]]))
         omics_ge_gs <- as.matrix(omics[[layers_def$omics[1]]][,ge_common])
@@ -324,16 +324,16 @@ OMICS_mod_res, edge_weights, TFtargs = NULL)
             gene_annot$entrezID)]
         borders_ge_b1 <- unlist(lapply(strsplit(levels(cut(
             omics[[layers_def$omics[1]]][omics[[layers_def$omics[1]]]<=
-            stats::median(omics[[layers_def$omics[1]]])],
+            median(omics[[layers_def$omics[1]]])],
             seq(from=min(omics[[layers_def$omics[1]]]), 
-            to=stats::median(omics[[layers_def$omics[1]]]), length.out=5), 
+            to=median(omics[[layers_def$omics[1]]]), length.out=5), 
             include.lowest = TRUE)),","),FUN=function(l) l[1]))
         borders_ge_b1[1] <- sub("[","(",borders_ge_b1[1], fixed = TRUE)
         borders_ge_b1 <- as.numeric(sub("(","",borders_ge_b1, fixed = TRUE))
         borders_ge_b2 <- unlist(lapply(strsplit(levels(cut(
             omics[[layers_def$omics[1]]][omics[[layers_def$omics[1]]]>
-            stats::median(omics[[layers_def$omics[1]]])], 
-            seq(from=stats::median(omics[[layers_def$omics[1]]]), 
+            median(omics[[layers_def$omics[1]]])], 
+            seq(from=median(omics[[layers_def$omics[1]]]), 
             to=max(omics[[layers_def$omics[1]]]), length.out=6), 
             include.lowest = TRUE)),","),FUN=function(l) l[1]))
         borders_ge_b2[1] <- sub("[","(",borders_ge_b2[1], fixed = TRUE)
@@ -342,15 +342,15 @@ OMICS_mod_res, edge_weights, TFtargs = NULL)
         
         borders_ge_t1 <- as.numeric(sub("]","", unlist(lapply(strsplit(
         levels(cut(omics[[layers_def$omics[1]]][omics[[layers_def$omics[1]]]<=
-            stats::median(omics[[layers_def$omics[1]]])],
+            median(omics[[layers_def$omics[1]]])],
             seq(from=min(omics[[layers_def$omics[1]]]), 
-            to=stats::median(omics[[layers_def$omics[1]]]), length.out=5), 
+            to=median(omics[[layers_def$omics[1]]]), length.out=5), 
             include.lowest = TRUE)),","),FUN=function(l) l[2]))))
         borders_ge_t2 <- as.numeric(sub("]","", unlist(lapply(
             strsplit(levels(cut(omics[[layers_def$omics[1
             ]]][omics[[layers_def$omics[1]]]>
-            stats::median(omics[[layers_def$omics[1]]])], 
-            seq(from=stats::median(omics[[layers_def$omics[1]]]), 
+            median(omics[[layers_def$omics[1]]])], 
+            seq(from=median(omics[[layers_def$omics[1]]]), 
             to=max(omics[[layers_def$omics[1]]]), length.out=6), 
             include.lowest = TRUE)),","),FUN=function(l) l[2]))))
         borders_ge_t <- c(borders_ge_t1,borders_ge_t2)
@@ -370,7 +370,7 @@ OMICS_mod_res, edge_weights, TFtargs = NULL)
         any(regexpr("eid:",colnames(mod))>0), 
         omics)==TRUE))
         {
-            cnv_cols <- RColorBrewer::brewer.pal(11, "PiYG")
+            cnv_cols <- brewer.pal(11, "PiYG")
             cnv_common <- intersect(tolower(gene_annot$entrezID[
                 match(toupper(node_list[is.na(node_list[,"color"]),"label"]), 
                 gene_annot$gene_symbol)]),
@@ -459,7 +459,7 @@ OMICS_mod_res, edge_weights, TFtargs = NULL)
         if(any(mapply(omics,FUN=function(list)
             any(regexpr("eid:",colnames(list), ignore.case = TRUE)<0))))
         {
-            meth_cols <- RColorBrewer::brewer.pal(9, "YlOrRd")
+            meth_cols <- brewer.pal(9, "YlOrRd")
             meth_common <-
                 intersect(node_list[,"label"],colnames(omics_meth_original))
                 omics_meth_gs <- as.matrix(omics_meth_original[,meth_common])

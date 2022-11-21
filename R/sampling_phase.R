@@ -69,11 +69,11 @@ thin, minseglen, burn_in, annot)
         layers_def = layers_def,
         energy_all_configs_node =
         second.adapt.phase_net$partition_func_UB$energy_all_configs_node,
-        len = utils::tail(second.adapt.phase_net$betas,1)[[1]][["len"]])
+        len = tail(second.adapt.phase_net$betas,1)[[1]][["len"]])
     rms <- c()
     seeds_res <- list(seed1=list(),seed2=list())
-    seeds_res$seed1$nets <- utils::tail(second.adapt.phase_net$nets,1)
-    seeds_res$seed1$betas <- utils::tail(second.adapt.phase_net$betas,1)
+    seeds_res$seed1$nets <- tail(second.adapt.phase_net$nets,1)
+    seeds_res$seed1$betas <- tail(second.adapt.phase_net$betas,1)
     seeds_res$seed1$partition_func_UB_beta_source <-
         second.adapt.phase_net$partition_func_UB_beta_source
     seeds_res$seed1$nets[[1]]$adjacency <-
@@ -137,10 +137,10 @@ thin, minseglen, burn_in, annot)
     second.adapt.phase_net$partition_func_UB$energy_all_configs_node))
     cpdags1 <- mcmc_sim_part_res$seed1$cpdags
     cpdags2 <- mcmc_sim_part_res$seed2$cpdags
-    cpdag_weights1 <- bnlearn::custom.strength(cpdags1, 
-        nodes = bnlearn::nodes(cpdags1[[1]]), weights = NULL)
-    cpdag_weights2 <- bnlearn::custom.strength(cpdags2, 
-        nodes = bnlearn::nodes(cpdags2[[1]]), weights = NULL)
+    cpdag_weights1 <- custom.strength(cpdags1, 
+        nodes = nodes(cpdags1[[1]]), weights = NULL)
+    cpdag_weights2 <- custom.strength(cpdags2, 
+        nodes = nodes(cpdags2[[1]]), weights = NULL)
     cpdag_weights1 <- cpdag_weights1[cpdag_weights1$direction>=0.5,]
     cpdag_weights2 <- cpdag_weights2[cpdag_weights2$direction>=0.5,]
     total <- merge(cpdag_weights1, cpdag_weights2, by = c("from","to"))
@@ -165,9 +165,9 @@ thin, minseglen, burn_in, annot)
         cpdags1 <- unique(mcmc_sim_part_res$seed1$cpdags)
         cpdags2 <- unique(mcmc_sim_part_res$seed2$cpdags)
         cpdag_weights1 <- custom.strength(cpdags1, 
-            nodes = bnlearn::nodes(cpdags1[[1]]), weights = NULL)
+            nodes = nodes(cpdags1[[1]]), weights = NULL)
         cpdag_weights2 <- custom.strength(cpdags2, 
-            nodes = bnlearn::nodes(cpdags2[[1]]), weights = NULL)
+            nodes = nodes(cpdags2[[1]]), weights = NULL)
         cpdag_weights1 <- cpdag_weights1[cpdag_weights1$direction>=0.5,]
         cpdag_weights2 <- cpdag_weights2[cpdag_weights2$direction>=0.5,]
         total <- merge(cpdag_weights1, cpdag_weights2, by = c("from","to"))
@@ -176,9 +176,9 @@ thin, minseglen, burn_in, annot)
         rms <- c(rms,sqrt(1/N*sum(dist_i)))
     } # end while(length(mcmc_sim_part_res$seed1$nets)<(2*burn_in))
     rms_strength <- abs(diff(rms))
-    strength_threshold <- stats::quantile(rms_strength, 0.75, na.rm = TRUE)
+    strength_threshold <- quantile(rms_strength, 0.75, na.rm = TRUE)
   
-    while(any(utils::tail(rms_strength,minseglen/thin)>strength_threshold))
+    while(any(tail(rms_strength,minseglen/thin)>strength_threshold))
     {
         mcmc_sim_part_res <- lapply(mcmc_sim_part_res, FUN=function(list_l)
             mcmc.simulation_sampling.phase(first = length(list_l$nets)+1,
@@ -196,9 +196,9 @@ thin, minseglen, burn_in, annot)
         cpdags1 <- unique(mcmc_sim_part_res$seed1$cpdags)
         cpdags2 <- unique(mcmc_sim_part_res$seed2$cpdags)
         cpdag_weights1 <- custom.strength(cpdags1, 
-            nodes = bnlearn::nodes(cpdags1[[1]]), weights = NULL)
+            nodes = nodes(cpdags1[[1]]), weights = NULL)
         cpdag_weights2 <- custom.strength(cpdags2, 
-            nodes = bnlearn::nodes(cpdags2[[1]]), weights = NULL)
+            nodes = nodes(cpdags2[[1]]), weights = NULL)
         cpdag_weights1 <- cpdag_weights1[cpdag_weights1$direction>=0.5,]
         cpdag_weights2 <- cpdag_weights2[cpdag_weights2$direction>=0.5,]
         total <- merge(cpdag_weights1, cpdag_weights2, by = c("from","to"))
@@ -206,6 +206,6 @@ thin, minseglen, burn_in, annot)
         dist_i <- abs(total$strength.x - total$strength.y)^2 / 2
         rms <- c(rms,sqrt(1/N*sum(dist_i)))
         rms_strength <- abs(diff(rms))
-    } # end while(any(utils::tail(rms_strength,...
+    } # end while(any(tail(rms_strength,...
     return(list(mcmc_sim_part_res = mcmc_sim_part_res, rms = rms))
 }

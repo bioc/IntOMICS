@@ -154,7 +154,7 @@ r_squared_thres, p_val_thres, TFBS_belief, nonGE_belief, woPKGE_belief)
                 layers_def$omics[j]]],2,FUN=function(col) all(is.na(col)))]
                 omics[[layers_def$omics[j]]] <-
                 apply(omics[[layers_def$omics[j]]], 2, FUN=function(column)
-                    bestNormalize::orderNorm(column)$x.t)
+                    orderNorm(column)$x.t)
         
                 if(lm_METH)
                 {
