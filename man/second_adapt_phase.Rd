@@ -79,3 +79,4 @@ if(interactive()){transient.phase_net <- transient_phase(prob_mbr = 0.07,
     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)}
 
 }
+\keyword{internal}

@@ -15,6 +15,8 @@
 #'
 #' @return Numeric vector of length 1: epsilon of given adjacency matrix
 #' (needed to compute energy of given adjacency matrix)
+#' @keywords internal
+#' @export
 epsilon <- function(net, B_prior_mat)
 {
     epsilon <- rep(NA,nrow(net))

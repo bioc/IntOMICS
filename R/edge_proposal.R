@@ -28,7 +28,9 @@
 #'     omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat)
 #'             
 #' @return List of 6 elements needed to define candidates for conventional
-#' single edge proposal move            
+#' single edge proposal move    
+#' @keywords internal
+#' @export         
 edge_proposal <- function(net, candidates, layers_def, ge_nodes, omics,
 B_prior_mat) {
     edge <- sample(candidates,1); div <- nrow(net); row <- edge %% div

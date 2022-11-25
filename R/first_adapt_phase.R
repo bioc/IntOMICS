@@ -34,13 +34,15 @@
 #'    annot = OMICS_mod_res$annot)}
 #'
 #' @return List of 1 element: first adaption phase result
+#' @keywords internal
+#' @export
 first_adapt_phase <- function(omics, B_prior_mat, energy_all_configs_node, 
 len, layers_def, prob_mbr, BGe_score_all_configs_node, 
 parent_set_combinations, annot) {
-    init.net1 <- init.net.mcmc(omics = omics, layers_def = layers_def,
+    init.net1 <- init_net_mcmc(omics = omics, layers_def = layers_def,
     B_prior_mat = B_prior_mat)
     first.adapt.phase_net <- source_net_def(omics = omics, len = len,
-        init.net.mcmc.output = init.net1, 
+        init_net_mcmc.output = init.net1, 
         parent_set_combinations = parent_set_combinations,
         BGe_score_all_configs_node = BGe_score_all_configs_node,
         B_prior_mat = B_prior_mat, layers_def = layers_def,

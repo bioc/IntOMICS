@@ -5,7 +5,7 @@
 \title{Resulting network definition}
 \usage{
 edge_types(
-  mcmc_res,
+  B_prior_mat_weighted,
   PK = NULL,
   gene_annot,
   edge_list,
@@ -16,7 +16,8 @@ edge_types(
 )
 }
 \arguments{
-\item{mcmc_res}{list output from the BN_module function.}
+\item{B_prior_mat_weighted}{matrix one of the outputs
+of the bn_module function.}
 
 \item{PK}{data.frame with known interactions.}
 
@@ -30,7 +31,7 @@ the target node.}
 \item{node_list}{character vector indicating the complete set of nodes
 in the resulting network structure.}
 
-\item{OMICS_mod_res}{list output from the OMICS_module function.}
+\item{OMICS_mod_res}{list output from the omics_module function.}
 
 \item{edge_weights}{character vector includes either "MCMC_freq" to reflect
 the edge weights frequency over the final set of network structures or
@@ -46,3 +47,4 @@ List of 6 elements needed to plot the final regulatory network edges
 \code{edge_types} Defines the resulting network structure and determines
 the color scale for each modality. This is part of trace_plots.
 }
+\keyword{internal}

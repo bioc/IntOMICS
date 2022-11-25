@@ -12,6 +12,8 @@
 #' normalise(x, from = range(x), to = c(0, 1))
 #'
 #' @return Numeric vector
+#' @keywords internal
+#' @export
 normalise <- function (x, from = range(x), to = c(0, 1)) {
     x <- (x - from[1])/(from[2] - from[1])
     if (!identical(to, c(0, 1))) {

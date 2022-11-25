@@ -2,7 +2,8 @@
 #' @description
 #' `edge_types` Defines the resulting network structure and determines 
 #' the color scale for each modality. This is part of trace_plots.
-#' @param mcmc_res list output from the BN_module function.
+#' @param B_prior_mat_weighted matrix one of the outputs 
+#' of the bn_module function.
 #' @param PK data.frame with known interactions.
 #' @param gene_annot data.frame containing the entrez ID and corresponding 
 #' gene symbol for conversion.
@@ -11,7 +12,7 @@
 #' the target node.
 #' @param node_list character vector indicating the complete set of nodes 
 #' in the resulting network structure.
-#' @param OMICS_mod_res list output from the OMICS_module function.
+#' @param OMICS_mod_res list output from the omics_module function.
 #' @param edge_weights character vector includes either "MCMC_freq" to reflect
 #' the edge weights frequency over the final set of network structures or 
 #' "empB" to reflect the empirical biological knowledge estimated by IntOMICS.
@@ -20,7 +21,9 @@
 #' @importFrom RColorBrewer brewer.pal
 #'
 #' @return List of 6 elements needed to plot the final regulatory network edges
-edge_types <- function(mcmc_res, PK = NULL, gene_annot, edge_list, node_list,
+#' @keywords internal
+#' @export 
+edge_types <- function(B_prior_mat_weighted, PK = NULL, gene_annot, edge_list, node_list,
 OMICS_mod_res, edge_weights, TFtargs = NULL)
 {
     omics <- OMICS_mod_res$omics
@@ -64,7 +67,7 @@ OMICS_mod_res, edge_weights, TFtargs = NULL)
             edge_list[,"weight"] <-
             round(as.numeric(unlist(lapply(seq_along(edge_list[,2]), 1, 
                 FUN=function(row)
-                mcmc_res$B_prior_mat_weighted[edge_list[row,"from"], 
+                B_prior_mat_weighted[edge_list[row,"from"], 
                 edge_list[row,"to"]]))), 2)
         } else {
             if(!is.null(PK))
@@ -292,19 +295,19 @@ OMICS_mod_res, edge_weights, TFtargs = NULL)
                 edge_list[,"edge"]), "edge_type"] <- "PK"
             } # end if(!is.null(PK))
             
-            rownames(mcmc_res$B_prior_mat_weighted)[!is.na(match(rownames(
-            mcmc_res$B_prior_mat_weighted), gene_annot$entrezID))] <-
+            rownames(B_prior_mat_weighted)[!is.na(match(rownames(
+            B_prior_mat_weighted), gene_annot$entrezID))] <-
             gene_annot$gene_symbol[match(rownames(
-            mcmc_res$B_prior_mat_weighted), gene_annot$entrezID, nomatch = 0)]
-            rownames(mcmc_res$B_prior_mat_weighted)[!is.na(match(toupper(
-            rownames(mcmc_res$B_prior_mat_weighted)), gene_annot$entrezID))] <-
+            B_prior_mat_weighted), gene_annot$entrezID, nomatch = 0)]
+            rownames(B_prior_mat_weighted)[!is.na(match(toupper(
+            rownames(B_prior_mat_weighted)), gene_annot$entrezID))] <-
             tolower(gene_annot$gene_symbol[match(toupper(rownames(
-            mcmc_res$B_prior_mat_weighted)), gene_annot$entrezID, nomatch = 0)])
-            colnames(mcmc_res$B_prior_mat_weighted) <-
-            rownames(mcmc_res$B_prior_mat_weighted)
+            B_prior_mat_weighted)), gene_annot$entrezID, nomatch = 0)])
+            colnames(B_prior_mat_weighted) <-
+            rownames(B_prior_mat_weighted)
             edge_list[,"weight"] <-
             round(as.numeric(unlist(lapply(seq_along(edge_list[,2]),
-                FUN=function(row) mcmc_res$B_prior_mat_weighted[
+                FUN=function(row) B_prior_mat_weighted[
                 edge_list[row,"from"],edge_list[row,"to"]]))),2)
         } else {
             if(!is.null(PK))

@@ -2,7 +2,7 @@
 #' @description
 #' `source_net_def` This function is used to create the initial network 
 #' with its features necessary for MCMC simulation.
-#' @param init.net.mcmc.output list output of the init.net.mcmc function.
+#' @param init_net_mcmc.output list output of the init_net_mcmc function.
 #' @param omics named list containing the gene expression (possibly copy number
 #' variation and methylation data). Each component of the list is a matrix 
 #' with samples in rows and features in columns.
@@ -22,10 +22,10 @@
 #'       
 #' @examples
 #' data("OMICS_mod_res", package="IntOMICS")
-#' init.net <- init.net.mcmc(omics = OMICS_mod_res$omics, 
+#' init.net <- init_net_mcmc(omics = OMICS_mod_res$omics, 
 #'     layers_def = OMICS_mod_res$layers_def, 
 #'     B_prior_mat = OMICS_mod_res$B_prior_mat)
-#' source_net_def(init.net.mcmc.output = init.net, 
+#' source_net_def(init_net_mcmc.output = init.net, 
 #'     omics = OMICS_mod_res$omics, 
 #'     parent_set_combinations = 
 #'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations,
@@ -36,15 +36,17 @@
 #'     energy_all_configs_node = 
 #'     OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node)
 #'              
-#' @return List of 10 elements needed to define the initial adjacency matrix            
-source_net_def <- function(init.net.mcmc.output, parent_set_combinations,
+#' @return List of 10 elements needed to define the initial adjacency matrix    
+#' @keywords internal
+#' @export       
+source_net_def <- function(init_net_mcmc.output, parent_set_combinations,
 omics, BGe_score_all_configs_node, B_prior_mat, layers_def,
 energy_all_configs_node, len)
 {
     beta_init <- runif(1, min = 0, max = 10)
     beta.source <- list(value = beta_init, prior = c())
-    source.net <- init.net.mcmc.output$source.net
-    source.net$BGe <- BGe_score(adjacency_matrix = source.net$adjacency, 
+    source.net <- init_net_mcmc.output$source.net
+    source.net$BGe <- bge_score(adjacency_matrix = source.net$adjacency, 
         omics = omics, layers_def = layers_def, 
         parent_set_combinations = parent_set_combinations,
         BGe_score_all_configs_node = BGe_score_all_configs_node)

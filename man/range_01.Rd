@@ -20,3 +20,4 @@ between 0 and 1.
 range_01(stats::rnorm(10))
 
 }
+\keyword{internal}

@@ -78,3 +78,4 @@ if(interactive()){transient.phase_net <- transient_phase(prob_mbr = 0.07,
     annot = OMICS_mod_res$annot)}
 
 }
+\keyword{internal}

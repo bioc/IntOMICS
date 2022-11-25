@@ -28,3 +28,4 @@ adjacency_matrix[,] <- 0
 epsilon(net = adjacency_matrix, B_prior_mat = OMICS_mod_res$B_prior_mat)
 
 }
+\keyword{internal}

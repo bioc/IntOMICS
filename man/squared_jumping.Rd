@@ -94,3 +94,4 @@ BGe_score_all_configs_node=OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_nod
 annot = annot)}
 
 }
+\keyword{internal}

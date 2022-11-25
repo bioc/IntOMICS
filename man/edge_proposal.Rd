@@ -46,3 +46,4 @@ edge_proposal(net = source_net$adjacency, candidates = vec,
     omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat)
             
 }
+\keyword{internal}

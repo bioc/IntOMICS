@@ -30,5 +30,4 @@ BiocManager::install("IntOMICS")
 # install the newest (development) version from GitHub
 # install.packages("remotes")
 remotes::install_github("anna-pacinkova/IntOMICS")
-
 ```

@@ -5,7 +5,7 @@
 \title{Source network for MCMC simulation}
 \usage{
 source_net_def(
-  init.net.mcmc.output,
+  init_net_mcmc.output,
   parent_set_combinations,
   omics,
   BGe_score_all_configs_node,
@@ -16,7 +16,7 @@ source_net_def(
 )
 }
 \arguments{
-\item{init.net.mcmc.output}{list output of the init.net.mcmc function.}
+\item{init_net_mcmc.output}{list output of the init_net_mcmc function.}
 
 \item{parent_set_combinations}{list of all possible parent set
 configuration for all nodes available.}
@@ -48,10 +48,10 @@ with its features necessary for MCMC simulation.
 }
 \examples{
 data("OMICS_mod_res", package="IntOMICS")
-init.net <- init.net.mcmc(omics = OMICS_mod_res$omics, 
+init.net <- init_net_mcmc(omics = OMICS_mod_res$omics, 
     layers_def = OMICS_mod_res$layers_def, 
     B_prior_mat = OMICS_mod_res$B_prior_mat)
-source_net_def(init.net.mcmc.output = init.net, 
+source_net_def(init_net_mcmc.output = init.net, 
     omics = OMICS_mod_res$omics, 
     parent_set_combinations = 
     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations,
@@ -63,3 +63,4 @@ source_net_def(init.net.mcmc.output = init.net,
     OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node)
              
 }
+\keyword{internal}

@@ -24,19 +24,10 @@
 #' @importFrom stats runif rnorm
 #' @importFrom matrixStats logSumExp
 #' @importFrom utils tail
-#' 
-#' @examples
-#' data(list=c("OMICS_mod_res", "first.adapt.phase_net"), package="IntOMICS")
-#' if(interactive()){acceptance_check(round_check = 100, prob_mbr = 0.07,
-#'     first.adapt.phase_net = first.adapt.phase_net, last_iter_check = 100,
-#'     layers_def = OMICS_mod_res$layers_def, 
-#'     BGe_score_all_configs_node = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-#'     parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations,
-#'     omics = OMICS_mod_res$omics, annot = OMICS_mod_res$annot)}
-#'
 #' @return List of 1 element: first adaption phase result 
 #' before given acceptance rate
+#' @keywords internal
+#' @export
 acceptance_check <- function(first.adapt.phase_net, round_check, 
 last_iter_check, prob_mbr, layers_def, parent_set_combinations,
 BGe_score_all_configs_node, omics, annot)
@@ -55,7 +46,7 @@ BGe_score_all_configs_node, omics, annot)
         sample(x = c("MC3", "MBR"), size = 1, prob = c(1-prob_mbr, prob_mbr))
         if(first.adapt.phase_net$method_choice_saved[i]=="MC3")
         {
-            candidate.net <- MC3(source_net = source.net, omics = omics, 
+            candidate.net <- mc3(source_net = source.net, omics = omics, 
                 layers_def = layers_def, beta.source = beta.source, 
                 B_prior_mat = first.adapt.phase_net$B_prior_mat, 
                 partition_func_UB_beta_source = 
@@ -80,13 +71,13 @@ BGe_score_all_configs_node, omics, annot)
             }
             first.adapt.phase_net$nets[[i]] <- source.net
         } else {
-            candidate.net <- MBR(source_net_adjacency = source.net$adjacency, 
+            candidate.net <- mbr(source_net_adjacency = source.net$adjacency, 
                 layers_def = layers_def, omics = omics, 
                 BGe_score_all_configs_node = BGe_score_all_configs_node, 
                 parent_set_combinations = parent_set_combinations)
             first.adapt.phase_net$acceptance_saved[i] <-
             candidate.net$acceptance
-            candidate.net$BGe <-BGe_score(omics = omics, 
+            candidate.net$BGe <-bge_score(omics = omics, 
                 adjacency_matrix = candidate.net$adjacency, 
                 layers_def = layers_def, 
                 parent_set_combinations = parent_set_combinations, 

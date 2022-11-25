@@ -54,13 +54,15 @@
 #'
 #' @return List of 2 elements: sampling phase result; RMS used to evaluate 
 #' MCMC convergence
+#' @keywords internal
+#' @export
 sampling_phase <- function(second.adapt.phase_net, omics, layers_def, prob_mbr,
 thin, minseglen, burn_in, annot) 
 {
-    init.net_sampling <- init.net.mcmc(omics = omics, layers_def = layers_def,
+    init.net_sampling <- init_net_mcmc(omics = omics, layers_def = layers_def,
         B_prior_mat = second.adapt.phase_net$B_prior_mat_weighted)
     init.net_sampling <- source_net_def(omics = omics, 
-        init.net.mcmc.output = init.net_sampling, 
+        init_net_mcmc.output = init.net_sampling, 
         parent_set_combinations =
         second.adapt.phase_net$partition_func_UB$parents_set_combinations,
         BGe_score_all_configs_node =
@@ -87,7 +89,7 @@ thin, minseglen, burn_in, annot)
     seeds_res$seed1$nets[[1]]$prior <- 
     (-seeds_res$seed1$betas[[1]]$value*seeds_res$seed1$nets[[1]]$energy) -
         seeds_res$seed1$partition_func_UB_beta_source
-    seeds_res$seed1$nets[[1]]$BGe <- BGe_score(omics = omics, 
+    seeds_res$seed1$nets[[1]]$BGe <- bge_score(omics = omics, 
         adjacency_matrix = seeds_res$seed1$nets[[1]]$adjacency, 
         layers_def = layers_def, 
         parent_set_combinations =
@@ -114,7 +116,7 @@ thin, minseglen, burn_in, annot)
     seeds_res$seed2$nets[[1]]$prior <- 
     (-seeds_res$seed2$betas[[1]]$value*seeds_res$seed2$nets[[1]]$energy) -
         seeds_res$seed2$partition_func_UB_beta_source
-    seeds_res$seed2$nets[[1]]$BGe <- BGe_score(omics = omics, 
+    seeds_res$seed2$nets[[1]]$BGe <- bge_score(omics = omics, 
         adjacency_matrix = seeds_res$seed2$nets[[1]]$adjacency, 
         layers_def = layers_def, 
         parent_set_combinations =
@@ -125,7 +127,7 @@ thin, minseglen, burn_in, annot)
     seeds_res$seed2$nets[[1]]$BGe + seeds_res$seed2$nets[[1]]$prior
     seeds_res$seed2$betas[[1]]$prior <- seeds_res$seed2$nets[[1]]$prior
     mcmc_sim_part_res <- lapply(seeds_res, FUN=function(list_l)
-    mcmc.simulation_sampling.phase(first = 1, last = thin, sim_init = list_l,
+    mcmc_simulation_sampling_phase(first = 1, last = thin, sim_init = list_l,
     prob_mbr = prob_mbr, omics = omics, annot = annot,
     B_prior_mat = second.adapt.phase_net$B_prior_mat_weighted,
     parent_set_combinations =
@@ -151,7 +153,7 @@ thin, minseglen, burn_in, annot)
     while(length(mcmc_sim_part_res$seed1$nets)<(2*burn_in))
     {
         mcmc_sim_part_res <- lapply(mcmc_sim_part_res, FUN=function(list_l) 
-            mcmc.simulation_sampling.phase(first = length(list_l$nets)+1,
+            mcmc_simulation_sampling_phase(first = length(list_l$nets)+1,
             last = length(list_l$nets)+thin, sim_init = list_l, annot = annot, 
             prob_mbr = prob_mbr, omics = omics, thin = thin, 
             B_prior_mat = second.adapt.phase_net$B_prior_mat_weighted,
@@ -181,7 +183,7 @@ thin, minseglen, burn_in, annot)
     while(any(tail(rms_strength,minseglen/thin)>strength_threshold))
     {
         mcmc_sim_part_res <- lapply(mcmc_sim_part_res, FUN=function(list_l)
-            mcmc.simulation_sampling.phase(first = length(list_l$nets)+1,
+            mcmc_simulation_sampling_phase(first = length(list_l$nets)+1,
             last = length(list_l$nets)+thin, sim_init = list_l, omics = omics,
             prob_mbr = prob_mbr, B_prior_mat =
             second.adapt.phase_net$B_prior_mat_weighted, 

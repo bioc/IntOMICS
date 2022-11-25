@@ -25,7 +25,7 @@
 #'
 #' @examples
 #' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", 
-#'    "omics", "gene_annot", "OMICS_mod_res", "first.adapt.phase_net"), 
+#'    "gene_annot", "OMICS_mod_res", "first.adapt.phase_net"), 
 #'    package="IntOMICS")
 #' if(interactive()){transient_phase(first.adapt.phase_net = 
 #'    first.adapt.phase_net, omics = OMICS_mod_res$omics, 
@@ -39,6 +39,8 @@
 #'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)}
 #'
 #' @return List of 1 element: first adaption phase and transient phase result
+#' @keywords internal
+#' @export 
 transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
     layers_def, energy_all_configs_node, prob_mbr, BGe_score_all_configs_node, 
     parent_set_combinations, annot)
@@ -57,7 +59,7 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
             "MBR"), size = 1, prob = c(1-prob_mbr, prob_mbr))
         if(first.adapt.phase_net$method_choice_saved[i]=="MC3")
         {
-            candidate.net <- MC3(source_net = source.net, annot = annot,
+            candidate.net <- mc3(source_net = source.net, annot = annot,
                 layers_def =  layers_def, B_prior_mat = B_prior_mat, 
                 beta.source = beta.source, omics = omics, 
                 partition_func_UB_beta_source = 
@@ -82,13 +84,13 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
             first.adapt.phase_net$nets[[i]] <- source.net
         } else {
      
-            candidate.net <- MBR(source_net_adjacency = source.net$adjacency, 
+            candidate.net <- mbr(source_net_adjacency = source.net$adjacency, 
                 layers_def = layers_def, omics = omics, 
                 BGe_score_all_configs_node = BGe_score_all_configs_node, 
                 parent_set_combinations = parent_set_combinations)
             first.adapt.phase_net$acceptance_saved[i] <- 
             candidate.net$acceptance
-            candidate.net$BGe <-BGe_score(omics = omics, 
+            candidate.net$BGe <-bge_score(omics = omics, 
                 adjacency_matrix = candidate.net$adjacency, 
                 layers_def = layers_def, 
                 parent_set_combinations = parent_set_combinations, 
@@ -157,7 +159,7 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
                 prob = c(1-prob_mbr, prob_mbr))
             if(first.adapt.phase_net$method_choice_saved[i]=="MC3")
             {
-                candidate.net <- MC3(source_net = source.net, annot = annot,
+                candidate.net <- mc3(source_net = source.net, annot = annot,
                     layers_def =  layers_def, B_prior_mat = B_prior_mat, 
                     beta.source = beta.source, omics = omics, 
                     partition_func_UB_beta_source = 
@@ -181,14 +183,14 @@ transient_phase <- function(first.adapt.phase_net, omics, B_prior_mat,
                 } # end if (u < first.adapt.phase_net$acceptance_saved[i])
                 first.adapt.phase_net$nets[[i]] <- source.net
             } else {
-                candidate.net <- MBR(omics = omics, 
+                candidate.net <- mbr(omics = omics, 
                     source_net_adjacency = source.net$adjacency, 
                     layers_def = layers_def, 
                     BGe_score_all_configs_node = BGe_score_all_configs_node, 
                     parent_set_combinations = parent_set_combinations)
                 first.adapt.phase_net$acceptance_saved[i] <-
                 candidate.net$acceptance
-                candidate.net$BGe <-BGe_score(omics = omics, 
+                candidate.net$BGe <-bge_score(omics = omics, 
                     adjacency_matrix = candidate.net$adjacency, 
                     layers_def = layers_def, 
                     parent_set_combinations = parent_set_combinations, 

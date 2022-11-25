@@ -53,7 +53,7 @@ the mode of target distribution.
 }
 \examples{
 data(list=c("PK", "TFtarg_mat", "annot", "layers_def", 
-   "omics", "gene_annot", "OMICS_mod_res", "first.adapt.phase_net"), 
+   "gene_annot", "OMICS_mod_res", "first.adapt.phase_net"), 
    package="IntOMICS")
 if(interactive()){transient_phase(first.adapt.phase_net = 
    first.adapt.phase_net, omics = OMICS_mod_res$omics, 
@@ -67,3 +67,4 @@ if(interactive()){transient_phase(first.adapt.phase_net =
     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)}
 
 }
+\keyword{internal}

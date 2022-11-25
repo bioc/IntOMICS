@@ -62,6 +62,8 @@
 #'
 #' @return List of 1 element: second adaptive phase result with stopped 
 #' MCMC mixing
+#' @keywords internal
+#' @export
 squared_jumping <- function(second.adapt.phase_net, constant, fin, beta_sd,
 B_prior_mat, omics, parent_set_combinations, BGe_score_all_configs_node,
 layers_def, prob_mbr, annot)
@@ -82,7 +84,7 @@ layers_def, prob_mbr, annot)
         sample(x = c("MC3", "MBR"), size = 1, prob = c(1-prob_mbr, prob_mbr))
         if(second.adapt.phase_net$method_choice_saved[i]=="MC3")
         {
-            candidate.net <- MC3(source_net = source.net, omics = omics, 
+            candidate.net <- mc3(source_net = source.net, omics = omics, 
             layers_def =  layers_def, B_prior_mat = B_prior_mat, 
             beta.source = beta.source, annot = annot,
             partition_func_UB_beta_source =
@@ -157,14 +159,14 @@ layers_def, prob_mbr, annot)
             } # end if else(u < second.adapt.phase_net$acceptance_saved[i])
             second.adapt.phase_net$nets[[i]] <- source.net
         } else {
-            candidate.net <- MBR(source_net_adjacency = source.net$adjacency, 
+            candidate.net <- mbr(source_net_adjacency = source.net$adjacency, 
                 layers_def = layers_def, omics = omics, 
                 BGe_score_all_configs_node = BGe_score_all_configs_node, 
                 parent_set_combinations = parent_set_combinations)
                 second.adapt.phase_net$acceptance_saved[i] <-
                 candidate.net$acceptance
                 candidate.net$BGe <-
-                BGe_score(adjacency_matrix = candidate.net$adjacency, 
+                bge_score(adjacency_matrix = candidate.net$adjacency, 
                     omics = omics, layers_def = layers_def, 
                     parent_set_combinations = parent_set_combinations, 
                     BGe_score_all_configs_node = BGe_score_all_configs_node)

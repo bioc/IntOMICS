@@ -64,3 +64,4 @@ if(interactive()){first_adapt_phase(omics = OMICS_mod_res$omics,
    annot = OMICS_mod_res$annot)}
 
 }
+\keyword{internal}

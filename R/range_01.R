@@ -7,5 +7,7 @@
 #' @examples
 #' range_01(stats::rnorm(10))
 #' 
-#' @return Numeric vector with normalised values           
+#' @return Numeric vector with normalised values    
+#' @keywords internal
+#' @export 
 range_01 <- function(x){(x-min(x))/(max(x)-min(x))}

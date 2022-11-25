@@ -25,3 +25,4 @@ x <- seq(1,10)
 normalise(x, from = range(x), to = c(0, 1))
 
 }
+\keyword{internal}

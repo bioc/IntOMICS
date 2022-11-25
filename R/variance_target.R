@@ -52,6 +52,8 @@
 #' @return Large List of 3 elements: second adaptive phase result 
 #' with possible MCMC mixing; acceptance rate of hyperparameter beta; 
 #' SD of hyperparameter beta
+#' @keywords internal
+#' @export 
 variance_target <- function(transient.phase_net, constant, fin, B_prior_mat, 
 omics, parent_set_combinations, BGe_score_all_configs_node, layers_def,
 prob_mbr, annot)
@@ -69,7 +71,7 @@ prob_mbr, annot)
         sample(x = c("MC3", "MBR"), size = 1, prob = c(1-prob_mbr, prob_mbr))
         if(transient.phase_net$method_choice_saved[i]=="MC3")
         {
-            candidate.net <- MC3(source_net = source.net, annot = annot,
+            candidate.net <- mc3(source_net = source.net, annot = annot,
                 B_prior_mat = B_prior_mat, beta.source = beta.source, 
                 partition_func_UB_beta_source =
                 transient.phase_net$partition_func_UB_beta_source, 
@@ -93,12 +95,12 @@ prob_mbr, annot)
             } # end if (u < transient.phase_net$acceptance_saved[i])
             transient.phase_net$nets[[i]] <- source.net
         } else {
-            candidate.net <- MBR(source_net_adjacency = source.net$adjacency, 
+            candidate.net <- mbr(source_net_adjacency = source.net$adjacency, 
                 layers_def = layers_def, omics = omics, 
                 BGe_score_all_configs_node = BGe_score_all_configs_node, 
                 parent_set_combinations = parent_set_combinations)
             transient.phase_net$acceptance_saved[i] <- candidate.net$acceptance
-            candidate.net$BGe <- BGe_score(omics = omics,
+            candidate.net$BGe <- bge_score(omics = omics,
                 adjacency_matrix = candidate.net$adjacency, 
                 layers_def = layers_def, 
                 parent_set_combinations = parent_set_combinations, 

@@ -49,6 +49,8 @@
 #'
 #' @return List of 1 element: first adaption phase + transient phase + 
 #' second adaption phase result
+#' @keywords internal
+#' @export
 second_adapt_phase <- function(transient.phase_net, omics, layers_def,
 B_prior_mat, energy_all_configs_node, prob_mbr, BGe_score_all_configs_node,
 parent_set_combinations, annot, woPKGE_belief = 0.5) 
@@ -133,7 +135,7 @@ parent_set_combinations, annot, woPKGE_belief = 0.5)
     matrix(B_prior_mat_weighted, nrow=nrow(B_prior_mat), 
     dimnames = list(rownames(B_prior_mat), colnames(B_prior_mat)))
     squared.jump_second.adapt.phase_net$partition_func_UB <- 
-    pf_UB_est(omics = omics, layers_def = layers_def, annot = annot,
+    pf_ub_est(omics = omics, layers_def = layers_def, annot = annot,
         B_prior_mat = squared.jump_second.adapt.phase_net$B_prior_mat_weighted)
     return(squared.jump_second.adapt.phase_net)
 }
