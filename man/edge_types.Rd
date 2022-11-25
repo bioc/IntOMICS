@@ -2,7 +2,7 @@
 % Please edit documentation in R/edge_types.R
 \name{edge_types}
 \alias{edge_types}
-\title{Resulting network definition}
+\title{Resulting edge types definition}
 \usage{
 edge_types(
   B_prior_mat_weighted,
@@ -44,7 +44,6 @@ the edge weights frequency over the final set of network structures or
 List of 6 elements needed to plot the final regulatory network edges
 }
 \description{
-\code{edge_types} Defines the resulting network structure and determines
-the color scale for each modality. This is part of trace_plots.
+\code{edge_types} Defines the resulting network structure.
 }
 \keyword{internal}
