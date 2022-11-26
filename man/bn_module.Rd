@@ -4,7 +4,14 @@
 \alias{bn_module}
 \title{#' BN module}
 \usage{
-bn_module(burn_in, thin, OMICS_mod_res, minseglen, len = 5, prob_mbr = 0.07)
+bn_module(
+  burn_in = 1e+05,
+  thin = 500,
+  OMICS_mod_res,
+  minseglen = 50000,
+  len = 5,
+  prob_mbr = 0.07
+)
 }
 \arguments{
 \item{burn_in}{numeric vector the minimal length of burn-in period

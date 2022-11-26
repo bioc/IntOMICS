@@ -29,7 +29,8 @@
 #' @param woPKGE_belief numeric vector to define the belief concerning GE-GE
 #' interactions without prior knowledge (default=0.5).
 #' @importFrom SummarizedExperiment assay
-
+#' @importFrom methods is
+#' 
 #' @examples
 #' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", 
 #' "gene_annot"), package="IntOMICS")
@@ -43,37 +44,115 @@ omics_module <- function(omics, PK=NULL, layers_def, TFtargs=NULL, annot=NULL,
 lm_METH = TRUE, r_squared_thres = 0.3, p_val_thres = 0.05, TFBS_belief = 0.75, 
 nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
 {
+  if(!is.data.frame(PK) | !all(colnames(PK) %in% c("src_entrez","dest_entrez",
+                                                   "edge_type")) | 
+     !all(regexpr("EID:",c(PK$src_entrez,PK$dest_entrez), fixed = TRUE)==1))
+  {
+    message('Invalid input "PK". Must be data.frame with colnames 
+            c("src_entrez","dest_entrez","edge_type") and gene names must 
+            be in EID:XXXX format indicating Entrez IDs.')
+  }
+  
+  if(!is.data.frame(layers_def) | !all(colnames(layers_def) %in% 
+                                       c("omics", "layer", "fan_in_ge")) | 
+     !all(layers_def$omics %in% names(omics)))
+  {
+    message('Invalid input "layers_def". Must be data.frame with colnames 
+            c("omics", "layer", "fan_in_ge") and layers_def$omics 
+            must fit names(omics).')
+  }
+  
+  if(!is.matrix(TFtargs) | 
+     !all(regexpr("EID:",unlist(dimnames(TFtargs)), fixed = TRUE)==1))
+  {
+    message('Invalid input "TFtargs". Must be matrix and dimnames must 
+            be in EID:XXXX format indicating Entrez IDs.')
+  } 
+  
+  if(!is.list(annot) | 
+     is.null(names(annot)) )
+  {
+    message('Invalid input "annot". Must be named list, 
+            names corresponding to gene symbols.')
+  }
+  
+  if(!all(names(annot) %in% gene_annot$gene_symbol))
+  {
+    message('Invalid input "annot". All names(annot) must be present in 
+            gene_annot$gene_symbol.')
+  }
+  
+  if(!is.data.frame(gene_annot) | !all(colnames(gene_annot) %in% 
+                                       c("entrezID","gene_symbol")) | 
+     !all(regexpr("EID:",gene_annot$entrezID, fixed = TRUE)==1))
+  {
+    message('Invalid input "gene_annot". Must be data.frame with colnames 
+            c("entrezID","gene_symbol") and entrezID must 
+            be in EID:XXXX format indicating Entrez IDs.')
+  }
+  
+  if(TFBS_belief==woPKGE_belief)
+  {
+    message('GE-GE interactions without PK have the same belief as TFs-targets 
+            interactions. TFs-targets interactions will be considered as GE-GE 
+            interactions without prior knowledge.')
+  }
+  
+  if(!is.numeric(r_squared_thres) | !is.numeric(p_val_thres) | 
+     !is.numeric(TFBS_belief) | !is.numeric(nonGE_belief) |
+     !is.numeric(woPKGE_belief) | length(r_squared_thres)!=1 |
+     length(p_val_thres)!=1 | length(TFBS_belief)!=1 |
+     length(nonGE_belief)!=1 | length(woPKGE_belief)!=1)
+  {
+    message('Invalid input. "r_squared_thres", "p_val_thres", "TFBS_belief", 
+            "nonGE_belief", and "woPKGE_belief" must be numeric of length 1.')  
+  }
+  
+  if(!is.logical(lm_METH))
+  {
+    message('Invalid input "lm_METH", must be logical.')  
+  }
+  
+  layers_def <- layers_def[order(layers_def$layer, decreasing = TRUE),]
+  
+  if(is(omics)[1]=="MatchedAssayExperiment")
+  {
     omics_list <- list()
     for(i in seq(1,nrow(layers_def)))
     {
-        omics_list[[i]] <- t(assay(omics[[layers_def$omics[i]]]))
-        if(!is.numeric(omics_list[[i]]))
-        {
-            omics_list[[i]] <- apply(omics_list[[i]],2,as.numeric)
-        } # end if(!is.numeric(omics_list[[i]]))
+      omics_list[[i]] <- t(assay(omics[[layers_def$omics[i]]]))
+      if(!is.numeric(omics_list[[i]]))
+      {
+        omics_list[[i]] <- apply(omics_list[[i]],2,as.numeric)
+      } # end if(!is.numeric(omics_list[[i]]))
     } # end for(i in seq(1,nrow(layers_def)))
     names(omics_list) <- layers_def$omics
-    colnames(omics_list$ge) <- gene_annot$entrezID[match(colnames(omics_list$ge),gene_annot$gene_symbol)]
-    colnames(omics_list$cnv) <- tolower(gene_annot$entrezID[match(colnames(omics_list$cnv),gene_annot$gene_symbol)])
-    names(annot) <- gene_annot$entrezID[match(names(annot),gene_annot$gene_symbol)]
-
-    if(TFBS_belief==woPKGE_belief)
-    {
-        message("GE-GE interactions without PK have the same belief as TFs-targets interactions. TFs-targets interactions will be considered as GE-GE interactions without prior knowledge.")
-    }
-  
-    layers_def <- layers_def[order(layers_def$layer, decreasing = TRUE),]
+    colnames(omics_list$ge) <- gene_annot$entrezID[
+      match(colnames(omics_list$ge),gene_annot$gene_symbol)]
+    colnames(omics_list$cnv) <- tolower(gene_annot$entrezID[
+      match(colnames(omics_list$cnv),gene_annot$gene_symbol)])
+    names(annot) <- gene_annot$entrezID[
+      match(names(annot),gene_annot$gene_symbol)]
+    
     omics <- omics_list[layers_def$omics[order(layers_def$layer, 
-        decreasing = TRUE)]]
-  
-    B <- b_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
-        annot = annot, lm_METH = lm_METH, r_squared_thres = r_squared_thres, 
-        p_val_thres = p_val_thres, TFtargs = TFtargs, 
-        TFBS_belief = TFBS_belief, nonGE_belief = nonGE_belief, 
-        woPKGE_belief = woPKGE_belief)
-    pf_UB_res <- pf_ub_est(omics = B$omics, layers_def = layers_def, 
-        B_prior_mat = B$B_prior_mat, annot = B$annot)
-    return(list(pf_UB_BGe_pre = pf_UB_res, B_prior_mat = B$B_prior_mat, 
-        annot = B$annot, omics = B$omics, layers_def = layers_def,
-        omics_meth_original = B$omics_meth_original))
+                                               decreasing = TRUE)]]
+  } else if(is.list(omics) & !is.null(names(omics))) {
+    
+    omics <- omics[layers_def$omics[order(layers_def$layer, 
+                                          decreasing = TRUE)]]
+  } else {
+    message('Invalid input "omics". Must be MatchedAssayExperiment or 
+            named list.')
+  }
+
+  B <- b_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
+      annot = annot, lm_METH = lm_METH, r_squared_thres = r_squared_thres, 
+      p_val_thres = p_val_thres, TFtargs = TFtargs, 
+      TFBS_belief = TFBS_belief, nonGE_belief = nonGE_belief, 
+      woPKGE_belief = woPKGE_belief)
+  pf_UB_res <- pf_ub_est(omics = B$omics, layers_def = layers_def, 
+      B_prior_mat = B$B_prior_mat, annot = B$annot)
+  return(list(pf_UB_BGe_pre = pf_UB_res, B_prior_mat = B$B_prior_mat, 
+      annot = B$annot, omics = B$omics, layers_def = layers_def,
+      omics_meth_original = B$omics_meth_original))
 }

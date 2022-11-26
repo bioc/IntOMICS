@@ -9,6 +9,7 @@
 #' @param TFtargs matrix containing the direct interactions between TFs
 #' (columns) and their targets (rows).
 #' @importFrom gplots heatmap.2 bluered
+#' @importFrom methods is
 #'
 #' @examples
 #' data(list=c("TFtarg_mat", "gene_annot", "OMICS_mod_res",
@@ -20,9 +21,39 @@
 #' @export
 emp_b_heatmap <- function(mcmc_res, OMICS_mod_res, gene_annot, TFtargs)
 {
+    if(!is.list(mcmc_res) | !all(names(mcmc_res) %in% 
+                                 c("sampling.phase_res","B_prior_mat_weighted",
+                                   "beta_tuning")))
+    {
+      message('Invalid input "mcmc_res". Must be named list with names 
+            c("sampling.phase_res","B_prior_mat_weighted","beta_tuning").')  
+    }
+  
+    if(!is.list(OMICS_mod_res) | 
+       !all(colnames(OMICS_mod_res) %in% c("pf_UB_BGe_pre", "B_prior_mat", 
+                                           "annot", "omics", "layers_def", "omics_meth_original")))
+    {
+      message('Invalid input "OMICS_mod_res". Must be named list, 
+              output from omics_module().')
+    }
+  
+    if(!is.data.frame(gene_annot) | !all(colnames(gene_annot) %in% c("entrezID","gene_symbol")) | 
+       !all(regexpr("EID:",gene_annot$entrezID, fixed = TRUE)==1))
+    {
+      message('Invalid input "gene_annot". Must be data.frame with colnames 
+              c("entrezID","gene_symbol") and entrezID must 
+              be in EID:XXXX format indicating Entrez IDs.')
+    }
+  
+    if(!is.matrix(TFtargs) | 
+       !all(regexpr("EID:",unlist(dimnames(TFtargs)), fixed = TRUE)==1))
+    {
+      message('Invalid input "TFtargs". Must be matrix and dimnames must 
+              be in EID:XXXX format indicating Entrez IDs.')
+    } 
     mat <- mcmc_res$B_prior_mat_weighted - OMICS_mod_res$B_prior_mat
     mat <- mat[regexpr("EID:",rownames(mat))>0,
-        regexpr("EID:",rownames(mat))>0]
+               regexpr("EID:",rownames(mat))>0]
     mat[which(OMICS_mod_res$B_prior_mat[regexpr("EID:",
         rownames(OMICS_mod_res$B_prior_mat))>0,regexpr("EID:",
         rownames(OMICS_mod_res$B_prior_mat))>0]==1)] <- NA

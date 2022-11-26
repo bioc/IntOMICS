@@ -1,6 +1,9 @@
 ---
 title: "IntOMICS tutorial"
-author: "Anna Pačínková"
+date: "`r BiocStyle::doc_date()`"
+author: 
+- name: Anna Pačínková
+  email: ana.pacinkova@gmail.com
 package: "IntOMICS"
 output:
   BiocStyle::html_document: 
@@ -16,12 +19,20 @@ vignette: >
 
 ## Summary
 
+Multi-omics data from the same set of samples contain complementary
+information and may provide a more accurate and holistic view of the biological
+system consisting of different interconnected molecular components.
+Hence, a computational framework to infer regulatory relationships 
+by integrating multiple modalities is one of the most relevant and challenging 
+problems in systems biology.
+
 IntOMICS is an efficient integrative framework based on Bayesian networks.
 IntOMICS systematically analyses gene expression (GE), DNA methylation (METH),
 copy number variation (CNV) and biological prior knowledge (B) to infer
 regulatory networks. IntOMICS complements the missing biological prior knowledge
 by so-called empirical biological knowledge (empB), estimated from the available  
 experimental data.
+
 An automatically tuned MCMC algorithm (Yang and Rosenthal, 2017) estimates model
 parameters and the empirical biological knowledge. Conventional MCMC algorithm
 with additional Markov blanket resampling (MBR) step (Su and Borsuk, 2016)
@@ -34,14 +45,16 @@ a powerful resource for exploratory systems biology and can provide valuable
 insights into the complex mechanisms of biological processes that has a vital
 role in personalised medicine.
 
-IntOMICS takes as input:
+
+IntOMICS takes as input `MatchedAssayExperiment` or named `list` with:
 
 1. gene expression matrix,  
-2. associated copy number variation matrix sampled from the same individuals,  
+2. associated copy number variation matrix sampled from the same individuals 
+(optional),  
 3. associated DNA methylation matrix of beta-values sampled from the same
-individuals, and  
+individuals (optional), and  
 4. the biological prior knowledge with information on known interactions
-among molecular features.   
+among molecular features (optional; highly recommended).   
 
 The resulting regulatory network structure contains the edge weights $w_i$
 representing the empirical frequency of given edge over samples of network
@@ -49,6 +62,13 @@ structures from two independent MCMC simulations.
 
 For further details about the IntOMICS algorithm, its performance and benchmark
 analysis, see manuscript Pacinkova \& Popovici, 2022.
+
+
+Projects such as The Cancer Genome Atlas aim to catalogue 
+multi-omics data from a large number of samples.
+IntOMICS framework is demonstrated using colon cancer data from the
+`r Biocpkg("curatedTCGA")` package. However, it is not limited to any particular
+omics data or phenotype.
 
 
 ![IntOMICS framework](figures/IntOMICS_framework_METH_empB_modules.png){width=90%}
@@ -97,7 +117,8 @@ library(parallel)
 library(RColorBrewer)
 library(bestNormalize)
 library(igraph)
-library(gplots)})
+library(gplots)
+library(ggplot2)})
 
 ```
 
@@ -313,27 +334,57 @@ and normalised methylation data (possibly filtered if we use "lm_METH = TRUE").
 
 ### Part 3: MCMC simulation
 
-We can use the automatically tuned MCMC algorithm (Yang and Rosenthal, 2017)
-to estimate model parameters and empirical biological knowledge and
-the conventional MCMC algorithm with additional Markov blanket resampling
-step (Su and Borsuk, 2016) to infer regulatory network structure consisting
-of three types of nodes: GE, CNV and METH nodes. Because of the MCMC simulation,
-this step is time-consuming. For the illustration, we have used only short
-burn-in period and very sparse thinning of the resulting Markov chain.
-We recommend to use much longer burn-in period, such as 100.000 and check trace
-plots of the MCMC simulation. The same goes for minseglen parameter
-(for further details see (Pacinkova \& Popovici, 2022)).
-To investigate relevant IntOMICS outputs, use the pre-computed result
-saved in `BN_mod_res` R object).
+We use the automatically tuned MCMC algorithm (Yang and Rosenthal, 2017) 
+with default setting to estimate model hyperparameter $\beta$ and empirical 
+biological knowledge matrix through multiple phases.
+
+1. The first adaptive phase is used to roughly tune the hyperparameter $\beta$, 
+more precisely the variance of its proposal distribution.
+
+2. The transient phase is applied to diagnose whether the chain has reached 
+the mode of the target distribution.
+
+3. The second adaptive phase is used to fine-tune the hyperparameter $\beta$, 
+the variance of its proposal distribution and to compute the empirical 
+biological prior matrix. Assuming there is no prior knowledge aboit interaction 
+from node *i* to node *j*, the prior knowledge about interaction from node *i* 
+to node *j* is updated during the second adaptive phase after every conventional
+edge proposal move (addition, deletion, reversal).  
+The empirical biological knowledge corresponds to the ratio of acceptance 
+(number of iterations with accepted candidate edge from~node *i* to~node *j*) 
+and frequency (number of iterations with proposed candidate edge from~node *i* 
+to~node *j*). Reversing an edge is equivalent to deleting the edge and adding 
+the edge in the opposite direction.
+
+4. The empirical biological matrix and the hyperparameter $\beta$ determined 
+by~the~second adaptive phase are used in the last sampling phase. 
+In this phase, IntOMICS applies a *greedy horizon* approach. Three independent 
+paths are executed with a fixed BGe score (except the MBR step). The most 
+probable path is chosen after every 500 iterations.  
+The conventional MCMC algorithm with additional Markov blanket resampling step 
+(Su and Borsuk, 2016) to infer regulatory network structure consisting of three 
+types of nodes: GE, CNV and METH nodes.
+Two independent samples of network structures are produced to evaluate the 
+convergence of the Markov chain. Each sample consists of 2*`burn_in` DAGs. 
+The~resulting samples of DAGs are thinned - discarded all but every `thin` DAG.
+The burn-in period and thinning frequency are arbitrary choices.
 ```{r echo=TRUE, include=TRUE, eval=FALSE}
 
 BN_mod_res_sparse <- bn_module(burn_in = 500, 
-                               thin = 50, 
+                               thin = 20, 
                                OMICS_mod_res = OMICS_mod_res,
-                               minseglen = 10)
+                               minseglen = 5)
 
 ```
 
+**Because of the MCMC simulation,
+`bn_module` function is time-consuming. For the illustration, we have used only 
+short burn-in period of the resulting Markov chain.
+We recommend to use much longer burn-in period and check trace
+plots of the MCMC simulation. We recommend to use burn_in = 100.000, thin = 500,
+and minseglen = 50.000 (for further details see (Pacinkova \& Popovici, 2022)).**
+To investigate relevant IntOMICS outputs, use the pre-computed result
+saved in `BN_mod_res` R object).  
 There are two optional arguments: "len" specifies the initial width
 of the sampling interval for hyperparameter $\beta$. However, this parameter
 will be tuned during the adaptive phases of the MCMC algorithm. "prob_mbr"
@@ -346,7 +397,6 @@ Let's check the outputs of `BN_module` function:
 ```{r echo=TRUE, include=TRUE}
 
 data("BN_mod_res")
-
 names(BN_mod_res)
 
 ```
@@ -421,7 +471,7 @@ weighted_net_res <- weighted_net(cpdag_weights = res_weighted,
                                  OMICS_mod_res = OMICS_mod_res, 
                                  gene_ID = "gene_symbol", 
                                  TFtargs = TFtarg_mat, 
-                                 B_prior_mat = BN_mod_res$B_prior_mat_weighted)
+                                 B_prior_mat_weighted = BN_mod_res$B_prior_mat_weighted)
 
 ```
 The parameter "gene_ID" determines the IDs used in the final network. There are
@@ -431,34 +481,38 @@ two options: "gene_symbol" (default) or "entrezID".
 ### Part 5: IntOMICS resulting network structure
 
 We can plot the resulting regulatory network inferred by `r Biocpkg("IntOMICS")` 
-using `ggraph` function from the `r Biocpkg("ggraph")` package:
-```{r echo=TRUE, include=TRUE}
+using `ggraph_weighted_net` (node size and label size can be modified) 
+and `legend_custom_ggplot` functions and arrange them into one figure:
 
-library(ggraph, quietly = TRUE)
-ggraph(weighted_net_res$net_weighted, layout = 'dh') + 
-  geom_edge_link(aes(end_cap = circle(node2.degree + 7, "pt"), 
-                     edge_color = edge, label = weight),
-                 arrow = arrow(angle = 20, length = unit(0.1, "inches"),
-                              ends = "last", type = "closed"))+
-  geom_node_point(aes(color = factor(color)), size = 10) +
-  scale_colour_manual(values = weighted_net_res$node_palette, guide = "none")+
-  geom_node_text(aes(label = label))
+```{r echo=TRUE, include=FALSE, eval=FALSE}
+
+rn <- ggraph_weighted_net(net = weighted_net_res)
+leg <- legend_custom_ggplot(net = weighted_net_res)
 
 ```
+
+```{r fig_weights, fig.height = 7, fig.width = 7}
+
+# ggraph_weighted_net scale_color_hue(labels = c("new", "PK"))
+library(cowplot)
+##### plot_grid(rn, leg, ncol = 1, rel_heights = c(3, 1))
+# weighted_net_legend(net = weighted_net_res)
+#grobs <- ggplotGrob(rn)$grobs
+#legend <- grobs[[which(sapply(grobs, function(x) x$name) == "guide-box")]]
+# build grid without legends
+#pgrid <- plot_grid(rn, leg, ncol = 1, rel_heights = c(3, 1), rel_widths = c(7,7))
+# add legend
+#p <- plot_grid(pgrid, legend, ncol = 2, rel_widths = c(1, .1))
+
+```
+
 Edges highlighted in blue are known from the biological prior knowledge.
 The edge labels reflects its empirical frequency over the final set of CPDAGs.
 GE node names are in upper case, CNV node names are in lower case, METH node
 names are the same as DNA methylation probe names in `omics$meth` matrix.
-
-Node colours legend:
-```{r fig_leg, fig.height = 4.5, fig.width = 7}
-
-legend_custom(net = weighted_net_res)
-  
-```
-  
 Node colour scales are given by GE/CNV/METH values of all features
 from the corresponding input data matrix.
+
 
 We can also change the edge labels to inspect the empirical prior knowledge
 inferred by `r Biocpkg("IntOMICS")` using the argument "edge_weights = empB"
@@ -477,23 +531,23 @@ weighted_net_res <- weighted_net(cpdag_weights = res_weighted,
                                  gene_ID = "gene_symbol", 
                                  edge_weights = "empB",
                                  TFtargs = TFtarg_mat, 
-                                 B_prior_mat = BN_mod_res$B_prior_mat_weighted)
+                                 B_prior_mat_weighted = BN_mod_res$B_prior_mat_weighted)
 
+```
+
+```{r echo=TRUE, include=FALSE}
+
+rn <- ggraph_weighted_net(net = weighted_net_res)
+leg <- legend_custom_ggplot(net = weighted_net_res)
 
 ```
 
-```{r echo=TRUE, include=TRUE}
+```{r fig_empB, fig.height = 7, fig.width = 7}
 
-ggraph(weighted_net_res$net_weighted, layout = 'dh') + 
-  geom_edge_link(aes(end_cap = circle(node2.degree + 7, "pt"), 
-                     edge_color = edge, label = weight),
-                 arrow = arrow(angle = 20, length = unit(0.1, "inches"),
-                              ends = "last", type = "closed"))+
-  geom_node_point(aes(color = factor(color)), size = 10) +
-  scale_colour_manual(values = weighted_net_res$node_palette, guide = "none")+
-  geom_node_text(aes(label = label),family="serif")
+# plot_grid(rn, leg, ncol = 1, rel_heights = c(3, 1))
 
 ```
+
 
 
 Function `empB_heatmap` can be used to check the difference between empirical
@@ -524,7 +578,7 @@ weighted_net_res <- weighted_net(cpdag_weights = res_weighted,
                                  OMICS_mod_res = OMICS_mod_res, 
                                  gene_ID = "gene_symbol", 
                                  TFtargs = TFtarg_mat, 
-                                 B_prior_mat = BN_mod_res$B_prior_mat_weighted)
+                                 B_prior_mat_weighted = BN_mod_res$B_prior_mat_weighted)
 
 dens_edge_weights(weighted_net_res)
 
