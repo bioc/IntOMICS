@@ -484,7 +484,7 @@ We can plot the resulting regulatory network inferred by `r Biocpkg("IntOMICS")`
 using `ggraph_weighted_net` (node size and label size can be modified) 
 and `legend_custom_ggplot` functions and arrange them into one figure:
 
-```{r echo=TRUE, include=FALSE, eval=FALSE}
+```{r echo=TRUE, include=FALSE, eval=TRUE}
 
 rn <- ggraph_weighted_net(net = weighted_net_res)
 leg <- legend_custom_ggplot(net = weighted_net_res)
@@ -493,9 +493,8 @@ leg <- legend_custom_ggplot(net = weighted_net_res)
 
 ```{r fig_weights, fig.height = 7, fig.width = 7}
 
-# ggraph_weighted_net scale_color_hue(labels = c("new", "PK"))
 library(cowplot)
-##### plot_grid(rn, leg, ncol = 1, rel_heights = c(3, 1))
+plot_grid(rn, leg, ncol = 1, rel_heights = c(3, 1))
 # weighted_net_legend(net = weighted_net_res)
 #grobs <- ggplotGrob(rn)$grobs
 #legend <- grobs[[which(sapply(grobs, function(x) x$name) == "guide-box")]]
@@ -544,7 +543,7 @@ leg <- legend_custom_ggplot(net = weighted_net_res)
 
 ```{r fig_empB, fig.height = 7, fig.width = 7}
 
-# plot_grid(rn, leg, ncol = 1, rel_heights = c(3, 1))
+plot_grid(rn, leg, ncol = 1, rel_heights = c(3, 1))
 
 ```
 

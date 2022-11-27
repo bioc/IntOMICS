@@ -34,7 +34,7 @@ edge_types <- function(B_prior_mat_weighted, PK = NULL, gene_annot, edge_list,
     
     if(edge_weights=="empB")
     {
-      edge_list[,"edge_type"] <- "forestgreen"
+      edge_list[,"edge_type"] <- "empirical"
       
       if(!is.null(TFtargs))
       {
@@ -57,7 +57,7 @@ edge_types <- function(B_prior_mat_weighted, PK = NULL, gene_annot, edge_list,
       if(!is.null(PK))
       {
         edge_list[match(intersect(edge_list[,"edge"],PK),
-                        edge_list[,"edge"]), "edge_type"] <- "cyan3"
+                        edge_list[,"edge"]), "edge_type"] <- "PK"
       } # end if(!is.null(PK))
       
       edge_list[,"weight"] <- 
@@ -68,9 +68,9 @@ edge_types <- function(B_prior_mat_weighted, PK = NULL, gene_annot, edge_list,
       if(!is.null(PK))
       {
         edge_list[match(setdiff(edge_list[,"edge"],PK),
-                        edge_list[,"edge"]),"edge_type"] <- "brown3"
+                        edge_list[,"edge"]),"edge_type"] <- "new"
         edge_list[match(intersect(edge_list[,"edge"],PK),
-                        edge_list[,"edge"]), "edge_type"] <- "cyan3"
+                        edge_list[,"edge"]), "edge_type"] <- "PK"
       } # end if(!is.null(PK))
     } # end if else (edge_weights=="empB")
     borders_output <- borders_def(node_list=node_list, layers_def=layers_def, 

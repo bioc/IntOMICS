@@ -24,9 +24,10 @@ List of 2 elements: random adjacency network and empty network
 The edges are sampled only between GE nodes.
 }
 \examples{
-data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
-package="IntOMICS")
-omics <- omics_to_list(omics = omics, layers_def = layers_def, gene_annot = gene_annot)
+data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", 
+"gene_annot"), package="IntOMICS")
+omics <- omics_to_list(omics = omics, layers_def = layers_def, 
+gene_annot = gene_annot)
 B <- b_prior_mat(omics = omics, PK = PK, annot = annot, lm_METH = TRUE,
      layers_def = layers_def, r_squared_thres = 0.3, p_val_thres = 0.05,
      TFtargs = TFtarg_mat, TFBS_belief = 0.75, nonGE_belief = 0.5, 

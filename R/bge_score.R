@@ -19,8 +19,8 @@
 bge_score <- function(adjacency_matrix, omics, layers_def,
 parent_set_combinations, BGe_score_all_configs_node)
 {
-    nodes_cand <- rownames(adjacency_matrix)[
-        which(regexpr("EID",rownames(adjacency_matrix))>0)]
+    nodes_cand <- rownames(adjacency_matrix)[grepl("EID",
+                                                   rownames(adjacency_matrix))]
     score_nodes <- sum(unlist(lapply(nodes_cand,
         FUN=function(node) bge_node(node = node, 
         adjacency_matrix = adjacency_matrix, 

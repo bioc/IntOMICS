@@ -6,6 +6,7 @@
 #' @importFrom ggplot2 aes
 #' @importFrom ggplot2 geom_vline
 #' @importFrom ggplot2 geom_density
+#' @importFrom ggplot2 after_stat
 #' @importFrom stats quantile
 #'
 #' @examples
@@ -32,7 +33,7 @@ dens_edge_weights <- function(net)
   
   df <- data.frame(edge_weight = as.numeric(net$edge_list[,"weight"]))
   q3 <- quantile(df$edge_weight, 0.75)
-  p <- ggplot(df, aes(x=edge_weight, y = ..scaled..)) +
+  p <- ggplot(df, aes(x=edge_weight, y = after_stat(scaled))) +
     geom_density(col="dodgerblue")
   p+geom_vline(xintercept=q3, size=0.5, color="black", linetype = "dashed")
 }
