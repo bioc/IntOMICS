@@ -25,8 +25,8 @@
 #' @export
 legend_custom_ggplot <- function(net)
 {
-    if(!is.list(net) | 
-      is.null(names(net)))
+    if(!is(net,'list') | 
+      is(names(net),'NULL'))
     {
       message('Invalid input "net". Must be named list, 
               output from weighted_net().')

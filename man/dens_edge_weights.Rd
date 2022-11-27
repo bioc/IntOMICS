@@ -4,10 +4,10 @@
 \alias{dens_edge_weights}
 \title{Density plot of edge weights inferred by IntOMICS}
 \usage{
-dens_edge_weights(weighted_net_res)
+dens_edge_weights(net)
 }
 \arguments{
-\item{weighted_net_res}{list output from the weighted_net function.}
+\item{net}{list output from the weighted_net function.}
 }
 \value{
 density plot of edge weights

@@ -5,8 +5,9 @@
 #'  all possible parent sets per node definition + 
 #'  BGe score computation for all possible parent sets
 #'
-#' @param omics MatchedAssayExperiment containing the gene expression 
-#' (possibly copy number variation and methylation data).
+#' @param omics MatchedAssayExperiment or named list containing the gene 
+#' expression (possibly copy number variation and methylation data). If using 
+#' named list, be aware rownames (samples) match across all objects.
 #' @param PK data.frame with known interactions.
 #' @param layers_def data.frame containing the modality ID, corresponding 
 #' layer in BN and maximal number of parents from given layer to GE nodes.
@@ -38,13 +39,14 @@
 #'     layers_def = layers_def, TFtargs = TFtarg_mat, annot = annot, 
 #'     gene_annot = gene_annot, r_squared_thres = 0.3, lm_METH = TRUE)
 #'
-#' @return List of 6 elements needed to init MCMC simulation          
+#' @return List of 6 elements needed to init MCMC simulation 
+#' @keywords internal         
 #' @export
 omics_module <- function(omics, PK=NULL, layers_def, TFtargs=NULL, annot=NULL, 
 lm_METH = TRUE, r_squared_thres = 0.3, p_val_thres = 0.05, TFBS_belief = 0.75, 
 nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
 {
-  if(!is.data.frame(PK) | !all(colnames(PK) %in% c("src_entrez","dest_entrez",
+  if(!is(PK,'data.frame') | !all(colnames(PK) %in% c("src_entrez","dest_entrez",
                                                    "edge_type")) | 
      !all(regexpr("EID:",c(PK$src_entrez,PK$dest_entrez), fixed = TRUE)==1))
   {
@@ -53,7 +55,7 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
             be in EID:XXXX format indicating Entrez IDs.')
   }
   
-  if(!is.data.frame(layers_def) | !all(colnames(layers_def) %in% 
+  if(!is(layers_def,'data.frame') | !all(colnames(layers_def) %in% 
                                        c("omics", "layer", "fan_in_ge")) | 
      !all(layers_def$omics %in% names(omics)))
   {
@@ -62,15 +64,15 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
             must fit names(omics).')
   }
   
-  if(!is.matrix(TFtargs) | 
-     !all(regexpr("EID:",unlist(dimnames(TFtargs)), fixed = TRUE)==1))
+  if(!is(TFtargs,'matrix') | 
+     !all(grepl("EID:",unlist(dimnames(TFtargs)), fixed = TRUE)))
   {
     message('Invalid input "TFtargs". Must be matrix and dimnames must 
             be in EID:XXXX format indicating Entrez IDs.')
   } 
   
-  if(!is.list(annot) | 
-     is.null(names(annot)) )
+  if(!is(annot,'list') | 
+     is(names(annot),'NULL') )
   {
     message('Invalid input "annot". Must be named list, 
             names corresponding to gene symbols.')
@@ -82,9 +84,9 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
             gene_annot$gene_symbol.')
   }
   
-  if(!is.data.frame(gene_annot) | !all(colnames(gene_annot) %in% 
+  if(!is(gene_annot, 'data.frame') | !all(colnames(gene_annot) %in% 
                                        c("entrezID","gene_symbol")) | 
-     !all(regexpr("EID:",gene_annot$entrezID, fixed = TRUE)==1))
+     !all(grepl("EID:",gene_annot$entrezID, fixed = TRUE)))
   {
     message('Invalid input "gene_annot". Must be data.frame with colnames 
             c("entrezID","gene_symbol") and entrezID must 
@@ -98,45 +100,28 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
             interactions without prior knowledge.')
   }
   
-  if(!is.numeric(r_squared_thres) | !is.numeric(p_val_thres) | 
-     !is.numeric(TFBS_belief) | !is.numeric(nonGE_belief) |
-     !is.numeric(woPKGE_belief) | length(r_squared_thres)!=1 |
-     length(p_val_thres)!=1 | length(TFBS_belief)!=1 |
-     length(nonGE_belief)!=1 | length(woPKGE_belief)!=1)
+  if(!is(r_squared_thres,'numeric') | !is(p_val_thres,'numeric') | 
+     !is(TFBS_belief,'numeric') | !is(nonGE_belief,'numeric') |
+     !is(woPKGE_belief,'numeric') | length(r_squared_thres)>1 |
+     length(p_val_thres)>1 | length(TFBS_belief)>1 |
+     length(nonGE_belief)>1 | length(woPKGE_belief)>1)
   {
     message('Invalid input. "r_squared_thres", "p_val_thres", "TFBS_belief", 
             "nonGE_belief", and "woPKGE_belief" must be numeric of length 1.')  
   }
   
-  if(!is.logical(lm_METH))
+  if(!is(lm_METH,'logical'))
   {
     message('Invalid input "lm_METH", must be logical.')  
   }
   
   layers_def <- layers_def[order(layers_def$layer, decreasing = TRUE),]
   
-  if(is(omics)[1]=="MatchedAssayExperiment")
+  if(is(omics,'MatchedAssayExperiment'))
   {
-    omics_list <- list()
-    for(i in seq(1,nrow(layers_def)))
-    {
-      omics_list[[i]] <- t(assay(omics[[layers_def$omics[i]]]))
-      if(!is.numeric(omics_list[[i]]))
-      {
-        omics_list[[i]] <- apply(omics_list[[i]],2,as.numeric)
-      } # end if(!is.numeric(omics_list[[i]]))
-    } # end for(i in seq(1,nrow(layers_def)))
-    names(omics_list) <- layers_def$omics
-    colnames(omics_list$ge) <- gene_annot$entrezID[
-      match(colnames(omics_list$ge),gene_annot$gene_symbol)]
-    colnames(omics_list$cnv) <- tolower(gene_annot$entrezID[
-      match(colnames(omics_list$cnv),gene_annot$gene_symbol)])
-    names(annot) <- gene_annot$entrezID[
-      match(names(annot),gene_annot$gene_symbol)]
-    
-    omics <- omics_list[layers_def$omics[order(layers_def$layer, 
-                                               decreasing = TRUE)]]
-  } else if(is.list(omics) & !is.null(names(omics))) {
+    omics <- omics_to_list(omics = omics, gene_annot = gene_annot, 
+                           layers_def = layers_def)
+  } else if(is(omics,'list') & !is(names(omics),'NULL')) {
     
     omics <- omics[layers_def$omics[order(layers_def$layer, 
                                           decreasing = TRUE)]]
@@ -144,7 +129,8 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
     message('Invalid input "omics". Must be MatchedAssayExperiment or 
             named list.')
   }
-
+  names(annot) <- gene_annot$entrezID[
+    match(names(annot),gene_annot$gene_symbol)]
   B <- b_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
       annot = annot, lm_METH = lm_METH, r_squared_thres = r_squared_thres, 
       p_val_thres = p_val_thres, TFtargs = TFtargs, 

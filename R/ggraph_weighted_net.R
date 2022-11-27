@@ -10,6 +10,7 @@
 #' @importFrom ggplot2 ylim
 #' @importFrom utils head
 #' @importFrom utils tail
+#' @importFrom igraph edge
 #' @importFrom ggraph ggraph
 #' @importFrom ggraph geom_edge_link
 #' @importFrom ggraph geom_node_point
@@ -36,16 +37,16 @@
 ggraph_weighted_net <- function(net, node_size = 10, node_label_size = 4, 
                                 edge_label_size = 4)
 {
-  if(!is.list(net) | 
-     is.null(names(net)))
+  if(!is(net, 'list') | 
+     is(names(net),'NULL'))
   {
     message('Invalid input "net". Must be named list, 
             output from weighted_net().')
   }
   
-  if(!is.numeric(node_size) | !is.numeric(node_label_size) | 
-     !is.numeric(edge_label_size) | length(node_size)!=1 |
-     length(node_label_size)!=1 | length(edge_label_size)!=1)
+  if(!is(node_size,'numeric') | !is(node_label_size,'numeric') | 
+     !is(edge_label_size,'numeric') | length(node_size)>1 |
+     length(node_label_size)>1 | length(edge_label_size)>1)
   {
     message('Invalid input. "node_size", "node_label_size", "edge_label_size",
             and must be numeric of length 1.')  

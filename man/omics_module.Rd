@@ -20,8 +20,9 @@ omics_module(
 )
 }
 \arguments{
-\item{omics}{MatchedAssayExperiment containing the gene expression
-(possibly copy number variation and methylation data).}
+\item{omics}{MatchedAssayExperiment or named list containing the gene
+expression (possibly copy number variation and methylation data). If using
+named list, be aware rownames (samples) match across all objects.}
 
 \item{PK}{data.frame with known interactions.}
 
@@ -72,3 +73,4 @@ OMICS_mod_res <- omics_module(omics = omics, PK = PK,
     gene_annot = gene_annot, r_squared_thres = 0.3, lm_METH = TRUE)
 
 }
+\keyword{internal}

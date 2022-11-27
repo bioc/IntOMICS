@@ -18,40 +18,35 @@
 #'
 #' @examples
 #' data("OMICS_mod_res", package="IntOMICS")
-#' if(interactive()){BN_mod_res <- bn_module(burn_in = 10000, 
-#'     thin = 500, OMICS_mod_res = OMICS_mod_res, 
-#'     minseglen = 500, len = 5, prob_mbr = 0.07)}
+#' if(interactive()){BN_mod_res <- bn_module(burn_in = 500, 
+#'     thin = 20, OMICS_mod_res = OMICS_mod_res, 
+#'     minseglen = 5, len = 5, prob_mbr = 0.07)}
 #' 
 #' @return Large List of 3 elements: empirical biological matrix, 
 #' sampling phase result and hyperparameter beta tuning trace
 #' @export
 bn_module <- function(burn_in = 100000, thin = 500, OMICS_mod_res, 
                       minseglen = 50000, len = 5, prob_mbr = 0.07) {
+    ### inputs validity check
+    if(!is(OMICS_mod_res,'list') | 
+       !all(colnames(OMICS_mod_res) %in% c("pf_UB_BGe_pre", "B_prior_mat", 
+       "annot", "omics", "layers_def", "omics_meth_original"))){
+      message('Invalid input "OMICS_mod_res". Must be named list, 
+              output from omics_module().')}  
+    if(!is(burn_in,'numeric') | !is(thin,'numeric') | 
+       !is(minseglen,'numeric') | !is(len,'numeric') |
+       !is(prob_mbr,'numeric') | length(burn_in)>1 |
+       length(thin)>1 | length(minseglen)>1 |
+       length(len)>1 | length(prob_mbr)>1){
+      message('Invalid input. "burn_in", "thin", "minseglen", 
+              "len", and "prob_mbr" must be numeric of length 1.')}
   
-  if(!is.list(OMICS_mod_res) | 
-     !all(colnames(OMICS_mod_res) %in% c("pf_UB_BGe_pre", "B_prior_mat", 
-     "annot", "omics", "layers_def", "omics_meth_original")))
-  {
-    message('Invalid input "OMICS_mod_res". Must be named list, 
-            output from omics_module().')
-  }  
-  
-  if(!is.numeric(burn_in) | !is.numeric(thin) | 
-     !is.numeric(minseglen) | !is.numeric(len) |
-     !is.numeric(prob_mbr) | length(burn_in)!=1 |
-     length(thin)!=1 | length(minseglen)!=1 |
-     length(len)!=1 | length(prob_mbr)!=1)
-  {
-    message('Invalid input. "burn_in", "thin", "minseglen", 
-            "len", and "prob_mbr" must be numeric of length 1.')  
-  }
-
-  energy_all_configs_node <- 
-    OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node
+    energy_all_configs_node <- 
+      OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node
     BGe_score_all_configs_node <- 
-    OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node
+      OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node
     parent_set_combinations <- 
-    OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations
+      OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations
     annot <- OMICS_mod_res$annot
     ### 1st adaption phase ###
     first.adapt.phase_net <- first_adapt_phase(len = len,

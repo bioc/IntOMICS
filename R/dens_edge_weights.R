@@ -1,7 +1,7 @@
 #' Density plot of edge weights inferred by IntOMICS
 #' @description
 #' `dens_edge_weights` Creates density plot of edge weights. 
-#' @param weighted_net_res list output from the weighted_net function.
+#' @param net list output from the weighted_net function.
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 aes
 #' @importFrom ggplot2 geom_vline
@@ -21,9 +21,16 @@
 #'
 #' @return density plot of edge weights
 #' @export
-dens_edge_weights <- function(weighted_net_res)
+dens_edge_weights <- function(net)
 {
-  df <- data.frame(edge_weight = as.numeric(weighted_net_res$edge_list[,"weight"]))
+  if(!is(net,'list') | 
+     is(names(net),'NULL'))
+  {
+    message('Invalid input "net". Must be named list, 
+              output from weighted_net().')
+  }
+  
+  df <- data.frame(edge_weight = as.numeric(net$edge_list[,"weight"]))
   q3 <- quantile(df$edge_weight, 0.75)
   p <- ggplot(df, aes(x=edge_weight, y = ..scaled..)) +
     geom_density(col="dodgerblue")

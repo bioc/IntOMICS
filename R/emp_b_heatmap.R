@@ -21,7 +21,7 @@
 #' @export
 emp_b_heatmap <- function(mcmc_res, OMICS_mod_res, gene_annot, TFtargs)
 {
-    if(!is.list(mcmc_res) | !all(names(mcmc_res) %in% 
+    if(!is(mcmc_res,'list') | !all(names(mcmc_res) %in% 
                                  c("sampling.phase_res","B_prior_mat_weighted",
                                    "beta_tuning")))
     {
@@ -29,7 +29,7 @@ emp_b_heatmap <- function(mcmc_res, OMICS_mod_res, gene_annot, TFtargs)
             c("sampling.phase_res","B_prior_mat_weighted","beta_tuning").')  
     }
   
-    if(!is.list(OMICS_mod_res) | 
+    if(!is(OMICS_mod_res,'list') | 
        !all(colnames(OMICS_mod_res) %in% c("pf_UB_BGe_pre", "B_prior_mat", 
                                            "annot", "omics", "layers_def", "omics_meth_original")))
     {
@@ -37,16 +37,16 @@ emp_b_heatmap <- function(mcmc_res, OMICS_mod_res, gene_annot, TFtargs)
               output from omics_module().')
     }
   
-    if(!is.data.frame(gene_annot) | !all(colnames(gene_annot) %in% c("entrezID","gene_symbol")) | 
-       !all(regexpr("EID:",gene_annot$entrezID, fixed = TRUE)==1))
+    if(!is(gene_annot,'data.frame') | !all(colnames(gene_annot) %in% c("entrezID","gene_symbol")) | 
+       !all(grepl("EID:",gene_annot$entrezID, fixed = TRUE)))
     {
       message('Invalid input "gene_annot". Must be data.frame with colnames 
               c("entrezID","gene_symbol") and entrezID must 
               be in EID:XXXX format indicating Entrez IDs.')
     }
   
-    if(!is.matrix(TFtargs) | 
-       !all(regexpr("EID:",unlist(dimnames(TFtargs)), fixed = TRUE)==1))
+    if(!is(TFtargs,'matrix') | 
+       !all(grepl("EID:",unlist(dimnames(TFtargs)), fixed = TRUE)))
     {
       message('Invalid input "TFtargs". Must be matrix and dimnames must 
               be in EID:XXXX format indicating Entrez IDs.')

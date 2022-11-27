@@ -23,7 +23,7 @@
 #' @export
 trace_plots <- function(mcmc_res, burn_in, thin, edge_freq_thres = NULL)
 {
-  if(!is.list(mcmc_res) | !all(names(mcmc_res) %in% 
+  if(!is(mcmc_res,'list') | !all(names(mcmc_res) %in% 
                                c("sampling.phase_res","B_prior_mat_weighted",
                                  "beta_tuning")))
   {
@@ -31,13 +31,13 @@ trace_plots <- function(mcmc_res, burn_in, thin, edge_freq_thres = NULL)
           c("sampling.phase_res","B_prior_mat_weighted","beta_tuning").')  
   }
   
-  if(!is.numeric(burn_in) | !is.numeric(thin) | 
-     length(burn_in)!=1 | length(thin)!=1)
+  if(!is(burn_in,'numeric') | !is(thin,'numeric') | 
+     length(burn_in)>1 | length(thin)>1)
   {
     message('Invalid input. "burn_in" or "thin" must be numeric of length 1.')  
   }
   
-  if(!is.null(edge_freq_thres) & !is.numeric(edge_freq_thres) | 
+  if(!is(edge_freq_thres,'NULL') & !is(edge_freq_thres,'numeric') | 
      length(edge_freq_thres)>1)
   {
     message('Invalid input "edge_freq_thres". 

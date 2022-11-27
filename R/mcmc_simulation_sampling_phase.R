@@ -27,10 +27,10 @@
 #' set configurations.
 #' @param annot named list containing the associated methylation probes 
 #' of given gene.
-#' @importFrom bnlearn empty.graph
 #' @importFrom bnlearn amat
 #' @importFrom bnlearn cpdag
 #' @importFrom stats runif
+#' @importFrom bnlearn empty.graph
 #' @return List of 1 element: sampling phase result before MCMC convergence
 #' @keywords internal
 #' @export

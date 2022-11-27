@@ -42,8 +42,8 @@ distribution.
 }
 \examples{
 data("OMICS_mod_res", package="IntOMICS")
-if(interactive()){BN_mod_res <- bn_module(burn_in = 10000, 
-    thin = 500, OMICS_mod_res = OMICS_mod_res, 
-    minseglen = 500, len = 5, prob_mbr = 0.07)}
+if(interactive()){BN_mod_res <- bn_module(burn_in = 500, 
+    thin = 20, OMICS_mod_res = OMICS_mod_res, 
+    minseglen = 5, len = 5, prob_mbr = 0.07)}
 
 }
