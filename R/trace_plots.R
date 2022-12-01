@@ -2,7 +2,7 @@
 #' @description
 #' `trace_plots` Create trace plots of MCMC simulation and filter low reliable 
 #' edges based on the edge_freq_thres parameter. 
-#' @param mcmc_res list output from the bn_module function.
+#' @param mcmc_res MCMC_sapling_res output from the bn_module function.
 #' @param burn_in numeric vector the minimal length of burn-in period 
 #' of the MCMC simulation.
 #' @param thin numeric vector thinning frequency of the resulting 
@@ -23,11 +23,10 @@
 #' @export
 trace_plots <- function(mcmc_res, burn_in, thin, edge_freq_thres = NULL)
 {
-  if(!is(mcmc_res,'list') | !all(names(mcmc_res) %in% 
-                               c("sampling.phase_res","B_prior_mat_weighted",
-                                 "beta_tuning")))
+  if(!is(mcmc_res,'MCMC_sapling_res') | !all(names(mcmc_res) %in% 
+                                     names(getSlots(class(mcmc_res)))))
   {
-    message('Invalid input "mcmc_res". Must be named list with names 
+    message('Invalid input "mcmc_res". Must be MCMC_sapling_res class with slots 
           c("sampling.phase_res","B_prior_mat_weighted","beta_tuning").')  
   }
   
@@ -44,20 +43,15 @@ trace_plots <- function(mcmc_res, burn_in, thin, edge_freq_thres = NULL)
           Must be "NULL" or numeric of length 1.')
   }
   
-  df1 <- data.frame(beta = mapply(mcmc_res$beta_tuning,
-                                  FUN=function(x) x$value), 
-                    k=seq_len(length(mapply(mcmc_res$beta_tuning,
-                                            FUN=function(x) x$value))), 
-                    accept = 1)
-  rms_strength <- abs(diff(mcmc_res$sampling.phase_res$rms))
+  rms_strength <- abs(diff(mcmc_res@rms))
   strength_threshold <- quantile(rms_strength, 0.75, na.rm = TRUE)
   cpdag_f <- (burn_in/thin+1)
-  cpdag_l <- length(mcmc_res$sampling.phase_res$mcmc_sim_part_res$seed1$cpdags)
+  cpdag_l <- length(mcmc_res@CPDAGs_sim1)
   cpdags1 <- 
-    unique(mcmc_res$sampling.phase_res$mcmc_sim_part_res$seed1$cpdags[
+    unique(mcmc_res@CPDAGs_sim1[
       seq(from = cpdag_f, to = cpdag_l)])
   cpdags2 <- 
-    unique(mcmc_res$sampling.phase_res$mcmc_sim_part_res$seed2$cpdags[
+    unique(mcmc_res@CPDAGs_sim2[
       seq(from = cpdag_f, to = cpdag_l)])
   cpdag_weights1 <- custom.strength(cpdags1, 
                                     nodes = nodes(cpdags1[[1]]), weights = NULL)
@@ -72,7 +66,9 @@ trace_plots <- function(mcmc_res, burn_in, thin, edge_freq_thres = NULL)
                                sep="_")
   total <- merge(cpdag_weights1, cpdag_weights2, by = c("from","to"))
   
-  plot(df1$beta ~ df1$k, type = "l", col= "darkblue", xlab = "iteration",
+  plot(unlist(mcmc_res@beta_tuning["value",]) ~ 
+         seq_len(ncol(mcmc_res@beta_tuning)), 
+       type = "l", col= "darkblue", xlab = "iteration",
        ylab = "beta", main = "Beta values of adaptive MCMC")
   plot(total$strength.x ~ total$strength.y, xlab="MCMC run 2",
        ylab = "MCMC run 1", 

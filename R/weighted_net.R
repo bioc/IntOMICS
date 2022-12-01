@@ -31,7 +31,7 @@
 #' weighted_net_res <- weighted_net(cpdag_weights = res_weighted, 
 #'  gene_annot = gene_annot, PK = PK, OMICS_mod_res = OMICS_mod_res, 
 #'  gene_ID = "gene_symbol", TFtargs = TFtarg_mat,
-#'  B_prior_mat_weighted = BN_mod_res$B_prior_mat_weighted) 
+#'  B_prior_mat_weighted = BN_mod_res@B_prior_mat_weighted) 
 #'
 #' @return List of 7 elements needed to plot the final regulatory network
 #' @export
@@ -93,7 +93,7 @@ weighted_net <- function(cpdag_weights, gene_annot, PK=NULL, OMICS_mod_res,
   }
   
   if(!is.matrix(B_prior_mat_weighted) | 
-     !any(regexpr("EID:",unlist(dimnames(BN_mod_res$B_prior_mat_weighted)), fixed = TRUE)==1))
+     !any(regexpr("EID:",unlist(dimnames(B_prior_mat_weighted)), fixed = TRUE)==1))
   {
     message('Invalid input "B_prior_mat_weighted". Must be matrix and dimnames must 
             be in correct format indicating Entrez IDs (and METH probes if available).')

@@ -31,10 +31,10 @@
 #' @export 
 sample_chain <- function(empty_net, omics_ge)
 {
-    dataset_BND <- BNDataset(data = empty_net, 
+    suppressWarnings(dataset_BND <- BNDataset(data = empty_net, 
         discreteness = rep('d',ncol(empty_net)),
         variables = c(colnames(empty_net)), node.sizes = rep(2,ncol(empty_net)),
-        starts.from=0)
+        starts.from=0))
     net <- BN(dataset_BND)
     net.dag <- bnstruct::dag(net)
     n <- ncol(omics_ge)

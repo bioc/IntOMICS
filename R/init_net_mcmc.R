@@ -31,8 +31,8 @@ init_net_mcmc <- function(omics, layers_def, B_prior_mat)
         ncol = sum(mapply(ncol,omics)),
         dimnames = list(unlist(mapply(colnames,omics)),
         unlist(mapply(colnames,omics))))
-    init.net <- sample_chain(empty_net = empty.net, 
-        omics_ge = omics[[layers_def$omics[1]]])
+    init.net <- suppressWarnings(sample_chain(empty_net = empty.net, 
+        omics_ge = omics[[layers_def$omics[1]]]))
     rownames(init.net@dag) <- rownames(empty.net)
     colnames(init.net@dag) <- rownames(empty.net)
     init.net@dag <- init.net@dag[rownames(B_prior_mat),rownames(B_prior_mat)]

@@ -2,7 +2,7 @@
 #' @description
 #' `edge_weights` Returns list of edges with corresponding posterior 
 #' probabilities (possibly filtered low reliable edges). 
-#' @param mcmc_res list output from the bn_module function.
+#' @param mcmc_res MCMC_sapling_res output from the bn_module function.
 #' @param burn_in numeric vector the minimal length of burn-in period 
 #' of the MCMC simulation.
 #' @param thin numeric vector thinning frequency of the resulting 
@@ -13,6 +13,7 @@
 #' @importFrom graphics text abline
 #' @importFrom stats quantile
 #' @importFrom bnlearn custom.strength
+#' @importFrom methods getSlots
 #'
 #' @examples
 #' data("BN_mod_res", package="IntOMICS")
@@ -24,11 +25,10 @@
 #' @export
 edge_weights <- function(mcmc_res, burn_in, thin, edge_freq_thres = NULL)
 {
-  if(!is.list(mcmc_res) | !all(names(mcmc_res) %in% 
-                               c("sampling.phase_res","B_prior_mat_weighted",
-                                 "beta_tuning")))
+  if(!is(mcmc_res,'MCMC_sapling_res') | 
+     !all(names(mcmc_res) %in% names(getSlots(class(mcmc_res)))))
   {
-    message('Invalid input "mcmc_res". Must be named list with names 
+    message('Invalid input "mcmc_res". Must be MCMC_sapling_res class with slots 
           c("sampling.phase_res","B_prior_mat_weighted","beta_tuning").')  
   }
   
@@ -46,12 +46,12 @@ edge_weights <- function(mcmc_res, burn_in, thin, edge_freq_thres = NULL)
   }
   
   cpdag_f <- (burn_in/thin+1)
-  cpdag_l <- length(mcmc_res$sampling.phase_res$mcmc_sim_part_res$seed1$cpdags)
+  cpdag_l <- length(mcmc_res@CPDAGs_sim1)
   cpdags1 <- 
-    unique(mcmc_res$sampling.phase_res$mcmc_sim_part_res$seed1$cpdags[
+    unique(mcmc_res@CPDAGs_sim1[
       seq(from = cpdag_f, to = cpdag_l)])
   cpdags2 <- 
-    unique(mcmc_res$sampling.phase_res$mcmc_sim_part_res$seed2$cpdags[
+    unique(mcmc_res@CPDAGs_sim2[
       seq(from = cpdag_f, to = cpdag_l)])
   
   cpdag_weights1 <- custom.strength(cpdags1, 

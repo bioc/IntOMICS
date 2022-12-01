@@ -7,7 +7,7 @@
 emp_b_heatmap(mcmc_res, OMICS_mod_res, gene_annot, TFtargs)
 }
 \arguments{
-\item{mcmc_res}{list output from the bn_module function.}
+\item{mcmc_res}{MCMC_sapling_res output from the bn_module function.}
 
 \item{OMICS_mod_res}{list output from the omics_module function.}
 

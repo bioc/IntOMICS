@@ -2,7 +2,7 @@
 #' @description
 #' `emp_b_heatmap` plot a heatmap with empB - B values (depicts the difference
 #' between prior knowledge and the empirical knowledge)
-#' @param mcmc_res list output from the bn_module function.
+#' @param mcmc_res MCMC_sapling_res output from the bn_module function.
 #' @param OMICS_mod_res list output from the omics_module function.
 #' @param gene_annot data.frame containing the entrez ID and corresponding gene
 #' symbol for conversion.
@@ -21,17 +21,17 @@
 #' @export
 emp_b_heatmap <- function(mcmc_res, OMICS_mod_res, gene_annot, TFtargs)
 {
-    if(!is(mcmc_res,'list') | !all(names(mcmc_res) %in% 
-                                 c("sampling.phase_res","B_prior_mat_weighted",
-                                   "beta_tuning")))
+    if(!is(mcmc_res,'MCMC_sapling_res') | 
+       !all(names(mcmc_res) %in% names(getSlots(class(mcmc_res)))))
     {
-      message('Invalid input "mcmc_res". Must be named list with names 
+      message('Invalid input "mcmc_res". Must be MCMC_sapling_res class with slots 
             c("sampling.phase_res","B_prior_mat_weighted","beta_tuning").')  
     }
   
     if(!is(OMICS_mod_res,'list') | 
        !all(colnames(OMICS_mod_res) %in% c("pf_UB_BGe_pre", "B_prior_mat", 
-                                           "annot", "omics", "layers_def", "omics_meth_original")))
+                                           "annot", "omics", "layers_def", 
+                                           "omics_meth_original")))
     {
       message('Invalid input "OMICS_mod_res". Must be named list, 
               output from omics_module().')
@@ -51,7 +51,7 @@ emp_b_heatmap <- function(mcmc_res, OMICS_mod_res, gene_annot, TFtargs)
       message('Invalid input "TFtargs". Must be matrix and dimnames must 
               be in EID:XXXX format indicating Entrez IDs.')
     } 
-    mat <- mcmc_res$B_prior_mat_weighted - OMICS_mod_res$B_prior_mat
+    mat <- mcmc_res@B_prior_mat_weighted - OMICS_mod_res$B_prior_mat
     mat <- mat[regexpr("EID:",rownames(mat))>0,
                regexpr("EID:",rownames(mat))>0]
     mat[which(OMICS_mod_res$B_prior_mat[regexpr("EID:",

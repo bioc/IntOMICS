@@ -22,13 +22,13 @@ Description: IntOMICS is an efficient integrative framework based on Bayesian
 Depends: R (>= 4.2.0)
 Imports: bnlearn, bnstruct, matrixStats, RColorBrewer, bestNormalize, igraph, 
     gplots, stats, utils, graphics, numbers, SummarizedExperiment,
-    ggplot2, ggraph, methods
+    ggplot2, ggraph, methods, cowplot
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 RoxygenNote: 7.2.2
 LazyData: false
-Suggests: BiocStyle, knitr, rmarkdown, curatedTCGAData, TCGAutils, cowplot
+Suggests: BiocStyle, knitr, rmarkdown, curatedTCGAData, TCGAutils
 biocViews: Software, DNAMethylation, GeneExpression, CopyNumberVariation, 
     SystemsBiology, GeneRegulation, Network, Bayesian

@@ -27,9 +27,9 @@
 #' set configurations.
 #' @param annot named list containing the associated methylation probes 
 #' of given gene.
-#' @importFrom bnlearn amat
 #' @importFrom bnlearn cpdag
 #' @importFrom stats runif
+#' @importFrom bnlearn amat
 #' @importFrom bnlearn empty.graph
 #' @return List of 1 element: sampling phase result before MCMC convergence
 #' @keywords internal
@@ -109,7 +109,7 @@ layers_def, len, thin, energy_all_configs_node, annot)
                 sim_init_fork$cpdags[[length(sim_init_fork$cpdags)+1]] <-
                 empty.graph(rownames(sim_init_fork$nets[[i
                 ]]$adjacency))
-                amat(sim_init_fork$cpdags[[
+                bnlearn::amat(sim_init_fork$cpdags[[
                 length(sim_init_fork$cpdags)]]) <-
                 sim_init_fork$nets[[i]]$adjacency
                 sim_init_fork$cpdags[[length(sim_init_fork$cpdags)]] <-

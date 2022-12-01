@@ -46,13 +46,20 @@ omics_module <- function(omics, PK=NULL, layers_def, TFtargs=NULL, annot=NULL,
 lm_METH = TRUE, r_squared_thres = 0.3, p_val_thres = 0.05, TFBS_belief = 0.75, 
 nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
 {
-  if(!is(PK,'data.frame') | !all(colnames(PK) %in% c("src_entrez","dest_entrez",
-                                                   "edge_type")) | 
-     !all(regexpr("EID:",c(PK$src_entrez,PK$dest_entrez), fixed = TRUE)==1))
+  if (length(omics) != nrow(layers_def)) {
+    stop('Number of modalities differs in "omics" and "layers_def".')
+  }
+  
+  if(! is(PK,"NULL"))
   {
-    message('Invalid input "PK". Must be data.frame with colnames 
+    if(!is(PK,'data.frame') | !all(colnames(PK) %in% c("src_entrez",
+      "dest_entrez", "edge_type")) | 
+      !all(regexpr("EID:",c(PK$src_entrez,PK$dest_entrez), fixed = TRUE)==1))
+    {
+        message('Invalid input "PK". Must be data.frame with colnames 
             c("src_entrez","dest_entrez","edge_type") and gene names must 
             be in EID:XXXX format indicating Entrez IDs.')
+    }
   }
   
   if(!is(layers_def,'data.frame') | !all(colnames(layers_def) %in% 
@@ -64,24 +71,32 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
             must fit names(omics).')
   }
   
-  if(!is(TFtargs,'matrix') | 
+  if(!is(TFtargs,"NULL"))
+  {
+    if(!is(TFtargs,'matrix') | 
      !all(grepl("EID:",unlist(dimnames(TFtargs)), fixed = TRUE)))
-  {
-    message('Invalid input "TFtargs". Must be matrix and dimnames must 
+    {
+      message('Invalid input "TFtargs". Must be matrix and dimnames must 
             be in EID:XXXX format indicating Entrez IDs.')
-  } 
-  
-  if(!is(annot,'list') | 
-     is(names(annot),'NULL') )
-  {
-    message('Invalid input "annot". Must be named list, 
-            names corresponding to gene symbols.')
+    }
   }
-  
-  if(!all(names(annot) %in% gene_annot$gene_symbol))
+   
+  if(!is(annot,"NULL"))
   {
-    message('Invalid input "annot". All names(annot) must be present in 
+    if(!is(annot,'list') | is(names(annot),'NULL') )
+    {
+      message('Invalid input "annot". Must be named list, 
+            names corresponding to gene symbols.')
+    }
+    if(!all(names(annot) %in% gene_annot$gene_symbol))
+    {
+      message('Invalid input "annot". All names(annot) must be present in 
             gene_annot$gene_symbol.')
+    }
+  } else {
+    if("meth" %in% names(omics))
+    message('Input "annot" is missing even if "meth" 
+        modality is available.')
   }
   
   if(!is(gene_annot, 'data.frame') | !all(colnames(gene_annot) %in% 
@@ -107,7 +122,7 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
      length(nonGE_belief)>1 | length(woPKGE_belief)>1)
   {
     message('Invalid input. "r_squared_thres", "p_val_thres", "TFBS_belief", 
-            "nonGE_belief", and "woPKGE_belief" must be numeric of length 1.')  
+          "nonGE_belief", and "woPKGE_belief" must be numeric of length 1.')  
   }
   
   if(!is(lm_METH,'logical'))
@@ -129,8 +144,13 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
     message('Invalid input "omics". Must be MatchedAssayExperiment or 
             named list.')
   }
-  names(annot) <- gene_annot$entrezID[
+  
+  if(!is(annot,"NULL"))
+  {
+    names(annot) <- gene_annot$entrezID[
     match(names(annot),gene_annot$gene_symbol)]
+  }
+  
   B <- b_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
       annot = annot, lm_METH = lm_METH, r_squared_thres = r_squared_thres, 
       p_val_thres = p_val_thres, TFtargs = TFtargs, 

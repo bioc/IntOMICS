@@ -7,7 +7,7 @@
 trace_plots(mcmc_res, burn_in, thin, edge_freq_thres = NULL)
 }
 \arguments{
-\item{mcmc_res}{list output from the bn_module function.}
+\item{mcmc_res}{MCMC_sapling_res output from the bn_module function.}
 
 \item{burn_in}{numeric vector the minimal length of burn-in period
 of the MCMC simulation.}

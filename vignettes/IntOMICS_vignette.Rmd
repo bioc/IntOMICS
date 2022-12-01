@@ -118,6 +118,8 @@ library(RColorBrewer)
 library(bestNormalize)
 library(igraph)
 library(gplots)
+library(methods)
+library(ggraph)
 library(ggplot2)})
 
 ```
@@ -368,10 +370,10 @@ Two independent samples of network structures are produced to evaluate the
 convergence of the Markov chain. Each sample consists of 2*`burn_in` DAGs. 
 The~resulting samples of DAGs are thinned - discarded all but every `thin` DAG.
 The burn-in period and thinning frequency are arbitrary choices.
-```{r echo=TRUE, include=TRUE, eval=FALSE}
+```{r echo=TRUE, include=FALSE, eval=FALSE}
 
 BN_mod_res_sparse <- bn_module(burn_in = 500, 
-                               thin = 20, 
+                               thin = 50, 
                                OMICS_mod_res = OMICS_mod_res,
                                minseglen = 5)
 
@@ -397,24 +399,33 @@ Let's check the outputs of `BN_module` function:
 ```{r echo=TRUE, include=TRUE}
 
 data("BN_mod_res")
-names(BN_mod_res)
+getSlots(class(BN_mod_res))
 
 ```
 
-1. `BN_mod_res$B_prior_mat_weighted` is empirical biological knowledge matrix.
-Interactions from the biological prior knowledge and TFs-target interactions are
-constant (if "TFBS_belief" is not equal to "woPKGE_belief").
-2. `BN_mod_res$sampling.phase_res` is a named list with results from the last
-sampling phase of the algorithm:
-- `BN_mod_res$sampling.phase_res$rms` trace of root mean square used for c_rms
-measure to evaluate the convergence of MCMC simulation,
-- `BN_mod_res$sampling.phase_res$mcmc_sim_part_res` contains CPDAGs of two
-independent MCMC simulations (for details see (Pacinkova \& Popovici, 2022)).
-4. `BN_mod_res$beta_tuning` is a named list for each iteration of adaptive
-phases that contains:
-- `BN_mod_res$beta_tuning$value` trace of hyperparameter beta tuning,
-- `BN_mod_res$beta_tuning$len` trace of width of the sampling interval
-for hyperparameter $\beta$.
+1. `BN_mod_res@estimated_beta` numeric, estimated value of hyperparameter $\beta$
+
+2. `BN_mod_res@estimated_len` Numeric, estimated width of the sampling interval 
+for hyperparameter $\beta$
+
+3. `BN_mod_res@B_prior_mat_weighted` Empirical biological knowledge matrix,
+interactions from the biological prior knowledge and TFs-target interactions 
+are constant (unless if "TFBS_belief" is not equal to "woPKGE_belief").
+
+4. `BN_mod_res@CPDAGs_sim1` List of CPDAGs from the first independent MCMC 
+simulation (thinned DAGs from the MCMC simulation converted into CPDAGs, 
+ducplicated CPDAGs discarded)
+
+5. `BN_mod_res@CPDAGs_sim2` List of CPDAGs from the second independent MCMC 
+simulation (thinned DAGs from the MCMC simulation converted into CPDAGs, 
+ducplicated CPDAGs discarded)
+
+6. `BN_mod_res@beta_tuning` Matrix of results from adaptive phases that contains
+hyperparameter $\beta$ tuning (trace of hyperparameter $\beta$, trace of width 
+of the sampling interval for hyperparameter $\beta$
+
+7. `BN_mod_res@rms` Numeric, trace of root mean square used for c_rms measure 
+to evaluate the convergence of MCMC simulation
 
 
 ### Part 4: MCMC diagnostics
@@ -429,6 +440,7 @@ trace_plots(mcmc_res = BN_mod_res,
             burn_in = 10000,
             thin = 500, 
             edge_freq_thres = 0.5)
+
 
 ```
 
@@ -471,7 +483,7 @@ weighted_net_res <- weighted_net(cpdag_weights = res_weighted,
                                  OMICS_mod_res = OMICS_mod_res, 
                                  gene_ID = "gene_symbol", 
                                  TFtargs = TFtarg_mat, 
-                                 B_prior_mat_weighted = BN_mod_res$B_prior_mat_weighted)
+                                 B_prior_mat_weighted = BN_mod_res@B_prior_mat_weighted)
 
 ```
 The parameter "gene_ID" determines the IDs used in the final network. There are
@@ -481,27 +493,14 @@ two options: "gene_symbol" (default) or "entrezID".
 ### Part 5: IntOMICS resulting network structure
 
 We can plot the resulting regulatory network inferred by `r Biocpkg("IntOMICS")` 
-using `ggraph_weighted_net` (node size and label size can be modified) 
-and `legend_custom_ggplot` functions and arrange them into one figure:
-
-```{r echo=TRUE, include=FALSE, eval=TRUE}
-
-rn <- ggraph_weighted_net(net = weighted_net_res)
-leg <- legend_custom_ggplot(net = weighted_net_res)
-
-```
+using `ggraph_weighted_net` function (node size and label size can be modified):
 
 ```{r fig_weights, fig.height = 7, fig.width = 7}
 
-library(cowplot)
-plot_grid(rn, leg, ncol = 1, rel_heights = c(3, 1))
-# weighted_net_legend(net = weighted_net_res)
-#grobs <- ggplotGrob(rn)$grobs
-#legend <- grobs[[which(sapply(grobs, function(x) x$name) == "guide-box")]]
-# build grid without legends
-#pgrid <- plot_grid(rn, leg, ncol = 1, rel_heights = c(3, 1), rel_widths = c(7,7))
-# add legend
-#p <- plot_grid(pgrid, legend, ncol = 2, rel_widths = c(1, .1))
+ggraph_weighted_net(net = weighted_net_res, 
+                    node_size = 10, 
+                    node_label_size = 4, 
+                    edge_label_size = 4)
 
 ```
 
@@ -530,20 +529,14 @@ weighted_net_res <- weighted_net(cpdag_weights = res_weighted,
                                  gene_ID = "gene_symbol", 
                                  edge_weights = "empB",
                                  TFtargs = TFtarg_mat, 
-                                 B_prior_mat_weighted = BN_mod_res$B_prior_mat_weighted)
+                                 B_prior_mat_weighted = BN_mod_res@B_prior_mat_weighted)
 
 ```
 
-```{r echo=TRUE, include=FALSE}
-
-rn <- ggraph_weighted_net(net = weighted_net_res)
-leg <- legend_custom_ggplot(net = weighted_net_res)
-
-```
 
 ```{r fig_empB, fig.height = 7, fig.width = 7}
 
-plot_grid(rn, leg, ncol = 1, rel_heights = c(3, 1))
+ggraph_weighted_net(net = weighted_net_res)
 
 ```
 
@@ -577,7 +570,7 @@ weighted_net_res <- weighted_net(cpdag_weights = res_weighted,
                                  OMICS_mod_res = OMICS_mod_res, 
                                  gene_ID = "gene_symbol", 
                                  TFtargs = TFtarg_mat, 
-                                 B_prior_mat_weighted = BN_mod_res$B_prior_mat_weighted)
+                                 B_prior_mat_weighted = BN_mod_res@B_prior_mat_weighted)
 
 dens_edge_weights(weighted_net_res)
 

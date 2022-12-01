@@ -15,6 +15,7 @@
 #' for hyperparameter beta.
 #' @param prob_mbr numeric vector probability of the MBR step.
 #' @importFrom methods is
+#' @importFrom methods new
 #'
 #' @examples
 #' data("OMICS_mod_res", package="IntOMICS")
@@ -81,12 +82,19 @@ bn_module <- function(burn_in = 100000, thin = 500, OMICS_mod_res,
     sampling.phase_net$mcmc_sim_part_res$seed1[c("betas","cpdags")]
     sampling.phase_net$mcmc_sim_part_res$seed2 <- 
     sampling.phase_net$mcmc_sim_part_res$seed2[c("betas","cpdags")]
-    beta_tuning <- second.adapt.phase_net$betas
-    res <- setClass("MCMC_res", slots = c(sampling.phase_res = "list",
-        B_prior_mat_weighted = "matrix", beta_tuning = "list"))
-    res <- MCMC_res(sampling.phase_res = sampling.phase_net,
-        B_prior_mat_weighted = second.adapt.phase_net$B_prior_mat_weighted, 
-        beta_tuning = beta_tuning)
+    beta_tuning <- mapply(second.adapt.phase_net$betas, 
+        FUN=function(x) x[c("value","len")])
+    estimated_beta <- 
+        sampling.phase_net$mcmc_sim_part_res$seed2$betas[[1]][["value"]]
+    estimated_len <- 
+        sampling.phase_net$mcmc_sim_part_res$seed2$betas[[1]][["len"]]
+    CPDAGs_sim1 <- sampling.phase_net$mcmc_sim_part_res$seed1$cpdags
+    CPDAGs_sim2 <- sampling.phase_net$mcmc_sim_part_res$seed1$cpdags
+    res <- new("MCMC_sapling_res", estimated_beta = estimated_beta,
+        estimated_len = estimated_len, beta_tuning = beta_tuning,
+        B_prior_mat_weighted = second.adapt.phase_net$B_prior_mat_weighted,
+        CPDAGs_sim1 = CPDAGs_sim1, CPDAGs_sim2 = CPDAGs_sim2,
+        rms = sampling.phase_net$rms)
     #return(list(sampling.phase_res = sampling.phase_net,
     #    B_prior_mat_weighted = second.adapt.phase_net$B_prior_mat_weighted, 
     #    beta_tuning = beta_tuning))
