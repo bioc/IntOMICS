@@ -46,10 +46,6 @@ omics_module <- function(omics, PK=NULL, layers_def, TFtargs=NULL, annot=NULL,
 lm_METH = TRUE, r_squared_thres = 0.3, p_val_thres = 0.05, TFBS_belief = 0.75, 
 nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
 {
-  if (length(omics)!=nrow(layers_def)) {
-    stop('Number of modalities differs in "omics" and "layers_def".')
-  }
-  
   if(!is(PK,"NULL"))
   {
     if(!is(PK,'data.frame') | !all(colnames(PK) %in% c("src_entrez",
@@ -143,6 +139,10 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
   } else {
     message('Invalid input "omics". Must be MultiAssayExperiment or 
             named list.')
+  }
+
+  if (length(omics)!=nrow(layers_def)) {
+    stop('Number of modalities differs in "omics" and "layers_def".')
   }
   
   if(length(unique(mapply(nrow,omics)))!=1) {

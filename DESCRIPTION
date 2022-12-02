@@ -22,7 +22,7 @@ Description: IntOMICS is an efficient integrative framework based on Bayesian
 Depends: R (>= 4.2.0)
 Imports: bnlearn, bnstruct, matrixStats, RColorBrewer, bestNormalize, igraph, 
     gplots, stats, utils, graphics, numbers, SummarizedExperiment,
-    ggplot2, ggraph, methods, cowplot, grid, HDF5Array
+    ggplot2, ggraph, methods, cowplot, grid
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
