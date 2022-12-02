@@ -9,6 +9,7 @@
 #' @param gene_annot data.frame containing the entrez ID and corresponding 
 #' gene symbol for conversion.
 #' @importFrom SummarizedExperiment assay
+#' @import HDF5Array
 #' 
 #' @examples
 #' data(list=c("layers_def", "omics", "gene_annot"), package="IntOMICS")

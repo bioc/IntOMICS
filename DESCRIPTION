@@ -1,7 +1,7 @@
 Package: IntOMICS
 Type: Package
 Title: Integrative analysis of multi-omics data to infer regulatory networks
-Version: 0.99.7
+Version: 0.99.8
 Authors@R: person("Pacinkova", "Anna", email = "ana.pacinkova@gmail.com", 
     role = c("cre","aut"))
 URL: https://github.com/anna-pacinkova/IntOMICS
@@ -22,13 +22,13 @@ Description: IntOMICS is an efficient integrative framework based on Bayesian
 Depends: R (>= 4.2.0)
 Imports: bnlearn, bnstruct, matrixStats, RColorBrewer, bestNormalize, igraph, 
     gplots, stats, utils, graphics, numbers, SummarizedExperiment,
-    ggplot2, ggraph, methods, cowplot, grid
+    ggplot2, ggraph, methods, cowplot, grid, HDF5Array
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 RoxygenNote: 7.2.2
 LazyData: false
-Suggests: BiocStyle, knitr, rmarkdown, curatedTCGAData, TCGAutils, rhdf5
+Suggests: BiocStyle, knitr, rmarkdown, curatedTCGAData, TCGAutils, testthat
 biocViews: Software, DNAMethylation, GeneExpression, CopyNumberVariation, 
     SystemsBiology, GeneRegulation, Network, Bayesian
