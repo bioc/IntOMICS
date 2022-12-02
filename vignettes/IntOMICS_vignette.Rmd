@@ -370,12 +370,15 @@ Two independent samples of network structures are produced to evaluate the
 convergence of the Markov chain. Each sample consists of 2*`burn_in` DAGs. 
 The~resulting samples of DAGs are thinned - discarded all but every `thin` DAG.
 The burn-in period and thinning frequency are arbitrary choices.
-```{r echo=TRUE, include=FALSE, eval=FALSE}
+```{r echo=TRUE, include=FALSE}
 
-BN_mod_res_sparse <- bn_module(burn_in = 500, 
+if(interactive())
+{
+  BN_mod_res_sparse <- bn_module(burn_in = 500, 
                                thin = 50, 
                                OMICS_mod_res = OMICS_mod_res,
                                minseglen = 5)
+}
 
 ```
 
