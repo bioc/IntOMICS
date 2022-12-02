@@ -24,4 +24,22 @@ Numeric vector of length 1: reverse edge candidates
 \code{fan_in_reverse} Determine the number of edges that can be reversed using
 the fan-in restriction in the largest layer.
 }
+\examples{
+data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
+package="IntOMICS")
+omics <- omics_to_list(omics = omics, gene_annot = gene_annot, 
+                       layers_def = layers_def)
+B <- b_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
+    annot = annot, lm_METH = TRUE, r_squared_thres = 0.3,
+    p_val_thres = 0.05, TFtargs = TFtarg_mat, TFBS_belief = 0.75, 
+    nonGE_belief = 0.5, woPKGE_belief = 0.5)
+adjacency_matrix <- B$B_prior_mat
+adjacency_matrix[,] <- 0
+adjacency_matrix[1,2] <- 1
+layer_max <- colnames(B$omics[[layers_def$omics[1]]])
+fan_in_reverse(positions = c(row=1,col=2), 
+net_layer_max = adjacency_matrix[layer_max,layer_max], 
+layers_def = layers_def)
+
+}
 \keyword{internal}

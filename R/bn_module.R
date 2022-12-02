@@ -95,8 +95,5 @@ bn_module <- function(burn_in = 100000, thin = 500, OMICS_mod_res,
         B_prior_mat_weighted = second.adapt.phase_net$B_prior_mat_weighted,
         CPDAGs_sim1 = CPDAGs_sim1, CPDAGs_sim2 = CPDAGs_sim2,
         rms = sampling.phase_net$rms)
-    #return(list(sampling.phase_res = sampling.phase_net,
-    #    B_prior_mat_weighted = second.adapt.phase_net$B_prior_mat_weighted, 
-    #    beta_tuning = beta_tuning))
     return(res)
 }

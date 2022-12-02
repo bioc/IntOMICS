@@ -24,6 +24,7 @@ List of omics modalities
 }
 \examples{
 data(list=c("layers_def", "omics", "gene_annot"), package="IntOMICS")
-omics_to_list(omics = omics,layers_def = layers_def,gene_annot = gene_annot)
+omics_to_list(omics = omics,layers_def = layers_def,
+gene_annot = gene_annot)
 
 }

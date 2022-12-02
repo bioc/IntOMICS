@@ -15,6 +15,15 @@
 #' @param p_val_thres numeric vector to define the p-value used as a threshold
 #' of significance in linear regression if lm_METH=TRUE (default=0.05).
 #' @importFrom stats lm shapiro.test
+#'
+#' @examples
+#' data(list=c("annot", "omics"), package="IntOMICS")
+#' omics <- omics_to_list(omics = omics, gene_annot = gene_annot, 
+#'                        layers_def = layers_def)
+#' lm_meth(ge_mat = omics$ge, meth_mat = omics$meth, 
+#'     gene = "WNT2B", meth_probes = annot[["WNT2B"]], 
+#'     r_squared_thres = 0.3, p_val_thres = 0.05)
+#' 
 #' @return Character vector with methylation probes 
 #' @keywords internal
 #' @export           

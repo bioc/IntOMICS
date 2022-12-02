@@ -3,6 +3,10 @@
 #' `is_acyclic` This function is from bnstruct R package. Check if the directed
 #' graph is acyclic.
 #' @param g adajcency matrix of given network/graph.
+#'
+#' @examples
+#' is_acyclic(matrix(c(1,rep(0,20)), nrow=3))
+#'
 #' @return boolean of length 1
 #' @keywords internal
 #' @export

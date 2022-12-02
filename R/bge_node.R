@@ -8,6 +8,15 @@
 #' for all nodes available.
 #' @param BGe_score_all_configs_node list of nodes BGe score for all possible
 #' parent set configurations.
+#' 
+#' @examples
+#' data("OMICS_mod_res", package="IntOMICS")
+#' bge_node(node = "EID:2535", adjacency_matrix = OMICS_mod_res$B_prior_mat,
+#'     parent_set_combinations =
+#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
+#'     BGe_score_all_configs_node =
+#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node)
+#'
 #' @return Numeric vector of length 1: BGe score of given node
 #' @keywords internal
 #' @export

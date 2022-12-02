@@ -32,4 +32,13 @@ Character vector with methylation probes
 explanatory variable METH. Returns METH with significant coefficient,
 R^2 > threshold and R~Gaussian residuals.
 }
+\examples{
+data(list=c("annot", "omics"), package="IntOMICS")
+omics <- omics_to_list(omics = omics, gene_annot = gene_annot, 
+                       layers_def = layers_def)
+lm_meth(ge_mat = omics$ge, meth_mat = omics$meth, 
+    gene = "WNT2B", meth_probes = annot[["WNT2B"]], 
+    r_squared_thres = 0.3, p_val_thres = 0.05)
+
+}
 \keyword{internal}
