@@ -5,7 +5,7 @@
 #'  all possible parent sets per node definition + 
 #'  BGe score computation for all possible parent sets
 #'
-#' @param omics MatchedAssayExperiment or named list containing the gene 
+#' @param omics MultiAssayExperiment or named list containing the gene 
 #' expression (possibly copy number variation and methylation data). If using 
 #' named list, be aware rownames (samples) match across all objects.
 #' @param PK data.frame with known interactions.
@@ -132,7 +132,7 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
   
   layers_def <- layers_def[order(layers_def$layer, decreasing = TRUE),]
   
-  if(is(omics,'MatchedAssayExperiment'))
+  if(is(omics,'MultiAssayExperiment'))
   {
     omics <- omics_to_list(omics = omics, gene_annot = gene_annot, 
                            layers_def = layers_def)
@@ -141,8 +141,13 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
     omics <- omics[layers_def$omics[order(layers_def$layer, 
                                           decreasing = TRUE)]]
   } else {
-    message('Invalid input "omics". Must be MatchedAssayExperiment or 
+    message('Invalid input "omics". Must be MultiAssayExperiment or 
             named list.')
+  }
+  
+  if(length(unique(mapply(nrow,omics_p)))==1) {
+    message('Invalid input "omics". 
+            Number of samples differ across modalities.')
   }
   
   if(!is(annot,"NULL"))

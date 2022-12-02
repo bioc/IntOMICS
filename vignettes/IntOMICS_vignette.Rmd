@@ -46,7 +46,7 @@ insights into the complex mechanisms of biological processes that has a vital
 role in personalised medicine.
 
 
-IntOMICS takes as input `MatchedAssayExperiment` or named `list` with:
+IntOMICS takes as input `MultiAssayExperiment` or named `list` with:
 
 1. gene expression matrix,  
 2. associated copy number variation matrix sampled from the same individuals 
@@ -160,13 +160,13 @@ coad_SE <- curatedTCGAData("COAD",
                            version = "2.0.1", dry.run = FALSE)
 coad_SE <- TCGAprimaryTumors(coad_SE)
  
-coad_ma <- MatchedAssayExperiment(coad_SE)
 ## keep NA for Methylation data
-coad_ma <- subsetByColData(coad_ma, coad_ma$MSI_status == "MSI-H" | 
-                             is.na(coad_ma$MSI_status))
+coad_ma <- subsetByColData(coad_SE, coad_SE$MSI_status == "MSI-H" | 
+                             is.na(coad_SE$MSI_status))
 # choose first 50 samples for illustration
-coad_ma <- subsetByColData(coad_ma, c(rep(TRUE,50),
-                                      rep(FALSE,ncol(coad_ma[[1]])-50)))
+random_samples <- sample(names(which(table(sampleMap(coad_ma)$primary)==3)),50)
+coad_ma <- subsetByColData(coad_ma, random_samples)
+
 rownames(coad_ma[["COAD_GISTIC_AllByGene-20160128"]]) <- rowData(coad_ma[["COAD_GISTIC_AllByGene-20160128"]])[["Gene.Symbol"]]
  
 data(list=c("gene_annot","annot"))
@@ -178,7 +178,7 @@ names(omics) <- c("cnv","ge","meth")
 
 ```
 
-Available omics data are saved in a MatchedAssayExperiment object including 
+Available omics data are saved in a MultiAssayExperiment object including 
 gene expression (GE) of 8 genes + copy number variation (CNV) of 8 genes + beta 
 value of 9 DNA methylation (METH) probes:
 
@@ -213,7 +213,7 @@ These values represent DNA methylation beta values of given probes
 
 IntOMICS is designed to infer regulatory networks even if the copy number 
 variation or DNA methylation data (or both) are not available. In such a case, 
-omics must be a MatchedAssayExperiment with gene expression. 
+omics must be a MultiAssayExperiment with gene expression. 
 
 If methylation data are available, we have to provide an annotation:
 ```{r echo=TRUE, include=TRUE}
@@ -266,7 +266,7 @@ layers_def
 `layers_def` is a data.frame containing:
 
 1) the modality ID (character vector);
-must be same as names of `omics` MatchedAssayExperiment object,
+must be same as names of `omics` MultiAssayExperiment object,
 
 2) corresponding layer in IntOMICS MCMC scheme (numeric vector);
 edges from the lowest layer (must be always GE) to the CNV/METH layers are

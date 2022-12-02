@@ -2,12 +2,12 @@
 % Please edit documentation in R/omics_to_list.R
 \name{omics_to_list}
 \alias{omics_to_list}
-\title{Convert omics MatchedAssayExperiment to list}
+\title{Convert omics MultiAssayExperiment to list}
 \usage{
 omics_to_list(omics, layers_def, gene_annot)
 }
 \arguments{
-\item{omics}{MatchedAssayExperiment containing the gene expression
+\item{omics}{MultiAssayExperiment containing the gene expression
 (possibly copy number variation and methylation data).}
 
 \item{layers_def}{data.frame containing the modality ID, corresponding
@@ -20,7 +20,7 @@ gene symbol for conversion.}
 List of omics modalities
 }
 \description{
-\code{omics_to_list} converts omics MatchedAssayExperiment to list
+\code{omics_to_list} converts omics MultiAssayExperiment to list
 }
 \examples{
 data(list=c("layers_def", "omics", "gene_annot"), package="IntOMICS")

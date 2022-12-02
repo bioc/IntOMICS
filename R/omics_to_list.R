@@ -1,8 +1,8 @@
-#' Convert omics MatchedAssayExperiment to list
+#' Convert omics MultiAssayExperiment to list
 #' @description
-#' `omics_to_list` converts omics MatchedAssayExperiment to list
+#' `omics_to_list` converts omics MultiAssayExperiment to list
 #'
-#' @param omics MatchedAssayExperiment containing the gene expression 
+#' @param omics MultiAssayExperiment containing the gene expression 
 #' (possibly copy number variation and methylation data).
 #' @param layers_def data.frame containing the modality ID, corresponding 
 #' layer in BN and maximal number of parents from given layer to GE nodes.

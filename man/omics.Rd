@@ -5,10 +5,10 @@
 \alias{omics}
 \title{Omics data}
 \format{
-A MatchedAssayExperiment with 3 components - each component corresponds to
+A MultiAssayExperiment with 3 components - each component corresponds to
 one omics data:
 \describe{
-MatchedAssayExperiment with variable number of columns
+MultiAssayExperiment with variable number of columns
 }
 }
 \source{
@@ -18,7 +18,7 @@ MatchedAssayExperiment with variable number of columns
 omics
 }
 \description{
-A MatchedAssayExperiment with names same as in layers_def$omics column
+A MultiAssayExperiment with names same as in layers_def$omics column
 containing the gene expression, copy number variation and methylation data.
 }
 \keyword{datasets}

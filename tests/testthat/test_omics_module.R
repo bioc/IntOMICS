@@ -24,7 +24,7 @@ test_that("output from omics_module is OK", {
   expect_named(expected$omics, expected$layers_def$omics, 
                ignore.order = TRUE)
   
-  if(is(omics,'MatchedAssayExperiment'))
+  if(is(omics,'MultiAssayExperiment'))
   {
     expect_equal(dim(expected$omics_meth_original), 
                  dim(t(assay(omics[["meth"]]))))

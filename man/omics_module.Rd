@@ -20,7 +20,7 @@ omics_module(
 )
 }
 \arguments{
-\item{omics}{MatchedAssayExperiment or named list containing the gene
+\item{omics}{MultiAssayExperiment or named list containing the gene
 expression (possibly copy number variation and methylation data). If using
 named list, be aware rownames (samples) match across all objects.}
 
