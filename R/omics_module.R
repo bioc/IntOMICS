@@ -145,7 +145,7 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
             named list.')
   }
   
-  if(length(unique(mapply(nrow,omics_p)))==1) {
+  if(length(unique(mapply(nrow,omics)))==1) {
     message('Invalid input "omics". 
             Number of samples differ across modalities.')
   }
