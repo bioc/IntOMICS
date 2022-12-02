@@ -46,7 +46,7 @@ omics_module <- function(omics, PK=NULL, layers_def, TFtargs=NULL, annot=NULL,
 lm_METH = TRUE, r_squared_thres = 0.3, p_val_thres = 0.05, TFBS_belief = 0.75, 
 nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
 {
-  if (length(omics) != nrow(layers_def)) {
+  if (!all.equal(length(omics),nrow(layers_def))) {
     stop('Number of modalities differs in "omics" and "layers_def".')
   }
   
@@ -145,7 +145,7 @@ nonGE_belief = 0.5, woPKGE_belief = 0.5, gene_annot)
             named list.')
   }
   
-  if(length(unique(mapply(nrow,omics)))==1) {
+  if(!all.equal(length(unique(mapply(nrow,omics))),1)) {
     message('Invalid input "omics". 
             Number of samples differ across modalities.')
   }
