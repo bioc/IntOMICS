@@ -9,6 +9,7 @@
 #' @importFrom utils tail
 #' @importFrom ggplot2 element_blank
 #' @importFrom methods is
+#' @importFrom rlang .data
 #'
 #' @examples
 #' data(list=c("OMICS_mod_res", "BN_mod_res", "gene_annot", "TFtarg_mat", 
@@ -71,12 +72,12 @@ legend_custom_ggplot <- function(net)
       df <- rbind(df, df3)
     } # end if(!is.null(net$borders_METH))
     
-    ggplot(df, aes(xmin = x_min, 
-                   xmax = x_max, 
-                   ymin = y_min, 
-                   ymax = y_max)) +
+    ggplot(df, aes(xmin = .data$x_min, 
+                   xmax = .data$x_max, 
+                   ymin = .data$y_min, 
+                   ymax = .data$y_max)) +
       geom_rect(fill = df$col, colour = "grey50") +
-      geom_text(aes(x = x_lab, y = y_min-0.01, label = val), size=4, data = df, 
+      geom_text(aes(x = .data$x_lab, y = y_min-0.01, label = .data$val), size=4, data = df, 
                 check_overlap = TRUE, angle = 45) +
       theme_minimal() + theme(panel.grid.major = element_blank(), 
                               panel.grid.minor = element_blank(), 

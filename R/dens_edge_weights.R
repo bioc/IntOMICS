@@ -8,6 +8,7 @@
 #' @importFrom ggplot2 geom_density
 #' @importFrom ggplot2 after_stat
 #' @importFrom stats quantile
+#' @importFrom rlang .data
 #'
 #' @examples
 #' data(list=c("OMICS_mod_res", "BN_mod_res", "gene_annot", "TFtarg_mat", 
@@ -33,7 +34,7 @@ dens_edge_weights <- function(net)
   
   df <- data.frame(edge_weight = as.numeric(net$edge_list[,"weight"]))
   q3 <- quantile(df$edge_weight, 0.75)
-  p <- ggplot(df, aes(x=edge_weight, y = after_stat(scaled))) +
+  p <- ggplot(df, aes(x=.data$edge_weight, y = after_stat(.data$scaled))) +
     geom_density(col="dodgerblue")
   p+geom_vline(xintercept=q3, size=0.5, color="black", linetype = "dashed")
 }
