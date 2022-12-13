@@ -33,29 +33,29 @@ init_net_mcmc <- function(omics, layers_def, B_prior_mat)
         unlist(mapply(colnames,omics))))
     init.net <- suppressWarnings(sample_chain(empty_net = empty.net, 
         omics_ge = omics[[layers_def$omics[1]]]))
-    rownames(init.net@dag) <- rownames(empty.net)
-    colnames(init.net@dag) <- rownames(empty.net)
-    init.net@dag <- init.net@dag[rownames(B_prior_mat),rownames(B_prior_mat)]
-    if(any(init.net@dag==1 & B_prior_mat==0))
+    rownames(dag(init.net)) <- rownames(empty.net)
+    colnames(dag(init.net)) <- rownames(empty.net)
+    dag(init.net) <- dag(init.net)[rownames(B_prior_mat),rownames(B_prior_mat)]
+    if(any(dag(init.net)==1 & B_prior_mat==0))
     {
-        init.net@dag[init.net@dag==1 & B_prior_mat==0] <- 0
+        dag(init.net)[dag(init.net)==1 & B_prior_mat==0] <- 0
     }
-    while(!is_acyclic(init.net@dag) |
-    any(colSums(init.net@dag[colnames(omics[[layers_def$omics[1]]]),
+    while(!is_acyclic(dag(init.net)) |
+    any(colSums(dag(init.net)[colnames(omics[[layers_def$omics[1]]]),
     colnames(omics[[layers_def$omics[1]]])]) > layers_def$fan_in_ge[1]))
     {
         init.net <- sample_chain(empty_net = empty.net, 
             omics_ge = omics[[layers_def$omics[1]]])
-        rownames(init.net@dag) <- rownames(empty.net)
-        colnames(init.net@dag) <- rownames(empty.net)
-        init.net@dag <- init.net@dag[rownames(B_prior_mat),
+        rownames(dag(init.net)) <- rownames(empty.net)
+        colnames(dag(init.net)) <- rownames(empty.net)
+        dag(init.net) <- dag(init.net)[rownames(B_prior_mat),
             rownames(B_prior_mat)]
-        if(any(init.net@dag==1 & B_prior_mat==0))
+        if(any(dag(init.net)==1 & B_prior_mat==0))
         {
-            init.net@dag[init.net@dag==1 & B_prior_mat==0] <- 0
+            dag(init.net)[dag(init.net)==1 & B_prior_mat==0] <- 0
         }
     }
-    source.net <- list(adjacency = init.net@dag, nbhd.size = c(), 
+    source.net <- list(adjacency = dag(init.net), nbhd.size = c(), 
         proposal.distr = c(), energy = c(), prior = c(), BGe = c(), 
         likelihood_part = c(), likelihood = c(), acceptance = c(), 
         edge_move = c())

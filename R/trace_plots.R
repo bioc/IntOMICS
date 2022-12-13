@@ -43,15 +43,15 @@ trace_plots <- function(mcmc_res, burn_in, thin, edge_freq_thres = NULL)
           Must be "NULL" or numeric of length 1.')
   }
   
-  rms_strength <- abs(diff(mcmc_res@rms))
+  rms_strength <- abs(diff(rms(mcmc_res)))
   strength_threshold <- quantile(rms_strength, 0.75, na.rm = TRUE)
   cpdag_f <- (burn_in/thin+1)
-  cpdag_l <- length(mcmc_res@CPDAGs_sim1)
+  cpdag_l <- length(CPDAGs_sim1(mcmc_res))
   cpdags1 <- 
-    unique(mcmc_res@CPDAGs_sim1[
+    unique(CPDAGs_sim1(mcmc_res)[
       seq(from = cpdag_f, to = cpdag_l)])
   cpdags2 <- 
-    unique(mcmc_res@CPDAGs_sim2[
+    unique(CPDAGs_sim2(mcmc_res)[
       seq(from = cpdag_f, to = cpdag_l)])
   cpdag_weights1 <- custom.strength(cpdags1, 
                                     nodes = nodes(cpdags1[[1]]), weights = NULL)
@@ -66,8 +66,8 @@ trace_plots <- function(mcmc_res, burn_in, thin, edge_freq_thres = NULL)
                                sep="_")
   total <- merge(cpdag_weights1, cpdag_weights2, by = c("from","to"))
   
-  plot(unlist(mcmc_res@beta_tuning["value",]) ~ 
-         seq_len(ncol(mcmc_res@beta_tuning)), 
+  plot(unlist(beta_tuning(mcmc_res)["value",]) ~ 
+         seq_len(ncol(beta_tuning(mcmc_res))), 
        type = "l", col= "darkblue", xlab = "iteration",
        ylab = "beta", main = "Beta values of adaptive MCMC")
   plot(total$strength.x ~ total$strength.y, xlab="MCMC run 2",

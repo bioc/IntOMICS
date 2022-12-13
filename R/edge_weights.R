@@ -46,12 +46,12 @@ edge_weights <- function(mcmc_res, burn_in, thin, edge_freq_thres = NULL)
   }
   
   cpdag_f <- (burn_in/thin+1)
-  cpdag_l <- length(mcmc_res@CPDAGs_sim1)
+  cpdag_l <- length((mcmc_res))
   cpdags1 <- 
-    unique(mcmc_res@CPDAGs_sim1[
+    unique(CPDAGs_sim1(mcmc_res)[
       seq(from = cpdag_f, to = cpdag_l)])
   cpdags2 <- 
-    unique(mcmc_res@CPDAGs_sim2[
+    unique(CPDAGs_sim2(mcmc_res)[
       seq(from = cpdag_f, to = cpdag_l)])
   
   cpdag_weights1 <- custom.strength(cpdags1, 

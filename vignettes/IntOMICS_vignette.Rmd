@@ -408,28 +408,28 @@ getSlots(class(BN_mod_res))
 
 ```
 
-1. `BN_mod_res@estimated_beta` Numeric, estimated value of hyperparameter $\beta$
+1. `estimated_beta(BN_mod_res)` Numeric, estimated value of hyperparameter $\beta$
 
-2. `BN_mod_res@estimated_len` Numeric, estimated width of the sampling interval 
+2. `estimated_len(BN_mod_res)` Numeric, estimated width of the sampling interval 
 for hyperparameter $\beta$
 
-3. `BN_mod_res@B_prior_mat_weighted` Empirical biological knowledge matrix,
+3. `B_prior_mat_weighted(BN_mod_res)` Empirical biological knowledge matrix,
 interactions from the biological prior knowledge and TFs-target interactions 
 are constant (unless "TFBS_belief" is not equal to "woPKGE_belief").
 
-4. `BN_mod_res@CPDAGs_sim1` List of CPDAGs from the first independent MCMC 
+4. `CPDAGs_sim1(BN_mod_res)` List of CPDAGs from the first independent MCMC 
 simulation (thinned DAGs from the MCMC simulation converted into CPDAGs, 
 duplicated CPDAGs discarded)
 
-5. `BN_mod_res@CPDAGs_sim2` List of CPDAGs from the second independent MCMC 
+5. `CPDAGs_sim2(BN_mod_res)` List of CPDAGs from the second independent MCMC 
 simulation (thinned DAGs from the MCMC simulation converted into CPDAGs, 
 duplicated CPDAGs discarded)
 
-6. `BN_mod_res@beta_tuning` Matrix of results from adaptive phases that contains
+6. `beta_tuning(BN_mod_res)` Matrix of results from adaptive phases that contains
 hyperparameter $\beta$ tuning (trace of hyperparameter $\beta$, trace of width 
 of the sampling interval for hyperparameter $\beta$
 
-7. `BN_mod_res@rms` Numeric, trace of root mean square used for c_rms measure 
+7. `rms(BN_mod_res)` Numeric, trace of root mean square used for c_rms measure 
 to evaluate the convergence of MCMC simulation
 
 
@@ -491,7 +491,7 @@ weighted_net_res <- weighted_net(cpdag_weights = res_weighted,
                                  OMICS_mod_res = OMICS_mod_res, 
                                  gene_ID = "gene_symbol", 
                                  TFtargs = TFtarg_mat, 
-                                 B_prior_mat_weighted = BN_mod_res@B_prior_mat_weighted)
+                                 B_prior_mat_weighted = B_prior_mat_weighted(BN_mod_res))
 
 ```
 The parameter "gene_ID" determines the IDs used in the final network. There are
@@ -530,7 +530,7 @@ weighted_net_res <- weighted_net(cpdag_weights = res_weighted,
                                  gene_ID = "gene_symbol", 
                                  edge_weights = "empB",
                                  TFtargs = TFtarg_mat, 
-                                 B_prior_mat_weighted = BN_mod_res@B_prior_mat_weighted)
+                                 B_prior_mat_weighted = B_prior_mat_weighted(BN_mod_res))
 
 ```
 
@@ -571,7 +571,7 @@ weighted_net_res <- weighted_net(cpdag_weights = res_weighted,
                                  OMICS_mod_res = OMICS_mod_res, 
                                  gene_ID = "gene_symbol", 
                                  TFtargs = TFtarg_mat, 
-                                 B_prior_mat_weighted = BN_mod_res@B_prior_mat_weighted)
+                                 B_prior_mat_weighted = B_prior_mat_weighted(BN_mod_res))
 
 dens_edge_weights(weighted_net_res)
 

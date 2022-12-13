@@ -7,20 +7,13 @@
 #' @param edge_label_size numeric edge label size
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom ggplot2 ggplot geom_rect geom_text theme_minimal theme annotate
-#' @importFrom ggplot2 ylim
-#' @importFrom utils head
-#' @importFrom utils tail
+#' @importFrom utils head tail
 #' @importFrom igraph edge
-#' @importFrom ggraph ggraph
-#' @importFrom ggraph geom_edge_link
-#' @importFrom ggraph geom_node_point
-#' @importFrom ggplot2 scale_colour_manual
-#' @importFrom ggraph geom_node_text
-#' @importFrom ggraph circle
-#' @importFrom ggplot2 arrow
+#' @importFrom ggraph ggraph geom_edge_link geom_node_point
+#' @importFrom ggplot2 scale_colour_manual arrow ylim
+#' @importFrom ggraph geom_node_text circle
 #' @importFrom grid unit
 #' @importFrom methods is
-#' @importFrom cowplot plot_grid
 #' @importFrom cowplot align_plots
 #'
 #' @examples
@@ -31,7 +24,7 @@
 #' weighted_net_res <- weighted_net(cpdag_weights = res_weighted, 
 #'  gene_annot = gene_annot, PK = PK, OMICS_mod_res = OMICS_mod_res, 
 #'  gene_ID = "gene_symbol", TFtargs = TFtarg_mat,
-#'  B_prior_mat_weighted = BN_mod_res@B_prior_mat_weighted) 
+#'  B_prior_mat_weighted = B_prior_mat_weighted(BN_mod_res))
 #' library(ggraph)
 #' ggraph_weighted_net(weighted_net_res)
 #'

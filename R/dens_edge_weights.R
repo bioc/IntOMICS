@@ -17,7 +17,7 @@
 #' weighted_net_res <- weighted_net(cpdag_weights = res_weighted, 
 #'  gene_annot = gene_annot, PK = PK, OMICS_mod_res = OMICS_mod_res, 
 #'  gene_ID = "gene_symbol", TFtargs = TFtarg_mat,
-#'  B_prior_mat_weighted = BN_mod_res@B_prior_mat_weighted) 
+#'  B_prior_mat_weighted = B_prior_mat_weighted(BN_mod_res))
 #' dens_edge_weights(weighted_net_res)
 #'
 #' @return density plot of edge weights

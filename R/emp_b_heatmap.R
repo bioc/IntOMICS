@@ -51,7 +51,7 @@ emp_b_heatmap <- function(mcmc_res, OMICS_mod_res, gene_annot, TFtargs)
       message('Invalid input "TFtargs". Must be matrix and dimnames must 
               be in EID:XXXX format indicating Entrez IDs.')
     } 
-    mat <- mcmc_res@B_prior_mat_weighted - OMICS_mod_res$B_prior_mat
+    mat <- B_prior_mat_weighted(mcmc_res) - OMICS_mod_res$B_prior_mat
     mat <- mat[regexpr("EID:",rownames(mat))>0,
                regexpr("EID:",rownames(mat))>0]
     mat[which(OMICS_mod_res$B_prior_mat[regexpr("EID:",
