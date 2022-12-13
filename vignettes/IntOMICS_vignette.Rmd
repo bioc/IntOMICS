@@ -63,9 +63,15 @@ structures from two independent MCMC simulations.
 For further details about the IntOMICS algorithm, its performance and benchmark
 analysis, see manuscript Pacinkova \& Popovici, 2022.
 
-
 Projects such as The Cancer Genome Atlas aim to catalogue 
 multi-omics data from a large number of samples.
+Bioconductor packages such as `r Biocpkg("curatedTCGA")` enable to download and 
+efficiently collect these multi-omics data.
+R-packages such as `r Biocpkg("IntOMICS")`,  `r Biocpkg("MOFA2")`, 
+and `r Biocpkg("cosmosR")` can provide a complementary understanding of hidden 
+interplay between multi-omics dataset and deciphering the complexity of the 
+biological system.
+
 IntOMICS framework is demonstrated using colon cancer data from the
 `r Biocpkg("curatedTCGA")` package. However, it is not limited to any particular
 omics data or phenotype.
@@ -446,7 +452,6 @@ trace_plots(mcmc_res = BN_mod_res,
             thin = 500, 
             edge_freq_thres = 0.5)
 
-
 ```
 
 The `trace_plots` function generates the following:
@@ -491,7 +496,7 @@ weighted_net_res <- weighted_net(cpdag_weights = res_weighted,
                                  OMICS_mod_res = OMICS_mod_res, 
                                  gene_ID = "gene_symbol", 
                                  TFtargs = TFtarg_mat, 
-                                 B_prior_mat_weighted = B_prior_mat_weighted(BN_mod_res))
+                                 B_prior_mat_weighted = BN_mod_res@B_prior_mat_weighted)
 
 ```
 The parameter "gene_ID" determines the IDs used in the final network. There are
@@ -530,7 +535,7 @@ weighted_net_res <- weighted_net(cpdag_weights = res_weighted,
                                  gene_ID = "gene_symbol", 
                                  edge_weights = "empB",
                                  TFtargs = TFtarg_mat, 
-                                 B_prior_mat_weighted = B_prior_mat_weighted(BN_mod_res))
+                                 B_prior_mat_weighted = BN_mod_res@B_prior_mat_weighted)
 
 ```
 
@@ -571,7 +576,7 @@ weighted_net_res <- weighted_net(cpdag_weights = res_weighted,
                                  OMICS_mod_res = OMICS_mod_res, 
                                  gene_ID = "gene_symbol", 
                                  TFtargs = TFtarg_mat, 
-                                 B_prior_mat_weighted = B_prior_mat_weighted(BN_mod_res))
+                                 B_prior_mat_weighted = BN_mod_res@B_prior_mat_weighted)
 
 dens_edge_weights(weighted_net_res)
 

@@ -9,6 +9,7 @@
 #' in BN and maximal number of parents from given layer to GE nodes.
 #' @param B_prior_mat a biological prior matrix.
 #' @importFrom methods setClass
+#' @importFrom bnstruct dag<-
 #' 
 #' @examples
 #' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", 
@@ -31,8 +32,8 @@ init_net_mcmc <- function(omics, layers_def, B_prior_mat)
         ncol = sum(mapply(ncol,omics)),
         dimnames = list(unlist(mapply(colnames,omics)),
         unlist(mapply(colnames,omics))))
-    init.net <- suppressWarnings(sample_chain(empty_net = empty.net, 
-        omics_ge = omics[[layers_def$omics[1]]]))
+    init.net <- sample_chain(empty_net = empty.net, 
+        omics_ge = omics[[layers_def$omics[1]]])
     rownames(dag(init.net)) <- rownames(empty.net)
     colnames(dag(init.net)) <- rownames(empty.net)
     dag(init.net) <- dag(init.net)[rownames(B_prior_mat),rownames(B_prior_mat)]

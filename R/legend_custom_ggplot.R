@@ -77,7 +77,7 @@ legend_custom_ggplot <- function(net)
                    ymin = .data$y_min, 
                    ymax = .data$y_max)) +
       geom_rect(fill = df$col, colour = "grey50") +
-      geom_text(aes(x = .data$x_lab, y = y_min-0.01, label = .data$val), size=4, data = df, 
+      geom_text(aes(x = .data$x_lab, y = .data$y_min-0.01, label = .data$val), size=4, data = df, 
                 check_overlap = TRUE, angle = 45) +
       theme_minimal() + theme(panel.grid.major = element_blank(), 
                               panel.grid.minor = element_blank(), 

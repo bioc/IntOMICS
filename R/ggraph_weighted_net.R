@@ -14,7 +14,7 @@
 #' @importFrom ggraph geom_node_text circle
 #' @importFrom grid unit
 #' @importFrom methods is
-#' @importFrom cowplot align_plots
+#' @importFrom cowplot align_plots plot_grid
 #' @importFrom rlang .data
 #'
 #' @examples
@@ -50,16 +50,16 @@ ggraph_weighted_net <- function(net, node_size = 10, node_label_size = 4,
   }
 
   # regulatory network
-  rn <- ggraph(weighted_net_res$net_weighted, layout = 'dh') + 
+  rn <- ggraph(net$net_weighted, layout = 'dh') + 
     geom_edge_link(aes(end_cap = circle(.data$node2.degree + 7, "pt"),
                      edge_color = edge, label = .data$weight), 
                  label_size = edge_label_size,
                  arrow = arrow(angle = 20, length = unit(0.1, "inches"),
                                ends = "last", type = "closed")) +
     geom_node_point(aes(color = factor(.data$color)), size = node_size) +
-    scale_colour_manual(values = .data$weighted_net_res$node_palette, guide = "none") +
+    scale_colour_manual(values = net$node_palette, guide = "none") +
     geom_node_text(aes(label = .data$label), size = node_label_size)
   
-  leg <- legend_custom_ggplot(net = weighted_net_res)
+  leg <- legend_custom_ggplot(net = net)
   plot_grid(rn, leg, ncol = 1, rel_heights = c(3, 1))
 }
