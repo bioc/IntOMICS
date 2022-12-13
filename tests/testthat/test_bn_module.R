@@ -2,10 +2,10 @@ test_that("output from bn_module is OK", {
   if(interactive())
   {
     data("OMICS_mod_res")
-    expected <- bn_module(burn_in = 100, 
+    expect_warning(expected <- bn_module(burn_in = 100, 
                           thin = 20,
                           OMICS_mod_res = OMICS_mod_res,
-                          minseglen = 2)
+                          minseglen = 2))
   
     expect_is(expected, "MCMC_sapling_res")
   
