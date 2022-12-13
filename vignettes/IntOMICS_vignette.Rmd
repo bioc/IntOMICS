@@ -152,7 +152,7 @@ All data matrices are sampled from the same individuals.
 
 We use `r Biocpkg("curatedTCGA")` package to obtain publicly available toy 
 dataset from The Cancer Genome Atlas (TCGA):
-```{r echo=TRUE, include=FALSE}
+```{r echo=TRUE, include=TRUE}
 
 coad_SE <- curatedTCGAData("COAD",
                            c("RNASeq2GeneNorm_illuminahiseq",
