@@ -285,7 +285,7 @@ We also need to define all possible parent set configurations for each node.
 For each parent set configuration, we compute the energy (needed to define
 the prior distribution of network structures) and the BGe score (needed
 to determine the posterior probability of network structures).
-These functionalities are available through the `OMICS_module` function.
+These functionalities are available through the `omics_module` function.
 We can use linear regression to filter irrelevant DNA methylation probes.
 In such a case, we set the parameter "lm_METH = TRUE".
 We can also specify the threshold for the R^2 to choose DNA methylation probes
@@ -372,7 +372,7 @@ Two independent samples of network structures are produced to evaluate the
 convergence of the Markov chain. Each sample consists of 2*`burn_in` DAGs. 
 The~resulting samples of DAGs are thinned - discarded all but every `thin` DAG.
 The burn-in period and thinning frequency are arbitrary choices.
-```{r echo=TRUE, include=FALSE}
+```{r echo=TRUE, include=TRUE}
 
 if(interactive())
 {
@@ -400,7 +400,7 @@ recommend to use the default setting (for further details on how this argument
 affects MCMC scheme results, see (Su and Borsuk, 2016)).
 
 
-Let's check the outputs of `BN_module` function:
+Let's check the outputs of `bn_module` function:
 ```{r echo=TRUE, include=TRUE}
 
 data("BN_mod_res")
@@ -408,22 +408,22 @@ getSlots(class(BN_mod_res))
 
 ```
 
-1. `BN_mod_res@estimated_beta` numeric, estimated value of hyperparameter $\beta$
+1. `BN_mod_res@estimated_beta` Numeric, estimated value of hyperparameter $\beta$
 
 2. `BN_mod_res@estimated_len` Numeric, estimated width of the sampling interval 
 for hyperparameter $\beta$
 
 3. `BN_mod_res@B_prior_mat_weighted` Empirical biological knowledge matrix,
 interactions from the biological prior knowledge and TFs-target interactions 
-are constant (unless if "TFBS_belief" is not equal to "woPKGE_belief").
+are constant (unless "TFBS_belief" is not equal to "woPKGE_belief").
 
 4. `BN_mod_res@CPDAGs_sim1` List of CPDAGs from the first independent MCMC 
 simulation (thinned DAGs from the MCMC simulation converted into CPDAGs, 
-ducplicated CPDAGs discarded)
+duplicated CPDAGs discarded)
 
 5. `BN_mod_res@CPDAGs_sim2` List of CPDAGs from the second independent MCMC 
 simulation (thinned DAGs from the MCMC simulation converted into CPDAGs, 
-ducplicated CPDAGs discarded)
+duplicated CPDAGs discarded)
 
 6. `BN_mod_res@beta_tuning` Matrix of results from adaptive phases that contains
 hyperparameter $\beta$ tuning (trace of hyperparameter $\beta$, trace of width 
@@ -449,7 +449,7 @@ trace_plots(mcmc_res = BN_mod_res,
 
 ```
 
-The `trace_plots` function generates:
+The `trace_plots` function generates the following:
   
 1. trace plot of beta values (we want to explore the sample space many times and 
 avoid flat bits - the chain stays in the same state for too long; in this case, 
@@ -473,6 +473,9 @@ edge weights filtering, such as 0.75 quantile of all edge weights
 in the resulting networks using "edge_freq_thres = 0.75".
 
 
+
+## Part 5: IntOMICS resulting network structure
+
 Now we use `edge_weights` and `weighted_net` functions to define the resulting
 regulatory network inferred by `r Biocpkg("IntOMICS")` with specific thresholds:
 ```{r echo=TRUE, include=TRUE}
@@ -495,8 +498,6 @@ The parameter "gene_ID" determines the IDs used in the final network. There are
 two options: "gene_symbol" (default) or "entrezID".
 
 
-## Part 5: IntOMICS resulting network structure
-
 We can plot the resulting regulatory network inferred by `r Biocpkg("IntOMICS")` 
 using `ggraph_weighted_net` function (node size and label size can be modified):
 
@@ -510,8 +511,8 @@ ggraph_weighted_net(net = weighted_net_res,
 ```
 
 Edges highlighted in blue are known from the biological prior knowledge.
-The edge labels reflects its empirical frequency over the final set of CPDAGs.
-GE node names are in upper case, CNV node names are in lower case, METH node
+The edge labels reflect its empirical frequency over the final set of CPDAGs.
+GE node names are in upper case, CNV node names are in lower case, and METH node
 names are the same as DNA methylation probe names in `omics$meth` matrix.
 Node colour scales are given by GE/CNV/METH values of all features
 from the corresponding input data matrix.
@@ -521,11 +522,6 @@ We can also change the edge labels to inspect the empirical prior knowledge
 inferred by `r Biocpkg("IntOMICS")` using the argument "edge_weights = empB"
 (default = "MCMC_freq"):
 ```{r echo=TRUE, include=TRUE}
-
-res_weighted <- edge_weights(mcmc_res = BN_mod_res, 
-                            burn_in = 10000, 
-                            thin = 500, 
-                            edge_freq_thres = 0.5)
 
 weighted_net_res <- weighted_net(cpdag_weights = res_weighted,
                                  gene_annot = gene_annot, 
