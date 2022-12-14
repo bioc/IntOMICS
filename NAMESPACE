@@ -2,6 +2,7 @@
 
 export(MCMC_sapling_res)
 export(acceptance_check)
+export(b_prior_mat)
 export(bge_node)
 export(bge_score)
 export(bn_module)
