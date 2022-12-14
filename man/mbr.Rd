@@ -36,14 +36,3 @@ with markov blanket resampling
 \code{mbr} This function performs the markov blanket resampling method according
 to Su and Borsuk, 2016.
 }
-\examples{
-data("OMICS_mod_res", package="IntOMICS")
-mbr(source_net_adjacency = OMICS_mod_res$B_prior_mat, 
-    layers_def = OMICS_mod_res$layers_def, omics = OMICS_mod_res$omics, 
-    BGe_score_all_configs_node = 
-    OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node,
-    parent_set_combinations = 
-    OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)
-
-}
-\keyword{internal}

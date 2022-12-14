@@ -15,20 +15,8 @@
 #' @importFrom bnlearn descendants
 #' @importFrom bnlearn amat
 #' @importFrom bnlearn empty.graph
-#'
-#' @examples
-#' data("OMICS_mod_res", package="IntOMICS")
-#' mbr(source_net_adjacency = OMICS_mod_res$B_prior_mat, 
-#'     layers_def = OMICS_mod_res$layers_def, omics = OMICS_mod_res$omics, 
-#'     BGe_score_all_configs_node = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node,
-#'     parent_set_combinations = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)
-#'
 #' @return List of 10 elements needed to define adjacency matrix 
 #' with markov blanket resampling
-#' @keywords internal
-#' @export
 mbr <- function(source_net_adjacency, layers_def, omics,
 BGe_score_all_configs_node, parent_set_combinations) 
 {

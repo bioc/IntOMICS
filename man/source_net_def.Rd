@@ -46,21 +46,3 @@ List of 10 elements needed to define the initial adjacency matrix
 \code{source_net_def} This function is used to create the initial network
 with its features necessary for MCMC simulation.
 }
-\examples{
-data("OMICS_mod_res", package="IntOMICS")
-init.net <- init_net_mcmc(omics = OMICS_mod_res$omics, 
-    layers_def = OMICS_mod_res$layers_def, 
-    B_prior_mat = OMICS_mod_res$B_prior_mat)
-source_net_def(init_net_mcmc.output = init.net, 
-    omics = OMICS_mod_res$omics, 
-    parent_set_combinations = 
-    OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations,
-    BGe_score_all_configs_node = 
-    OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    B_prior_mat = OMICS_mod_res$B_prior_mat, 
-    layers_def = OMICS_mod_res$layers_def, len = 5,
-    energy_all_configs_node = 
-    OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node)
-             
-}
-\keyword{internal}

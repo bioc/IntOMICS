@@ -6,17 +6,8 @@
 #' the energy of given network.
 #' @param net adjacency matrix of given network.
 #' @param B_prior_mat a biological prior matrix.
-#'
-#' @examples
-#' data("OMICS_mod_res", package="IntOMICS")
-#' adjacency_matrix <- OMICS_mod_res$B_prior_mat
-#' adjacency_matrix[,] <- 0
-#' epsilon(net = adjacency_matrix, B_prior_mat = OMICS_mod_res$B_prior_mat)
-#'
 #' @return Numeric vector of length 1: epsilon of given adjacency matrix
 #' (needed to compute energy of given adjacency matrix)
-#' @keywords internal
-#' @export
 epsilon <- function(net, B_prior_mat)
 {
     epsilon <- rep(NA,nrow(net))

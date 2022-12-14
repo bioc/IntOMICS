@@ -18,27 +18,8 @@
 #' @param len numeric vector initial width of the sampling interval 
 #' for hyperparameter beta.
 #' @importFrom stats runif
-#' @importFrom matrixStats logSumExp
-#'       
-#' @examples
-#' data("OMICS_mod_res", package="IntOMICS")
-#' init.net <- init_net_mcmc(omics = OMICS_mod_res$omics, 
-#'     layers_def = OMICS_mod_res$layers_def, 
-#'     B_prior_mat = OMICS_mod_res$B_prior_mat)
-#' source_net_def(init_net_mcmc.output = init.net, 
-#'     omics = OMICS_mod_res$omics, 
-#'     parent_set_combinations = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations,
-#'     BGe_score_all_configs_node = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-#'     B_prior_mat = OMICS_mod_res$B_prior_mat, 
-#'     layers_def = OMICS_mod_res$layers_def, len = 5,
-#'     energy_all_configs_node = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node)
-#'              
-#' @return List of 10 elements needed to define the initial adjacency matrix    
-#' @keywords internal
-#' @export       
+#' @importFrom matrixStats logSumExp             
+#' @return List of 10 elements needed to define the initial adjacency matrix          
 source_net_def <- function(init_net_mcmc.output, parent_set_combinations,
 omics, BGe_score_all_configs_node, B_prior_mat, layers_def,
 energy_all_configs_node, len)

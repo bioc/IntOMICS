@@ -18,8 +18,6 @@
 #' @param TFtargs matrix containing the direct interactions between TFs
 #' (columns) and their targets (rows).
 #' @return List of 6 elements needed to plot the final regulatory network edges
-#' @keywords internal
-#' @export 
 edge_types <- function(B_prior_mat_weighted, PK = NULL, gene_annot, edge_list, 
                        node_list, OMICS_mod_res, edge_weights, TFtargs = NULL)
 {

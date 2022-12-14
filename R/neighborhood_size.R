@@ -9,24 +9,7 @@
 #' @param omics named list containing the gene expression (possibly copy number
 #' variation and methylation data). Each component of the list is a matrix 
 #' with samples in rows and features in columns.
-#'
-#' @examples
-#' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
-#' package="IntOMICS")
-#' omics <- omics_to_list(omics = omics, gene_annot = gene_annot, 
-#'                        layers_def = layers_def)
-#' B <- b_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
-#'      annot = annot, lm_METH = TRUE, r_squared_thres = 0.3,
-#'      p_val_thres = 0.05, TFtargs = TFtarg_mat, TFBS_belief = 0.75, 
-#'      nonGE_belief = 0.5, woPKGE_belief = 0.5)
-#' adjacency_matrix <- B$B_prior_mat
-#' adjacency_matrix[,] <- 0
-#' neighborhood_size(net = adjacency_matrix, layers_def = layers_def,
-#' B_prior_mat = B$B_prior_mat, omics = B$omics)
-#'
 #' @return Numeric of length 1: neighborhood size
-#' @keywords internal
-#' @export
 neighborhood_size <- function(net, layers_def, B_prior_mat, omics)
 {
     remove.edge.size <- sum(net)

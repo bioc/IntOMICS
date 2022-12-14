@@ -23,4 +23,3 @@ Numeric vector of length 1
 \code{dag_core_score} The log of the BGe score simplified as much as possible.
 This function is from BiDAG package.
 }
-\keyword{internal}

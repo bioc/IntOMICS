@@ -27,17 +27,3 @@ List of 4 elements needed to simulate MCMC sampling
 For each node returns energy over all possible parent set configurations
 and BGe score.
 }
-\examples{
-data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", "gene_annot"),
-package="IntOMICS")
-omics <- omics_to_list(omics = omics, gene_annot = gene_annot, 
-                       layers_def = layers_def)
-B <- b_prior_mat(omics = omics, PK = PK, layers_def = layers_def, 
-     annot = annot, lm_METH = TRUE, r_squared_thres = 0.3,
-     p_val_thres = 0.05, TFtargs = TFtarg_mat, TFBS_belief = 0.75, 
-     nonGE_belief = 0.5, woPKGE_belief = 0.5)
-pf_ub_est(omics = B$omics, B_prior_mat = B$B_prior_mat, 
-layers_def = layers_def, annot = B$annot)
-
-}
-\keyword{internal}

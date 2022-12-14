@@ -12,8 +12,6 @@
 #' in columns.
 #' @importFrom RColorBrewer brewer.pal
 #' @return List of 5 elements indicating the color scale for each modality
-#' @keywords internal
-#' @export
 borders_def <- function(node_list, layers_def, omics, omics_meth_original)
 {
   ge_cols <- brewer.pal(9, "Blues")

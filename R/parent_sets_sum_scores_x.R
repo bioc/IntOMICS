@@ -13,8 +13,6 @@
 #' parent set configurations.
 #' @importFrom matrixStats logSumExp
 #' @return List of 3 elements
-#' @keywords internal
-#' @export 
 parent_sets_sum_scores_x <- function(parent_set_combinations, 
 selected_node, descendants, parent_set, BGe_score_all_configs_node)
 {

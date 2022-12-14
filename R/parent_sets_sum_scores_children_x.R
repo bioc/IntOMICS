@@ -18,8 +18,6 @@
 #' @importFrom matrixStats logSumExp
 #' @importFrom bnlearn amat
 #' @return List of 3 elements
-#' @keywords internal
-#' @export
 parent_sets_sum_scores_children_x <- function(parent_set_combinations, 
 selected_node, children_selected_node, child_order, dag_tmp_bn, 
 new_parent_set, source_net_adjacency, BGe_score_all_configs_node)

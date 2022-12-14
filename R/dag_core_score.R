@@ -7,10 +7,7 @@
 #' @param n numeric vector number of nodes in the netwrok
 #' @param param an object of class scoreparameters, which includes all
 #' necessary information for calculating the BDe/BGe score
-#'
-#' @return Numeric vector of length 1    
-#' @keywords internal
-#' @export   
+#' @return Numeric vector of length 1      
 dag_core_score <- function(j,parentnodes,n,param) {
   
     TN <- param$TN

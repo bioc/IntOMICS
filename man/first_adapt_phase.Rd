@@ -52,16 +52,3 @@ List of 1 element: first adaption phase result
 the variance of the proposal distribution is changed to achieve
 the MC acceptance rate of 0.44.
 }
-\examples{
-data("OMICS_module", package="IntOMICS")
-if(interactive()){first_adapt_phase(omics = OMICS_mod_res$omics, 
-   B_prior_mat = OMICS_mod_res$B_prior_mat, len = 5, 
-   energy_all_configs_node = 
-   OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
-   layers_def = OMICS_mod_res$layers_def, prob_mbr = 0.07,
-   BGe_score_all_configs_node = OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-   parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
-   annot = OMICS_mod_res$annot)}
-
-}
-\keyword{internal}

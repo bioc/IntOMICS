@@ -9,8 +9,6 @@
 #' @importFrom stats cov
 #' @return Object of class scoreparameters, which includes all necessary
 #' information for calculating the BDe/BGe score
-#' @keywords internal
-#' @export
 score_parameters_bidag_bge <- function (n, data, 
 bgepar = list(am = 1, aw = NULL))
 {

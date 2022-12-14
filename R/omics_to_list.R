@@ -9,14 +9,7 @@
 #' @param gene_annot data.frame containing the entrez ID and corresponding 
 #' gene symbol for conversion.
 #' @importFrom SummarizedExperiment assay
-#' 
-#' @examples
-#' data(list=c("layers_def", "omics", "gene_annot"), package="IntOMICS")
-#' omics_to_list(omics = omics,layers_def = layers_def,
-#' gene_annot = gene_annot)
-#'
 #' @return List of omics modalities         
-#' @export
 omics_to_list <- function(omics, layers_def, gene_annot)
 {
   omics_list <- list()

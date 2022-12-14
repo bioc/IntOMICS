@@ -32,18 +32,3 @@ single edge proposal move
 moves (identify those edges that are possible to change in given network
 structure)
 }
-\examples{
-data(list=c("OMICS_mod_res", "first.adapt.phase_net"),
-package="IntOMICS")
-source_net <- first.adapt.phase_net$nets[[length(
-    first.adapt.phase_net$nets)]]
-ge_nodes <- rownames(source_net$adjacency)[regexpr("EID",
-    rownames(source_net$adjacency))>0]
-vec <- seq_len(length(c(source_net$adjacency)))
-vec <- vec[c(OMICS_mod_res$B_prior_mat)>0]
-edge_proposal(net = source_net$adjacency, candidates = vec, 
-    layers_def = OMICS_mod_res$layers_def, ge_nodes = ge_nodes, 
-    omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat)
-            
-}
-\keyword{internal}

@@ -22,4 +22,3 @@ information for calculating the BDe/BGe score
 \code{score_parameters_bidag_bge} Returns parameters needed for calculation
 of the BGe score. This function is from BiDAG package.
 }
-\keyword{internal}

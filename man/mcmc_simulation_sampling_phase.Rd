@@ -66,4 +66,3 @@ List of 1 element: sampling phase result before MCMC convergence
 of network structures with estimated hyperparameters.
 It if part of sampling_phase function.
 }
-\keyword{internal}

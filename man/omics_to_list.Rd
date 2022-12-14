@@ -22,9 +22,3 @@ List of omics modalities
 \description{
 \code{omics_to_list} converts omics MultiAssayExperiment to list
 }
-\examples{
-data(list=c("layers_def", "omics", "gene_annot"), package="IntOMICS")
-omics_to_list(omics = omics,layers_def = layers_def,
-gene_annot = gene_annot)
-
-}

@@ -13,24 +13,8 @@
 #' Each component of the list is a matrix with samples in rows and features 
 #' in columns.
 #' @param B_prior_mat a biological prior matrix.
-#' 
-#' @examples
-#' data(list=c("OMICS_mod_res", "first.adapt.phase_net"),
-#' package="IntOMICS")
-#' source_net <- first.adapt.phase_net$nets[[length(
-#'     first.adapt.phase_net$nets)]]
-#' ge_nodes <- rownames(source_net$adjacency)[regexpr("EID",
-#'     rownames(source_net$adjacency))>0]
-#' vec <- seq_len(length(c(source_net$adjacency)))
-#' vec <- vec[c(OMICS_mod_res$B_prior_mat)>0]
-#' edge_proposal(net = source_net$adjacency, candidates = vec, 
-#'     layers_def = OMICS_mod_res$layers_def, ge_nodes = ge_nodes, 
-#'     omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat)
-#'             
 #' @return List of 6 elements needed to define candidates for conventional
-#' single edge proposal move    
-#' @keywords internal
-#' @export         
+#' single edge proposal move            
 edge_proposal <- function(net, candidates, layers_def, ge_nodes, omics,
 B_prior_mat) {
     edge <- sample(candidates,1); div <- nrow(net); row <- edge %% div

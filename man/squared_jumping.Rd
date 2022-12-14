@@ -59,39 +59,3 @@ MCMC mixing
 \code{squared_jumping} Squared jumping of adaptive MCMC algorithm is used to tune
 the variance of the beta parameter.
 }
-\examples{
-data(list=c("OMICS_mod_res", "first.adapt.phase_net", "annot"), 
-package="IntOMICS")
-if(interactive()){transient.phase_net <- transient_phase(prob_mbr = 0.07,
-first.adapt.phase_net = first.adapt.phase_net, 
-omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat, 
-layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
-energy_all_configs_node = 
-OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
-BGe_score_all_configs_node = 
-OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-parent_set_combinations = 
-OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
-second_adapt_phase_net <- second_adapt_phase(prob_mbr = 0.07, 
-transient.phase_net = transient.phase_net, woPKGE_belief = 0.5,
-layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
-energy_all_configs_node = 
-OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node, 
-B_prior_mat = OMICS_mod_res$B_prior_mat, 
-BGe_score_all_configs_node = 
-OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-parent_set_combinations = 
-OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations,
-omics = OMICS_mod_res$omics)
-squared_jumping(omics = OMICS_mod_res$omics,
-second.adapt.phase_net = second.adapt.phase_net$variance.target_net, 
-constant = 2.38/(1.5), fin = (nrow(OMICS_mod_res$B_prior_mat)^2)*5, 
-beta_sd = second.adapt.phase_net$beta_sd, prob_mbr = 0.07,
-B_prior_mat = OMICS_mod_res$B_prior_mat, 
-layers_def = OMICS_mod_res$layers_def,
-parent_set_combinations=OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations,
-BGe_score_all_configs_node=OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node,
-annot = annot)}
-
-}
-\keyword{internal}

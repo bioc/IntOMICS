@@ -32,8 +32,6 @@
 #' @importFrom bnlearn amat
 #' @importFrom bnlearn empty.graph
 #' @return List of 1 element: sampling phase result before MCMC convergence
-#' @keywords internal
-#' @export
 mcmc_simulation_sampling_phase <- function(first, last, sim_init, prob_mbr,
 B_prior_mat, omics, parent_set_combinations, BGe_score_all_configs_node, 
 layers_def, len, thin, energy_all_configs_node, annot)

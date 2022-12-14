@@ -26,4 +26,3 @@ List of 5 elements indicating the color scale for each modality
 \description{
 \code{borders_def} Determines the color scale for each modality.
 }
-\keyword{internal}

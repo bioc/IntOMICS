@@ -46,4 +46,3 @@ List of 6 elements needed to plot the final regulatory network edges
 \description{
 \code{edge_types} Defines the resulting network structure.
 }
-\keyword{internal}

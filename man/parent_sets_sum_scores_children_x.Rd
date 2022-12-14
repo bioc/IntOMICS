@@ -43,4 +43,3 @@ List of 3 elements
 \code{parent_sets_sum_scores_children_x} This function determines the sum of BGe
 scores of given node's children.
 }
-\keyword{internal}

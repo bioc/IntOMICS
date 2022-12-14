@@ -52,15 +52,3 @@ before given acceptance rate
 \code{acceptance_check} This phase verify if the acceptance is in range
 of 0.28 and 0.6.
 }
-\examples{
-data(list=c("OMICS_mod_res", "first.adapt.phase_net"), package="IntOMICS")
-if(interactive()){acceptance_check(round_check = 100, prob_mbr = 0.07,
-    first.adapt.phase_net = first.adapt.phase_net, last_iter_check = 100,
-    layers_def = OMICS_mod_res$layers_def, 
-    BGe_score_all_configs_node = 
-    OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-    parent_set_combinations = OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations,
-    omics = OMICS_mod_res$omics, annot = OMICS_mod_res$annot)}
-
-}
-\keyword{internal}

@@ -24,36 +24,9 @@
 #' of given gene.
 #' @importFrom utils tail
 #' @importFrom stats rnorm sd
-#'
-#' @examples
-#' data(list=c("OMICS_mod_res", "first.adapt.phase_net"),
-#'     package="IntOMICS")
-#' if(interactive()){transient.phase_net <- transient_phase(
-#'     annot = OMICS_mod_res$annot, 
-#'     first.adapt.phase_net = first.adapt.phase_net, 
-#'     omics = OMICS_mod_res$omics, prob_mbr = 0.07, 
-#'     B_prior_mat = OMICS_mod_res$B_prior_mat, 
-#'     layers_def = OMICS_mod_res$layers_def, 
-#'     energy_all_configs_node = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
-#'     BGe_score_all_configs_node = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-#'     parent_set_combinations = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
-#'     variance_target(annot = OMICS_mod_res$annot,
-#'     constant = 1.586667, B_prior_mat = OMICS_mod_res$B_prior_mat,
-#'     parent_set_combinations = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations, 
-#'     BGe_score_all_configs_node = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-#'     layers_def = OMICS_mod_res$layers_def, omics = OMICS_mod_res$omics, 
-#'     prob_mbr = 0.07, transient.phase_net = transient.phase_net, fin = 200)}
-#'
 #' @return Large List of 3 elements: second adaptive phase result 
 #' with possible MCMC mixing; acceptance rate of hyperparameter beta; 
 #' SD of hyperparameter beta
-#' @keywords internal
-#' @export 
 variance_target <- function(transient.phase_net, constant, fin, B_prior_mat, 
 omics, parent_set_combinations, BGe_score_all_configs_node, layers_def,
 prob_mbr, annot)

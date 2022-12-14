@@ -23,34 +23,8 @@
 #' GE-GE interactions without prior knowledge (default=0.5).
 #' @importFrom utils tail
 #' @importFrom stats lm 
-#' 
-#' @examples
-#' data(list=c("OMICS_mod_res", "first.adapt.phase_net"), package="IntOMICS")
-#' if(interactive()){transient.phase_net <- transient_phase(prob_mbr = 0.07,
-#'     first.adapt.phase_net = first.adapt.phase_net, 
-#'     omics = OMICS_mod_res$omics, B_prior_mat = OMICS_mod_res$B_prior_mat, 
-#'     layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
-#'     energy_all_configs_node = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node,
-#'     BGe_score_all_configs_node = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-#'     parent_set_combinations = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations) 
-#'     second_adapt_phase(omics = OMICS_mod_res$omics,
-#'     transient.phase_net = transient.phase_net, woPKGE_belief = 0.5,
-#'     layers_def = OMICS_mod_res$layers_def, annot = OMICS_mod_res$annot,
-#'     energy_all_configs_node = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$energy_all_configs_node, 
-#'     prob_mbr = 0.07, B_prior_mat = OMICS_mod_res$B_prior_mat, 
-#'     BGe_score_all_configs_node = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$BGe_score_all_configs_node, 
-#'     parent_set_combinations = 
-#'     OMICS_mod_res$pf_UB_BGe_pre$parents_set_combinations)}
-#'
 #' @return List of 1 element: first adaption phase + transient phase + 
 #' second adaption phase result
-#' @keywords internal
-#' @export
 second_adapt_phase <- function(transient.phase_net, omics, layers_def,
 B_prior_mat, energy_all_configs_node, prob_mbr, BGe_score_all_configs_node,
 parent_set_combinations, annot, woPKGE_belief = 0.5) 
