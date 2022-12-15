@@ -24,7 +24,7 @@
 #' @importFrom methods is
 #' 
 #' @examples
-#' data(list=c("OMICS_mod_res", "BN_mod_res", "gene_annot", "TFtarg_mat", 
+#' if(interactive()){data(list=c("OMICS_mod_res", "BN_mod_res", "gene_annot", "TFtarg_mat", 
 #' "PK"), package="IntOMICS")
 #' res_weighted <- edge_weights(mcmc_res = BN_mod_res, burn_in = 10000, 
 #'  thin = 500, edge_freq_thres = 0.3) 
@@ -32,6 +32,7 @@
 #'  gene_annot = gene_annot, PK = PK, OMICS_mod_res = OMICS_mod_res, 
 #'  gene_ID = "gene_symbol", TFtargs = TFtarg_mat,
 #'  B_prior_mat_weighted = B_prior_mat_weighted(BN_mod_res)) 
+#' }
 #'
 #' @return List of 7 elements needed to plot the final regulatory network
 #' @export

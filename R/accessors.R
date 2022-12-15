@@ -22,7 +22,7 @@ estimated_len <- function(x) x@estimated_len
 #' @param x MCMC_sapling_res-class, output from the bn_module function
 #'
 #' @return Matrix, empirical biological knowledge
-#' @keywords internal
+#' @keyword internal
 B_prior_mat_weighted <- function(x) x@B_prior_mat_weighted
 
 #' Beta tuning accessor

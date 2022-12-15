@@ -15,4 +15,3 @@ Matrix, empirical biological knowledge
 \description{
 \code{B_prior_mat_weighted} This is accessor function for MCMC_sapling_res-class.
 }
-\keyword{internal}
