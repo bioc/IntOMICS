@@ -4,7 +4,7 @@
 #' @param x MCMC_sapling_res-class, output from the bn_module function
 #'
 #' @return Numeric, trace of root mean square used for c_rms measure
-#' @keywords internal
+#' @export
 estimated_beta <- function(x) x@estimated_beta
 
 #' Estimated len accessor
@@ -13,7 +13,7 @@ estimated_beta <- function(x) x@estimated_beta
 #' @param x MCMC_sapling_res-class, output from the bn_module function
 #'
 #' @return Numeric, width of the sampling interval for hyperparameter beta
-#' @keywords internal
+#' @export
 estimated_len <- function(x) x@estimated_len
 
 #' Empirical biological knowledge accessor
@@ -22,7 +22,7 @@ estimated_len <- function(x) x@estimated_len
 #' @param x MCMC_sapling_res-class, output from the bn_module function
 #'
 #' @return Matrix, empirical biological knowledge
-#' @keyword internal
+#' @export
 B_prior_mat_weighted <- function(x) x@B_prior_mat_weighted
 
 #' Beta tuning accessor
@@ -32,7 +32,7 @@ B_prior_mat_weighted <- function(x) x@B_prior_mat_weighted
 #'
 #' @return Matrix, results from adaptive phases that contains hyperparameter
 #' beta tuning
-#' @keywords internal
+#' @export
 beta_tuning <- function(x) x@beta_tuning
 
 #' CPDAGs from the first simulation accessor
@@ -41,7 +41,7 @@ beta_tuning <- function(x) x@beta_tuning
 #' @param x MCMC_sapling_res-class, output from the bn_module function
 #'
 #' @return List, CPDAGs from the first independent MCMC simulation
-#' @keywords internal
+#' @export
 CPDAGs_sim1 <- function(x) x@CPDAGs_sim1
 
 #' CPDAGs from the second simulation accessor
@@ -50,7 +50,7 @@ CPDAGs_sim1 <- function(x) x@CPDAGs_sim1
 #' @param x MCMC_sapling_res-class, output from the bn_module function
 #'
 #' @return List, CPDAGs from the second independent MCMC simulation
-#' @keywords internal
+#' @export
 CPDAGs_sim2 <- function(x) x@CPDAGs_sim2
 
 #' c_rms trace accessor
@@ -59,5 +59,5 @@ CPDAGs_sim2 <- function(x) x@CPDAGs_sim2
 #' @param x MCMC_sapling_res-class, output from the bn_module function
 #'
 #' @return Numeric, trace of root mean square used for c_rms measure
-#' @keywords internal
+#' @export
 rms <- function(x) x@rms

@@ -11,7 +11,7 @@
 #' @importFrom rlang .data
 #'
 #' @examples
-#' if(interactive()){data(list=c("OMICS_mod_res", "BN_mod_res", "gene_annot", "TFtarg_mat", 
+#' data(list=c("OMICS_mod_res", "BN_mod_res", "gene_annot", "TFtarg_mat", 
 #' "PK"), package="IntOMICS")
 #' res_weighted <- edge_weights(mcmc_res = BN_mod_res, burn_in = 10000, 
 #'  thin = 500, edge_freq_thres = 0.3) 
@@ -20,7 +20,7 @@
 #'  gene_ID = "gene_symbol", TFtargs = TFtarg_mat,
 #'  B_prior_mat_weighted = B_prior_mat_weighted(BN_mod_res))
 #' dens_edge_weights(weighted_net_res)
-#' }
+#' 
 #'
 #' @return density plot of edge weights
 #' @export

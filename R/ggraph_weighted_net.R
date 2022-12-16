@@ -18,7 +18,7 @@
 #' @importFrom rlang .data
 #'
 #' @examples
-#' if(interactive()){data(list=c("OMICS_mod_res", "BN_mod_res", "gene_annot", "TFtarg_mat", 
+#' data(list=c("OMICS_mod_res", "BN_mod_res", "gene_annot", "TFtarg_mat", 
 #' "PK"), package="IntOMICS")
 #' res_weighted <- edge_weights(mcmc_res = BN_mod_res, burn_in = 10000, 
 #'  thin = 500, edge_freq_thres = 0.3)
@@ -28,7 +28,6 @@
 #'  B_prior_mat_weighted = B_prior_mat_weighted(BN_mod_res))
 #' library(ggraph)
 #' ggraph_weighted_net(weighted_net_res)
-#' }
 #'
 #' @return Figure of weighted network
 #' @export
