@@ -16,4 +16,3 @@ beta tuning
 \description{
 \code{beta_tuning} This is accessor function for MCMC_sapling_res-class.
 }
-\keyword{internal}

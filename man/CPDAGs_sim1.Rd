@@ -15,4 +15,3 @@ List, CPDAGs from the first independent MCMC simulation
 \description{
 \code{CPDAGs_sim1} This is accessor function for MCMC_sapling_res-class.
 }
-\keyword{internal}

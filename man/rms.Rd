@@ -15,4 +15,3 @@ Numeric, trace of root mean square used for c_rms measure
 \description{
 \code{rms} This is accessor function for MCMC_sapling_res-class.
 }
-\keyword{internal}

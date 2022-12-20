@@ -15,4 +15,3 @@ Numeric, width of the sampling interval for hyperparameter beta
 \description{
 \code{estimated_len} This is accessor function for MCMC_sapling_res-class.
 }
-\keyword{internal}
