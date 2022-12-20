@@ -15,3 +15,8 @@ Matrix, empirical biological knowledge
 \description{
 \code{B_prior_mat_weighted} This is accessor function for MCMC_sapling_res-class.
 }
+\examples{
+data("BN_mod_res", package="IntOMICS")
+B_prior_mat_weighted(BN_mod_res)
+
+}

@@ -1,7 +1,7 @@
 Package: IntOMICS
 Type: Package
 Title: Integrative analysis of multi-omics data to infer regulatory networks
-Version: 0.99.18
+Version: 0.99.19
 Authors@R: person("Pacinkova", "Anna", email = "ana.pacinkova@gmail.com", 
     role = c("cre","aut"))
 URL: https://github.com/anna-pacinkova/IntOMICS
@@ -32,51 +32,3 @@ LazyData: false
 Suggests: BiocStyle, knitr, rmarkdown, curatedTCGAData, TCGAutils, testthat
 biocViews: Software, DNAMethylation, GeneExpression, CopyNumberVariation, 
     SystemsBiology, GeneRegulation, Network, Bayesian
-Collate: 
-    'IntOMICS-package.R'
-    'acceptance_check.R'
-    'accessors.R'
-    'b_prior_mat.R'
-    'bge_node.R'
-    'bge_score.R'
-    'bn_module.R'
-    'borders_def.R'
-    'dag_core_score.R'
-    'data.R'
-    'dens_edge_weights.R'
-    'edge_proposal.R'
-    'edge_types.R'
-    'edge_weights.R'
-    'emp_b_heatmap.R'
-    'energy_function_node_specific.R'
-    'epsilon.R'
-    'fan_in_reverse.R'
-    'first_adapt_phase.R'
-    'ggraph_weighted_net.R'
-    'init_net_mcmc.R'
-    'is_acyclic.R'
-    'legend_custom_ggplot.R'
-    'lm_meth.R'
-    'mbr.R'
-    'mc3.R'
-    'mc3_constant_bge.R'
-    'mcmc_simulation_sampling_phase.R'
-    'neighborhood_size.R'
-    'normalise.R'
-    'omics_module.R'
-    'omics_to_list.R'
-    'parent_sets_sum_scores_children_x.R'
-    'parent_sets_sum_scores_x.R'
-    'pf_ub_est.R'
-    'range_01.R'
-    'sample_chain.R'
-    'sampling_phase.R'
-    'score_parameters_bidag_bge.R'
-    'second_adapt_phase.R'
-    'source_net_def.R'
-    'squared_jumping.R'
-    'trace_plots.R'
-    'transient_phase.R'
-    'valid_classes.R'
-    'variance_target.R'
-    'weighted_net.R'

@@ -36,8 +36,25 @@
 #'     minseglen = 5, len = 5, prob_mbr = 0.07)}
 #' 
 #' @export
-
 MCMC_sapling_res <- setClass("MCMC_sapling_res", 
     slots = c(estimated_beta = "numeric", estimated_len = "numeric",
     B_prior_mat_weighted = "matrix", beta_tuning = "matrix",
     CPDAGs_sim1 = "list", CPDAGs_sim2 = "list", rms = "numeric"))
+
+#' MCMC_sampling_res-methods
+#' @description set show method for MCMC_sampling_res-class objects.
+#' @importFrom methods setMethod
+#' @param object gien MCMC_sampling_res-class object
+#'
+#' @return Get summary of the properties of MCMC_sampling_res-class object.
+#' @keywords internal
+setMethod(f = "show", signature = "MCMC_sapling_res",
+          definition = function(object) print(list(
+              estimated_beta = estimated_beta(BN_mod_res),
+              estimated_len = estimated_len(BN_mod_res),
+              B_prior_mat_weighted = B_prior_mat_weighted(BN_mod_res)[1:5,1:5],
+              beta_tuning = beta_tuning(BN_mod_res)[,1:5],
+              CPDAGs_sim1 = is(CPDAGs_sim1(BN_mod_res)),
+              CPDAGs_sim2 = is(CPDAGs_sim2(BN_mod_res)),
+              rms = head(rms(BN_mod_res))))
+)
