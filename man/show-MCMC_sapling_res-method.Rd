@@ -7,7 +7,7 @@
 \S4method{show}{MCMC_sapling_res}(object)
 }
 \arguments{
-\item{object}{gien MCMC_sampling_res-class object}
+\item{object}{given MCMC_sampling_res-class object}
 }
 \value{
 Get summary of the properties of MCMC_sampling_res-class object.

@@ -44,7 +44,7 @@ MCMC_sapling_res <- setClass("MCMC_sapling_res",
 #' MCMC_sampling_res-methods
 #' @description set show method for MCMC_sampling_res-class objects.
 #' @importFrom methods setMethod
-#' @param object gien MCMC_sampling_res-class object
+#' @param object given MCMC_sampling_res-class object
 #'
 #' @return Get summary of the properties of MCMC_sampling_res-class object.
 #' @keywords internal

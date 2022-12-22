@@ -69,10 +69,6 @@ CPDAGs_sim1 <- function(x) x@CPDAGs_sim1
 #' `CPDAGs_sim2` This is accessor function for MCMC_sapling_res-class.
 #' @param x MCMC_sapling_res-class, output from the bn_module function
 #'
-#' @examples
-#' data("BN_mod_res", package="IntOMICS")
-#' CPDAGs_sim2(BN_mod_res)
-#'
 #' @return List, CPDAGs from the second independent MCMC simulation
 #' @export
 CPDAGs_sim2 <- function(x) x@CPDAGs_sim2
