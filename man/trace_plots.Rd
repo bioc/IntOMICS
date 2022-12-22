@@ -26,8 +26,8 @@ MCMC simulation trace plots
 edges based on the edge_freq_thres parameter.
 }
 \examples{
-data("BN_mod_res", package="IntOMICS")
+if(interactive()){data("BN_mod_res", package="IntOMICS")
 res_weighted <- trace_plots(mcmc_res = BN_mod_res, burn_in = 10000, 
-       thin = 500, edge_freq_thres = 0.3) 
+       thin = 500, edge_freq_thres = 0.3)}
 
 }
