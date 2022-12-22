@@ -50,11 +50,11 @@ MCMC_sapling_res <- setClass("MCMC_sapling_res",
 #' @keywords internal
 setMethod(f = "show", signature = "MCMC_sapling_res",
           definition = function(object) print(list(
-              estimated_beta = estimated_beta(BN_mod_res),
-              estimated_len = estimated_len(BN_mod_res),
-              B_prior_mat_weighted = B_prior_mat_weighted(BN_mod_res)[1:5,1:5],
-              beta_tuning = beta_tuning(BN_mod_res)[,1:5],
-              CPDAGs_sim1 = is(CPDAGs_sim1(BN_mod_res)),
-              CPDAGs_sim2 = is(CPDAGs_sim2(BN_mod_res)),
-              rms = head(rms(BN_mod_res))))
+              estimated_beta = estimated_beta(object),
+              estimated_len = estimated_len(object),
+              B_prior_mat_weighted = B_prior_mat_weighted(object)[1:5,1:5],
+              beta_tuning = beta_tuning(object)[,1:5],
+              CPDAGs_sim1 = is(CPDAGs_sim1(object)),
+              CPDAGs_sim2 = is(CPDAGs_sim2(object)),
+              rms = head(rms(object))))
 )
