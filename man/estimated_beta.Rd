@@ -16,7 +16,7 @@ Numeric, trace of root mean square used for c_rms measure
 \code{estimated_beta} This is accessor function for MCMC_sapling_res-class.
 }
 \examples{
-data("BN_mod_res", package="IntOMICS")
-estimated_beta(BN_mod_res)
+if(interactive()){data("BN_mod_res", package="IntOMICS")
+estimated_beta(BN_mod_res)}
 
 }

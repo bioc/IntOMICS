@@ -30,8 +30,8 @@
 #' @examples
 #'
 #' # A MCMC_sapling_res object created by the bn_module function.
-#' data("OMICS_mod_res", package="IntOMICS")
-#' if(interactive()){BN_mod_res <- bn_module(burn_in = 500, 
+#' if(interactive()){data("OMICS_mod_res", package="IntOMICS")
+#' BN_mod_res <- bn_module(burn_in = 500, 
 #'     thin = 20, OMICS_mod_res = OMICS_mod_res, 
 #'     minseglen = 5, len = 5, prob_mbr = 0.07)}
 #' 
@@ -52,8 +52,8 @@ setMethod(f = "show", signature = "MCMC_sapling_res",
           definition = function(object) print(list(
               estimated_beta = estimated_beta(object),
               estimated_len = estimated_len(object),
-              B_prior_mat_weighted = B_prior_mat_weighted(object)[1:5,1:5],
-              beta_tuning = beta_tuning(object)[,1:5],
+              B_prior_mat_weighted = B_prior_mat_weighted(object)[seq(1,5),seq(1,5)],
+              beta_tuning = beta_tuning(object)[,seq(1,5)],
               CPDAGs_sim1 = is(CPDAGs_sim1(object)),
               CPDAGs_sim2 = is(CPDAGs_sim2(object)),
               rms = head(rms(object))))

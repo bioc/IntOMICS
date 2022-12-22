@@ -15,3 +15,8 @@ List, CPDAGs from the second independent MCMC simulation
 \description{
 \code{CPDAGs_sim2} This is accessor function for MCMC_sapling_res-class.
 }
+\examples{
+if(interactive()){data("BN_mod_res", package="IntOMICS")
+CPDAGs_sim2(BN_mod_res)}
+
+}
