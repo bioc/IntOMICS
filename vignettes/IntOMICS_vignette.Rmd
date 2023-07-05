@@ -181,6 +181,7 @@ rowselect <- list(gene_annot$gene_symbol, gene_annot$gene_symbol,
 names(rowselect) <- names(coad_ma)
 omics <- coad_ma[rowselect, , ]
 names(omics) <- c("cnv","ge","meth")
+omics[["ge"]] <- log2(assay(omics[["ge"]]))
 
 ```
 
