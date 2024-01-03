@@ -1,4 +1,4 @@
-## Changes in version 1.3.0 (2024-03-01)
+## Changes in version 1.2.0 (2024-03-01)
 
 ---
 
