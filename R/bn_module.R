@@ -18,7 +18,7 @@
 #' @importFrom methods new
 #'
 #' @examples
-#' if(interactive()){data("OMICS_mod_res", package="IntOMICS")
+#' if(interactive()){data("OMICS_mod_res", package="IntOMICS_R")
 #' BN_mod_res <- bn_module(burn_in = 500, 
 #'     thin = 20, OMICS_mod_res = OMICS_mod_res, 
 #'     minseglen = 5, len = 5, prob_mbr = 0.07)}

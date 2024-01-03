@@ -69,13 +69,13 @@
 #' }
 "layers_def"
 
-#' preprocessed IntOMICS input data
+#' preprocessed IntOMICS_R input data
 #'
-#' The output from IntOMICS::OMICS_module function. A named list containing preprocessed input data.
+#' The output from IntOMICS_R::OMICS_module function. A named list containing preprocessed input data.
 #'
 #' @format A named list with 6 components:
 #' \describe{
-#'   \item{pf_UB_BGe_pre}{output from IntOMICS::pf_UB_est function}
+#'   \item{pf_UB_BGe_pre}{output from IntOMICS_R::pf_UB_est function}
 #'   \item{B_prior_mat}{biological prior matrix}
 #'   \item{annot}{genes and associated methylation probes}
 #'   \item{omics}{a named list containing the gene expression, copy number variation and methylation data}
@@ -84,9 +84,9 @@
 #' }
 "OMICS_mod_res"
 
-#' IntOMICS first adaption phase result
+#' IntOMICS_R first adaption phase result
 #'
-#' The output from IntOMICS::first_adapt_phase function. A named list containing results from the MCMC sampling of the first adaption phase.
+#' The output from IntOMICS_R::first_adapt_phase function. A named list containing results from the MCMC sampling of the first adaption phase.
 #'
 #' @format A named list with 10 components:
 #' \describe{
@@ -104,13 +104,13 @@
 "first.adapt.phase_net"
 
 
-#' IntOMICS MCMC simulation result
+#' IntOMICS_R MCMC simulation result
 #'
-#' The output from IntOMICS::BN_module function. A named list containing results from the MCMC sampling (resulting sample is thinned and converted into corresponding CPDAGs)
+#' The output from IntOMICS_R::BN_module function. A named list containing results from the MCMC sampling (resulting sample is thinned and converted into corresponding CPDAGs)
 #'
 #' @format A named list with 3 components:
 #' \describe{
-#'   \item{B_prior_mat_weighted}{IntOMICS estimated empirical biological knowledge}
+#'   \item{B_prior_mat_weighted}{IntOMICS_R estimated empirical biological knowledge}
 #'   \item{sampling.phase_res}{results from the conventional MCMC sampling - two independent simulations}
 #'   \item{beta_tuning}{result from the automatically tuned MCMC algorithm}
 #' }

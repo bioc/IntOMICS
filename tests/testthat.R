@@ -1,4 +1,4 @@
 library(testthat)
-library(IntOMICS)
+library(IntOMICS_R)
 
-test_check("IntOMICS")
+test_check("IntOMICS_R")
