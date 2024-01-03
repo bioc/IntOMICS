@@ -27,7 +27,7 @@ symbol for conversion.}
 
 \item{edge_weights}{character vector includes either "MCMC_freq" to reflect
 the edge weights frequency over the final set of network structures or
-"empB" to reflect the empirical biological knowledge estimated by IntOMICS.}
+"empB" to reflect the empirical biological knowledge estimated by IntOMICS_R.}
 
 \item{gene_ID}{character vector includes either "gene_symbol" or "entrezID"
 to reflect gene identifiers used in the final figure.}
@@ -47,7 +47,7 @@ the color scale for each modality.
 }
 \examples{
 data(list=c("OMICS_mod_res", "BN_mod_res", "gene_annot", "TFtarg_mat", 
-"PK"), package="IntOMICS")
+"PK"), package="IntOMICS_R")
 res_weighted <- edge_weights(mcmc_res = BN_mod_res, burn_in = 10000, 
  thin = 500, edge_freq_thres = 0.3) 
 weighted_net_res <- weighted_net(cpdag_weights = res_weighted, 

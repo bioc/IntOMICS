@@ -17,7 +17,7 @@ beta tuning
 \code{beta_tuning} This is accessor function for MCMC_sapling_res-class.
 }
 \examples{
-if(interactive()){data("BN_mod_res", package="IntOMICS")
+if(interactive()){data("BN_mod_res", package="IntOMICS_R")
 beta_tuning(BN_mod_res)}
 
 }

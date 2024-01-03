@@ -2,7 +2,7 @@
 #' @aliases MCMC_sapling_res-class
 #' @title The MCMC_sapling_res class
 #' @description Container of an MCMC sampling phase results generated 
-#' by the function \code{\link[IntOMICS]{bn_module}}.
+#' by the function \code{\link[IntOMICS_R]{bn_module}}.
 #' 
 #' @slot estimated_beta Numeric, estimated value of
 #' hyperparameter beta
@@ -30,7 +30,7 @@
 #' @examples
 #'
 #' # A MCMC_sapling_res object created by the bn_module function.
-#' if(interactive()){data("OMICS_mod_res", package="IntOMICS")
+#' if(interactive()){data("OMICS_mod_res", package="IntOMICS_R")
 #' BN_mod_res <- bn_module(burn_in = 500, 
 #'     thin = 20, OMICS_mod_res = OMICS_mod_res, 
 #'     minseglen = 5, len = 5, prob_mbr = 0.07)}

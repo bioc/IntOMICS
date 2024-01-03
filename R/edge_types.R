@@ -14,7 +14,7 @@
 #' @param OMICS_mod_res list output from the omics_module function.
 #' @param edge_weights character vector includes either "MCMC_freq" to reflect
 #' the edge weights frequency over the final set of network structures or 
-#' "empB" to reflect the empirical biological knowledge estimated by IntOMICS.
+#' "empB" to reflect the empirical biological knowledge estimated by IntOMICS_R.
 #' @param TFtargs matrix containing the direct interactions between TFs
 #' (columns) and their targets (rows).
 #' @return List of 6 elements needed to plot the final regulatory network edges

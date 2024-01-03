@@ -1,4 +1,4 @@
-## Changes in version 0.99.24 (2022-20-12)
+## Changes in version 1.3.0 (2024-03-01)
 
 ---
 

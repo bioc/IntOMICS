@@ -15,7 +15,7 @@
 #' @importFrom bnlearn custom.strength
 #'
 #' @examples
-#' if(interactive()){data("BN_mod_res", package="IntOMICS")
+#' if(interactive()){data("BN_mod_res", package="IntOMICS_R")
 #' res_weighted <- trace_plots(mcmc_res = BN_mod_res, burn_in = 10000, 
 #'        thin = 500, edge_freq_thres = 0.3)}
 #'

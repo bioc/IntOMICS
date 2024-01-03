@@ -16,7 +16,7 @@ Numeric, width of the sampling interval for hyperparameter beta
 \code{estimated_len} This is accessor function for MCMC_sapling_res-class.
 }
 \examples{
-if(interactive()){data("BN_mod_res", package="IntOMICS")
+if(interactive()){data("BN_mod_res", package="IntOMICS_R")
 estimated_len(BN_mod_res)}
 
 }

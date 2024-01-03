@@ -26,7 +26,7 @@ between prior knowledge and the empirical knowledge)
 }
 \examples{
 data(list=c("TFtarg_mat", "gene_annot", "OMICS_mod_res",
-"BN_mod_res"), package="IntOMICS")
+"BN_mod_res"), package="IntOMICS_R")
 emp_b_heatmap(mcmc_res = BN_mod_res, OMICS_mod_res = OMICS_mod_res, 
     gene_annot = gene_annot, TFtargs = TFtarg_mat)
             

@@ -35,7 +35,7 @@ in the resulting network structure.}
 
 \item{edge_weights}{character vector includes either "MCMC_freq" to reflect
 the edge weights frequency over the final set of network structures or
-"empB" to reflect the empirical biological knowledge estimated by IntOMICS.}
+"empB" to reflect the empirical biological knowledge estimated by IntOMICS_R.}
 
 \item{TFtargs}{matrix containing the direct interactions between TFs
 (columns) and their targets (rows).}
