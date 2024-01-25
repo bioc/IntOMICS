@@ -1,17 +1,17 @@
 ---
-title: "IntOMICS_R tutorial"
+title: "IntOMICSr tutorial"
 date: "`r BiocStyle::doc_date()`"
 author: 
 - name: Anna Pačínková
   email: ana.pacinkova@gmail.com
-package: "IntOMICS_R"
+package: "IntOMICSr"
 output:
   BiocStyle::html_document: 
     toc: true
     toc_depth: 2
     keep_md: true
 vignette: >
-  %\VignetteIndexEntry{IntOMICS_R tutorial}
+  %\VignetteIndexEntry{IntOMICSr tutorial}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -26,10 +26,10 @@ Hence, a computational framework to infer regulatory relationships
 by integrating multiple modalities is one of the most relevant and challenging 
 problems in systems biology.
 
-IntOMICS_R is an efficient integrative framework based on Bayesian networks.
-IntOMICS_R systematically analyses gene expression (GE), DNA methylation (METH),
+IntOMICSr is an efficient integrative framework based on Bayesian networks.
+IntOMICSr systematically analyses gene expression (GE), DNA methylation (METH),
 copy number variation (CNV) and biological prior knowledge (B) to infer
-regulatory networks. IntOMICS_R complements the missing biological prior knowledge
+regulatory networks. IntOMICSr complements the missing biological prior knowledge
 by so-called empirical biological knowledge (empB), estimated from the available  
 experimental data.
 
@@ -39,14 +39,14 @@ with additional Markov blanket resampling (MBR) step (Su and Borsuk, 2016)
 infers resulting regulatory network structure consisting of three
 types of nodes: GE nodes refer to gene expression levels, CNV nodes refer
 to associated copy number variations, and METH nodes refer to associated
-DNA methylation probe(s). Regulatory networks derived from IntOMICS_R provide
-deeper insights into the complex flow of genetic information. IntOMICS_R is 
+DNA methylation probe(s). Regulatory networks derived from IntOMICSr provide
+deeper insights into the complex flow of genetic information. IntOMICSr is 
 a powerful resource for exploratory systems biology and can provide valuable
 insights into the complex mechanisms of biological processes that has a vital
 role in personalised medicine.
 
 
-IntOMICS_R takes as input `MultiAssayExperiment` or named `list` with:
+IntOMICSr takes as input `MultiAssayExperiment` or named `list` with:
 
 1. gene expression matrix,  
 2. associated copy number variation matrix sampled from the same individuals 
@@ -60,24 +60,24 @@ The resulting regulatory network structure contains the edge weights $w_i$
 representing the empirical frequency of given edge over samples of network
 structures from two independent MCMC simulations.
 
-For further details about the IntOMICS_R algorithm, its performance and benchmark
+For further details about the IntOMICSr algorithm, its performance and benchmark
 analysis, see manuscript Pacinkova \& Popovici, 2022.
 
 Projects such as The Cancer Genome Atlas aim to catalogue 
 multi-omics data from a large number of samples.
 Bioconductor packages such as `r Biocpkg("curatedTCGA")` enable to download and 
 efficiently collect these multi-omics data.
-R-packages such as `r Biocpkg("IntOMICS_R")`,  `r Biocpkg("MOFA2")`, 
+R-packages such as `r Biocpkg("IntOMICSr")`,  `r Biocpkg("MOFA2")`, 
 and `r Biocpkg("cosmosR")` can provide a complementary understanding of hidden 
 interplay between multi-omics dataset and deciphering the complexity of the 
 biological system.
 
-IntOMICS_R framework is demonstrated using colon cancer data from the
+IntOMICSr framework is demonstrated using colon cancer data from the
 `r Biocpkg("curatedTCGA")` package. However, it is not limited to any particular
 omics data or phenotype.
 
 
-![IntOMICS_R framework](figures/IntOMICS_R_framework_METH_empB_modules.png){width=90%}
+![IntOMICSr framework](figures/IntOMICSr_framework_METH_empB_modules.png){width=90%}
 
 
 
@@ -88,17 +88,17 @@ omics data or phenotype.
 # bioconductor install
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("IntOMICS_R")
+BiocManager::install("IntOMICSr")
 
 # install the newest (development) version from GitHub
 # install.packages("remotes")
-remotes::install_github("anna-pacinkova/IntOMICS_R")  
+remotes::install_github("anna-pacinkova/IntOMICSr")  
 
 ```
 
 # Usage
 
-This tutorial will show you how to use the `r Biocpkg("IntOMICS_R")` package   
+This tutorial will show you how to use the `r Biocpkg("IntOMICSr")` package   
 with a toy example. The example dataset consisting of processed gene expression,
 DNA methylation (Illumina Infinium HumanMethylation450 BeadChip) and copy number
 variation is from the TCGA data portal (https://portal.gdc.cancer.gov/): primary
@@ -110,7 +110,7 @@ from the KEGG Colorectal cancer pathway(https://www.genome.jp/pathway/hsa05210).
 
 ```{r include = TRUE, echo = TRUE}
 
-library(IntOMICS_R)
+library(IntOMICSr)
 
 # load required libraries
 suppressPackageStartupMessages({
@@ -131,7 +131,7 @@ library(ggplot2)})
 ```
 
 
-IntOMICS_R framework takes as input:  
+IntOMICSr framework takes as input:  
   
 1. gene expression matrix $GE$ ($m$ x $n_1$) with microarray intensities or 
 RNA-seq count data transformed into a continuous domain ($m$ samples and $n_1$ 
@@ -145,12 +145,12 @@ segment mean values derived for each gene ($n_2 \leq n_1$),
 4. data.frame including all known interactions between molecular features 
 (information from public available databases such as KEGG (Ogata et al., 1999) 
 or REACTOME (Wu \& Haw, 2017)). Any other source of prior knowledge can be used. 
-(IntOMICS_R is designed to run even if prior knowledge is not available. However, 
+(IntOMICSr is designed to run even if prior knowledge is not available. However, 
 we highly recommend to use it.)
 
 5. logical matrix with known transcription factors (TFs) and its targets 
 (information from public available databases such as ENCODE (ENCODE Project 
-Consortium, 2004). Any other source can be used. (IntOMICS_R is designed to run 
+Consortium, 2004). Any other source can be used. (IntOMICSr is designed to run 
 even if any TF-target interaction is not available.)
   
 All data matrices are sampled from the same individuals.  
@@ -220,7 +220,7 @@ These values represent DNA methylation beta values of given probes
 
 **!!Please, be sure that samples are in the same order across all modalities!!**
 
-IntOMICS_R is designed to infer regulatory networks even if the copy number 
+IntOMICSr is designed to infer regulatory networks even if the copy number 
 variation or DNA methylation data (or both) are not available. In such a case, 
 omics must be a MultiAssayExperiment with gene expression. 
 
@@ -277,7 +277,7 @@ layers_def
 1) the modality ID (character vector);
 must be same as names of `omics` MultiAssayExperiment object,
 
-2) corresponding layer in IntOMICS_R MCMC scheme (numeric vector);
+2) corresponding layer in IntOMICSr MCMC scheme (numeric vector);
 edges from the lowest layer (must be always GE) to the CNV/METH layers are
 excluded from the set of candidate edges), and
 
@@ -369,7 +369,7 @@ the edge in the opposite direction.
 
 4. The empirical biological matrix and the hyperparameter $\beta$ determined 
 by~the~second adaptive phase are used in the last sampling phase. 
-In this phase, IntOMICS_R applies a *greedy horizon* approach. Three independent 
+In this phase, IntOMICSr applies a *greedy horizon* approach. Three independent 
 paths are executed with a fixed BGe score (except the MBR step). The most 
 probable path is chosen after every 500 iterations.  
 The conventional MCMC algorithm with additional Markov blanket resampling step 
@@ -397,7 +397,7 @@ short burn-in period of the resulting Markov chain.
 We recommend to use much longer burn-in period and check trace
 plots of the MCMC simulation. We recommend to use burn_in = 100.000, thin = 500,
 and minseglen = 50.000 (for further details see (Pacinkova \& Popovici, 2022)).**
-To investigate relevant IntOMICS_R outputs, use the pre-computed result
+To investigate relevant IntOMICSr outputs, use the pre-computed result
 saved in `BN_mod_res` R object).  
 There are two optional arguments: "len" specifies the initial width
 of the sampling interval for hyperparameter $\beta$. However, this parameter
@@ -480,10 +480,10 @@ in the resulting networks using "edge_freq_thres = 0.75".
 
 
 
-## Part 5: IntOMICS_R resulting network structure
+## Part 5: IntOMICSr resulting network structure
 
 Now we use `edge_weights` and `weighted_net` functions to define the resulting
-regulatory network inferred by `r Biocpkg("IntOMICS_R")` with specific thresholds:
+regulatory network inferred by `r Biocpkg("IntOMICSr")` with specific thresholds:
 ```{r echo=TRUE, include=TRUE}
 
 res_weighted <- edge_weights(mcmc_res = BN_mod_res, 
@@ -504,7 +504,7 @@ The parameter "gene_ID" determines the IDs used in the final network. There are
 two options: "gene_symbol" (default) or "entrezID".
 
 
-We can plot the resulting regulatory network inferred by `r Biocpkg("IntOMICS_R")` 
+We can plot the resulting regulatory network inferred by `r Biocpkg("IntOMICSr")` 
 using `ggraph_weighted_net` function (node size and label size can be modified):
 
 ```{r fig_weights, fig.height = 7, fig.width = 7}
@@ -525,7 +525,7 @@ from the corresponding input data matrix.
 
 
 We can also change the edge labels to inspect the empirical prior knowledge
-inferred by `r Biocpkg("IntOMICS_R")` using the argument "edge_weights = empB"
+inferred by `r Biocpkg("IntOMICSr")` using the argument "edge_weights = empB"
 (default = "MCMC_freq"):
 ```{r echo=TRUE, include=TRUE}
 
@@ -561,7 +561,7 @@ emp_b_heatmap(mcmc_res = BN_mod_res,
 ```
 Interactions with constant biological knowledge are highlighted in gray.
 
-Interesting could be also density of the edge weights inferred by `r Biocpkg("IntOMICS_R")`. 
+Interesting could be also density of the edge weights inferred by `r Biocpkg("IntOMICSr")`. 
 First of all, we have to use the `edge_weights` function without the edge weights
 filtering:
 ```{r fig_ew, fig.height = 4.5, fig.width = 5}

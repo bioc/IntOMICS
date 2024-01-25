@@ -16,7 +16,7 @@
 #' @importFrom methods getSlots
 #'
 #' @examples
-#' data("BN_mod_res", package="IntOMICS_R")
+#' data("BN_mod_res", package="IntOMICSr")
 #' res_weighted <- edge_weights(mcmc_res = BN_mod_res, burn_in = 10000, 
 #'        thin = 500, edge_freq_thres = 0.3) 
 #'

@@ -34,7 +34,7 @@
 #' 
 #' @examples
 #' data(list=c("PK", "TFtarg_mat", "annot", "layers_def", "omics", 
-#' "gene_annot"), package="IntOMICS_R")
+#' "gene_annot"), package="IntOMICSr")
 #' OMICS_mod_res <- omics_module(omics = omics, PK = PK, 
 #'     layers_def = layers_def, TFtargs = TFtarg_mat, annot = annot, 
 #'     gene_annot = gene_annot, r_squared_thres = 0.3, lm_METH = TRUE)

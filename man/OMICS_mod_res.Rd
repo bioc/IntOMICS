@@ -3,11 +3,11 @@
 \docType{data}
 \name{OMICS_mod_res}
 \alias{OMICS_mod_res}
-\title{preprocessed IntOMICS_R input data}
+\title{preprocessed IntOMICSr input data}
 \format{
 A named list with 6 components:
 \describe{
-\item{pf_UB_BGe_pre}{output from IntOMICS_R::pf_UB_est function}
+\item{pf_UB_BGe_pre}{output from IntOMICSr::pf_UB_est function}
 \item{B_prior_mat}{biological prior matrix}
 \item{annot}{genes and associated methylation probes}
 \item{omics}{a named list containing the gene expression, copy number variation and methylation data}
@@ -19,6 +19,6 @@ A named list with 6 components:
 OMICS_mod_res
 }
 \description{
-The output from IntOMICS_R::OMICS_module function. A named list containing preprocessed input data.
+The output from IntOMICSr::OMICS_module function. A named list containing preprocessed input data.
 }
 \keyword{datasets}

@@ -3,11 +3,11 @@
 \docType{data}
 \name{BN_mod_res}
 \alias{BN_mod_res}
-\title{IntOMICS_R MCMC simulation result}
+\title{IntOMICSr MCMC simulation result}
 \format{
 A named list with 3 components:
 \describe{
-\item{B_prior_mat_weighted}{IntOMICS_R estimated empirical biological knowledge}
+\item{B_prior_mat_weighted}{IntOMICSr estimated empirical biological knowledge}
 \item{sampling.phase_res}{results from the conventional MCMC sampling - two independent simulations}
 \item{beta_tuning}{result from the automatically tuned MCMC algorithm}
 }
@@ -16,6 +16,6 @@ A named list with 3 components:
 BN_mod_res
 }
 \description{
-The output from IntOMICS_R::BN_module function. A named list containing results from the MCMC sampling (resulting sample is thinned and converted into corresponding CPDAGs)
+The output from IntOMICSr::BN_module function. A named list containing results from the MCMC sampling (resulting sample is thinned and converted into corresponding CPDAGs)
 }
 \keyword{datasets}

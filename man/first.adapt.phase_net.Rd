@@ -3,7 +3,7 @@
 \docType{data}
 \name{first.adapt.phase_net}
 \alias{first.adapt.phase_net}
-\title{IntOMICS_R first adaption phase result}
+\title{IntOMICSr first adaption phase result}
 \format{
 A named list with 10 components:
 \describe{
@@ -23,6 +23,6 @@ A named list with 10 components:
 first.adapt.phase_net
 }
 \description{
-The output from IntOMICS_R::first_adapt_phase function. A named list containing results from the MCMC sampling of the first adaption phase.
+The output from IntOMICSr::first_adapt_phase function. A named list containing results from the MCMC sampling of the first adaption phase.
 }
 \keyword{datasets}

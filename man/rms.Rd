@@ -16,7 +16,7 @@ Numeric, trace of root mean square used for c_rms measure
 \code{rms} This is accessor function for MCMC_sapling_res-class.
 }
 \examples{
-if(interactive()){data("BN_mod_res", package="IntOMICS_R")
+if(interactive()){data("BN_mod_res", package="IntOMICSr")
 rms(BN_mod_res)}
 
 }
