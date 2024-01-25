@@ -46,7 +46,7 @@ r_squared_thres, p_val_thres, TFBS_belief, nonGE_belief, woPKGE_belief)
   
     if(is.null(PK))
     {
-        message('Please, consider adding PK to increase the IntOMICS_R prediction accuracy.')
+        message('Please, consider adding PK to increase the IntOMICSr prediction accuracy.')
     } else {
         if(is.list(omics))
         {

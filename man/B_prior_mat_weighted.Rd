@@ -16,7 +16,7 @@ Matrix, empirical biological knowledge
 \code{B_prior_mat_weighted} This is accessor function for MCMC_sapling_res-class.
 }
 \examples{
-if(interactive()){data("BN_mod_res", package="IntOMICS_R")
+if(interactive()){data("BN_mod_res", package="IntOMICSr")
 B_prior_mat_weighted(BN_mod_res)}
 
 }

@@ -7,5 +7,5 @@ test_that("Output from omics_module", {
                  TFtargs = TFtarg_mat,
                  annot = annot, 
                  gene_annot = gene_annot),
-    'Please, consider adding PK to increase the IntOMICS_R prediction accuracy.')
+    'Please, consider adding PK to increase the IntOMICSr prediction accuracy.')
 })

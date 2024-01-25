@@ -2,7 +2,7 @@
 % Please edit documentation in R/dens_edge_weights.R
 \name{dens_edge_weights}
 \alias{dens_edge_weights}
-\title{Density plot of edge weights inferred by IntOMICS_R}
+\title{Density plot of edge weights inferred by IntOMICSr}
 \usage{
 dens_edge_weights(net)
 }
@@ -17,7 +17,7 @@ density plot of edge weights
 }
 \examples{
 data(list=c("OMICS_mod_res", "BN_mod_res", "gene_annot", "TFtarg_mat", 
-"PK"), package="IntOMICS_R")
+"PK"), package="IntOMICSr")
 res_weighted <- edge_weights(mcmc_res = BN_mod_res, burn_in = 10000, 
  thin = 500, edge_freq_thres = 0.3) 
 weighted_net_res <- weighted_net(cpdag_weights = res_weighted, 
