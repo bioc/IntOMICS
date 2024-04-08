@@ -1,7 +1,7 @@
 Package: IntOMICSr
 Type: Package
 Title: Integrative analysis of multi-omics data to infer regulatory networks
-Version: 1.2.0
+Version: 1.2.1
 Authors@R: person("Pacinkova", "Anna", email = "ana.pacinkova@gmail.com", 
     role = c("cre","aut"))
 URL: https://github.com/anna-pacinkova/IntOMICSr
@@ -31,3 +31,4 @@ LazyData: false
 Suggests: BiocStyle, knitr, rmarkdown, curatedTCGAData, TCGAutils, testthat
 biocViews: Software, DNAMethylation, GeneExpression, CopyNumberVariation, 
     SystemsBiology, GeneRegulation, Network, Bayesian
+PackageStatus: Deprecated
