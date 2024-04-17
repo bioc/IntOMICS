@@ -1,4 +1,4 @@
-Package: IntOMICSr
+Package: IntOMICS
 Type: Package
 Title: Integrative analysis of multi-omics data to infer regulatory networks
 Version: 1.3.1
